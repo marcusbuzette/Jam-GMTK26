@@ -14,6 +14,10 @@ public class PlayerMovement : MonoBehaviour {
     private InputSystem_Actions inputActions;
     private CharacterController controller;
     private Vector2 moveInput;
+    
+
+    public float RotationSpeed => rotationSpeed;
+    public float AngleToStartMoving => angleToStartMoving;
 
     private void Awake() {
         inputActions = new InputSystem_Actions();
@@ -41,21 +45,15 @@ public class PlayerMovement : MonoBehaviour {
     {
         if (moveInput.sqrMagnitude < 0.01f) return;
 
-        // Vetor de direção baseado no mundo (W/S move no eixo Z, A/D move no eixo X)
-        // Se a sua câmera for isométrica/rotacionada, você precisaria multiplicar essa direção pela rotação da câmera.
         Vector3 targetDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
 
-        // 1. Lida com a rotação
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
-        // 2. Calcula a diferença entre onde o player está olhando e para onde ele quer ir
         float currentAngleDifference = Vector3.Angle(transform.forward, targetDirection);
 
-        // 3. Só aplica o movimento se o personagem já estiver virado o suficiente
         if (currentAngleDifference <= angleToStartMoving)
         {
-            // Usamos transform.forward para garantir que ele ande na direção em que o modelo está apontando
             controller.Move(transform.forward * moveSpeed * Time.deltaTime);
         }
     }
