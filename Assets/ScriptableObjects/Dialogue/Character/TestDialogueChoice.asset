@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: TestDialogueChoice
   m_EditorClassIdentifier: Assembly-CSharp::DialogueChoice
   optionA:
-    optionId: option_A
+    optionId: test_dialogue_option_A
     localizedTexts:
     - languageCode: pt
       text: Atirar nele.
     nextDialogue: {fileID: 11400000, guid: 9c57f6c07f1186849ab8c78537dc65de, type: 2}
   optionB:
-    optionId: option_B
+    optionId: test_dialogue_option_B
     localizedTexts:
     - languageCode: pt
       text: Ir embora.

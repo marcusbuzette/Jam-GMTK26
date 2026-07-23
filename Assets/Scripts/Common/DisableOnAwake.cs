@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class DisableOnStart : MonoBehaviour
+public class DisableOnAwake : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         gameObject.SetActive(false);
     }

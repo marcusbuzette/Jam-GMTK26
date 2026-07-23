@@ -14,7 +14,6 @@ public class PlayerMovement : MonoBehaviour {
     private InputSystem_Actions inputActions;
     private CharacterController controller;
     private Vector2 moveInput;
-    
 
     public float RotationSpeed => rotationSpeed;
     public float AngleToStartMoving => angleToStartMoving;
