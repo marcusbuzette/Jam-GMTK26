@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(CharacterController))]
@@ -23,6 +24,7 @@ public class PlayerInteract : MonoBehaviour {
 
     private bool isNavigatingToInteract;
     private bool isAligningToInteract;
+    private bool isDialogueMode;
 
     private void Awake() {
         inputActions = new InputSystem_Actions();
@@ -40,15 +42,37 @@ public class PlayerInteract : MonoBehaviour {
         inputActions.Player.Enable();
         inputActions.Player.Interact.performed += OnInteractClicked;
         inputActions.UI.Enable();
+        inputActions.UI.Click.performed += OnUIClicked;
+        inputActions.UI.Submit.performed += OnUISubmit;
+
+        var manager = DialogueManager.Instance;
+        if (manager != null)
+        {
+            manager.DialogueStarted += OnDialogueStarted;
+            manager.DialogueFinished += OnDialogueFinished;
+        }
     }
 
     private void OnDisable() {
         inputActions.Player.Disable();
         inputActions.Player.Interact.performed -= OnInteractClicked;
+        inputActions.UI.Click.performed -= OnUIClicked;
+        inputActions.UI.Submit.performed -= OnUISubmit;
         inputActions.UI.Disable();
+
+        var manager = DialogueManager.Instance;
+        if (manager != null)
+        {
+            manager.DialogueStarted -= OnDialogueStarted;
+            manager.DialogueFinished -= OnDialogueFinished;
+        }
     }
 
     private void Update() {
+        if (isDialogueMode) {
+            return;
+        }
+
         HandleHover();
         
         if (isNavigatingToInteract) {
@@ -83,6 +107,10 @@ public class PlayerInteract : MonoBehaviour {
     }
 
     private void OnInteractClicked(InputAction.CallbackContext context) {
+        if (isDialogueMode) {
+            return;
+        }
+
         Vector2 mousePos = inputActions.UI.Point.ReadValue<Vector2>();
         Ray ray = mainCamera.ScreenPointToRay(mousePos);
 
@@ -192,10 +220,22 @@ public class PlayerInteract : MonoBehaviour {
 
     private void ExecuteInteraction() {
         targetInteractable.Interact(gameObject);
+
+        if (DialogueManager.Instance != null && DialogueManager.Instance.HasDialogue) {
+            targetInteractable = null;
+            isNavigatingToInteract = false;
+            isAligningToInteract = false;
+            return;
+        }
+
         CancelAutoInteraction();
     }
 
     private void CheckManualMovementOverride() {
+        if (isDialogueMode) {
+            return;
+        }
+
         Vector2 moveInput = inputActions.Player.Move.ReadValue<Vector2>();
         if (moveInput.sqrMagnitude > 0.1f && (isNavigatingToInteract || isAligningToInteract)) {
             CancelAutoInteraction();
@@ -218,5 +258,65 @@ public class PlayerInteract : MonoBehaviour {
         agent.enabled = false;
         characterController.enabled = true;
         playerMovementScript.enabled = true;
+    }
+
+    private void OnUIClicked(InputAction.CallbackContext context)
+    {
+        if (!isDialogueMode || context.phase != InputActionPhase.Performed)
+        {
+            return;
+        }
+
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
+        var dialogueUI = DialogueUI.Instance;
+        if (dialogueUI != null)
+        {
+            dialogueUI.HandleAdvanceInput();
+        }
+    }
+
+    private void OnUISubmit(InputAction.CallbackContext context)
+    {
+        if (!isDialogueMode || context.phase != InputActionPhase.Performed)
+        {
+            return;
+        }
+
+        var dialogueUI = DialogueUI.Instance;
+        if (dialogueUI != null)
+        {
+            dialogueUI.HandleAdvanceInput();
+        }
+    }
+
+    private void OnDialogueStarted(Dialogue dialogue)
+    {
+        isDialogueMode = true;
+
+        targetInteractable = null;
+        isNavigatingToInteract = false;
+        isAligningToInteract = false;
+
+        if (agent.enabled && agent.isOnNavMesh) {
+            agent.ResetPath();
+        }
+
+        agent.enabled = false;
+        characterController.enabled = false;
+        playerMovementScript.enabled = false;
+        inputActions.Player.Disable();
+        inputActions.UI.Enable();
+    }
+
+    private void OnDialogueFinished(Dialogue dialogue)
+    {
+        isDialogueMode = false;
+        inputActions.Player.Enable();
+        inputActions.UI.Enable();
+        RestoreManualMovement();
     }
 }

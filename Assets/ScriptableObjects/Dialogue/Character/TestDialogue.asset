@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e2fc63825895e8429f9d28a3a6515a6, type: 3}
   m_Name: TestDialogue
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
-  conversationId: conversation_test
+  conversationId: test_dialogue
   displayName: Dialogue
   lines:
   - character: {fileID: 11400000, guid: c052724c165f89a43a01ab84f981b02c, type: 2}

@@ -1,19 +1,18 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 
-public class DialogueUI : MonoBehaviour
-{
+public class DialogueUI : MonoBehaviour {
     private static DialogueUI instance;
+    private DialogueManager subscribedManager;
+    private EventSystem runtimeEventSystem;
 
-    public static DialogueUI Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
+    public static DialogueUI Instance {
+        get {
+            if (instance == null) {
                 instance = FindAnyObjectByType<DialogueUI>();
             }
 
@@ -37,143 +36,117 @@ public class DialogueUI : MonoBehaviour
 
     [Header("Display")]
     [SerializeField] private bool showChoices = true;
-    [SerializeField, Min(0f)] private float skipGracePeriod = 0.2f;
     [SerializeField, Min(0f)] private float continueDelay = 0.15f;
 
     private GameObject currentPortraitInstance;
-    private Coroutine pendingAdvanceRoutine;
     private Coroutine continuePromptRoutine;
-    private bool hasPendingAdvance;
     private bool continuePromptVisible;
 
-    private void Awake()
-    {
-        if (instance != null && instance != this)
-        {
+    private void Awake() {
+        if (instance != null && instance != this) {
             Destroy(gameObject);
             return;
         }
 
         instance = this;
+        EnsureEventSystem();
 
-        if (skipButton != null)
-        {
+        if (skipButton != null) {
             skipButton.onClick.AddListener(HandleSkipPressed);
         }
 
-        if (dialogueTextAnimator == null)
-        {
+        if (dialogueTextAnimator == null) {
             dialogueTextAnimator = GetComponent<DialogueTextAnimator>();
         }
 
-        if (dialogueTextAnimator != null)
-        {
+        if (dialogueTextAnimator != null) {
             dialogueTextAnimator.TypingFinished += HandleTypingFinished;
         }
+
+        SubscribeToDialogueManager();
 
         SetDialoguePanelVisible(false);
         SetContinueIndicatorVisible(false);
         SetContainerMode(false);
 
-        if (choiceAButton != null)
-        {
+        if (choiceAButton != null) {
             choiceAButton.onClick.AddListener(() => HandleChoicePressed(0));
         }
 
-        if (choiceBButton != null)
-        {
+        if (choiceBButton != null) {
             choiceBButton.onClick.AddListener(() => HandleChoicePressed(1));
         }
 
         RefreshDisplay();
     }
 
-    private void OnEnable()
-    {
-        var manager = DialogueManager.Instance;
-        if (manager != null)
-        {
-            manager.DialogueStarted += HandleDialogueChanged;
-            manager.DialogueAdvanced += HandleDialogueChanged;
-            manager.DialogueFinished += HandleDialogueFinished;
-        }
-    }
+    private void OnDestroy() {
+        UnsubscribeFromDialogueManager();
 
-    private void OnDisable()
-    {
-        var manager = DialogueManager.Instance;
-        if (manager != null)
-        {
-            manager.DialogueStarted -= HandleDialogueChanged;
-            manager.DialogueAdvanced -= HandleDialogueChanged;
-            manager.DialogueFinished -= HandleDialogueFinished;
-        }
-
-        if (dialogueTextAnimator != null)
-        {
+        if (dialogueTextAnimator != null) {
             dialogueTextAnimator.TypingFinished -= HandleTypingFinished;
         }
     }
 
-    private void HandleDialogueChanged(Dialogue dialogue)
-    {
-        CancelPendingAdvance();
+    private void HandleDialogueStarted(Dialogue dialogue) {
+        EnsureEventSystem();
+        SetCursorForDialogue(true);
+        SetDialoguePanelVisible(true);
+    }
+
+    private void HandleDialogueChanged(Dialogue dialogue) {
         RefreshDisplay();
     }
 
-    private void HandleDialogueFinished(Dialogue dialogue)
-    {
-        CancelPendingAdvance();
+    private void HandleDialogueFinished(Dialogue dialogue) {
         ClearChoices();
         ClearPortrait();
         CancelContinuePrompt();
         SetContinueIndicatorVisible(false);
         SetContainerMode(false);
-        if (dialogueTextAnimator != null)
-        {
+        if (dialogueTextAnimator != null) {
             dialogueTextAnimator.Clear();
         }
 
         SetDialoguePanelVisible(false);
+        SetCursorForDialogue(false);
     }
 
-    private void HandleSkipPressed()
-    {
+    private void HandleSkipPressed() {
+        HandleAdvanceInput();
+    }
+
+    public bool HandleAdvanceInput() {
         var manager = DialogueManager.Instance;
-        if (manager == null)
-        {
-            return;
+        if (manager == null || !manager.HasDialogue || dialoguePanel == null || !dialoguePanel.activeInHierarchy) {
+            return false;
         }
 
-        if (dialogueTextAnimator != null && dialogueTextAnimator.IsTyping)
-        {
+        if (dialogueTextAnimator != null && dialogueTextAnimator.IsTyping) {
             dialogueTextAnimator.SkipTyping();
-            return;
+            return true;
         }
 
-        if (continuePromptVisible)
-        {
+        if (continuePromptVisible) {
             manager.AdvanceLine();
-            return;
+            return true;
         }
+
+        return false;
     }
 
-    private void HandleChoicePressed(int index)
-    {
+    private void HandleChoicePressed(int index) {
         var manager = DialogueManager.Instance;
-        if (manager == null)
-        {
+        if (manager == null) {
             return;
         }
 
         manager.SelectChoice(index);
     }
 
-    private void RefreshDisplay()
-    {
+    private void RefreshDisplay() {
         var manager = DialogueManager.Instance;
-        if (manager == null || !manager.HasDialogue)
-        {
+        if (manager == null || !manager.HasDialogue) {
             CancelContinuePrompt();
             SetContinueIndicatorVisible(false);
             ClearChoices();
@@ -187,8 +160,7 @@ public class DialogueUI : MonoBehaviour
 
         SetDialoguePanelVisible(true);
 
-        if (showChoices && manager.IsAwaitingChoiceSelection)
-        {
+        if (showChoices && manager.IsAwaitingChoiceSelection) {
             SetContainerMode(true);
             RefreshChoices();
             return;
@@ -197,16 +169,13 @@ public class DialogueUI : MonoBehaviour
         SetContainerMode(false);
 
         var line = manager.GetCurrentLine();
-        if (line != null)
-        {
-            if (characterNameText != null)
-            {
+        if (line != null) {
+            if (characterNameText != null) {
                 characterNameText.text = manager.GetCurrentSpeakerName();
                 characterNameText.color = line.Character != null ? line.Character.CharacterAccentColor : Color.white;
             }
 
-            if (dialogueTextAnimator != null)
-            {
+            if (dialogueTextAnimator != null) {
                 dialogueTextAnimator.ShowText(manager.GetCurrentLineText());
             }
         }
@@ -214,41 +183,34 @@ public class DialogueUI : MonoBehaviour
         RefreshPortrait();
     }
 
-    private void RefreshChoices()
-    {
+    private void RefreshChoices() {
         var manager = DialogueManager.Instance;
         var choicesVisible = showChoices && manager != null && manager.IsAwaitingChoiceSelection;
 
-        if (choicesVisible)
-        {
+        if (choicesVisible) {
             CancelContinuePrompt();
             SetContinueIndicatorVisible(false);
         }
 
-        if (choiceAText != null && manager != null && choicesVisible)
-        {
+        if (choiceAText != null && manager != null && choicesVisible) {
             choiceAText.text = manager.GetChoiceText(0);
         }
 
-        if (choiceBText != null && manager != null && choicesVisible)
-        {
+        if (choiceBText != null && manager != null && choicesVisible) {
             choiceBText.text = manager.GetChoiceText(1);
         }
     }
 
-    private void RefreshPortrait()
-    {
+    private void RefreshPortrait() {
         ClearPortrait();
 
         var manager = DialogueManager.Instance;
-        if (manager == null || !manager.HasDialogue)
-        {
+        if (manager == null || !manager.HasDialogue) {
             return;
         }
 
         var line = manager.GetCurrentLine();
-        if (line == null || line.Character == null || line.Character.PortraitPrefab == null || characterAnchor == null)
-        {
+        if (line == null || line.Character == null || line.Character.PortraitPrefab == null || characterAnchor == null) {
             return;
         }
 
@@ -257,84 +219,109 @@ public class DialogueUI : MonoBehaviour
         currentPortraitInstance.transform.localRotation = Quaternion.identity;
     }
 
-    private void ClearPortrait()
-    {
-        if (currentPortraitInstance != null)
-        {
+    private void ClearPortrait() {
+        if (currentPortraitInstance != null) {
             Destroy(currentPortraitInstance);
             currentPortraitInstance = null;
         }
     }
 
-    private void HandleTypingFinished()
-    {
+    private void HandleTypingFinished() {
         CancelContinuePrompt();
         continuePromptRoutine = StartCoroutine(ShowContinuePromptAfterDelayRoutine());
     }
 
-    private IEnumerator ShowContinuePromptAfterDelayRoutine()
-    {
+    private IEnumerator ShowContinuePromptAfterDelayRoutine() {
         yield return new WaitForSeconds(continueDelay);
 
         continuePromptRoutine = null;
-        if (DialogueManager.Instance != null && DialogueManager.Instance.HasDialogue && !DialogueManager.Instance.IsAwaitingChoiceSelection)
-        {
+        if (DialogueManager.Instance != null && DialogueManager.Instance.HasDialogue && !DialogueManager.Instance.IsAwaitingChoiceSelection) {
             SetContinueIndicatorVisible(true);
         }
     }
 
-    private void CancelContinuePrompt()
-    {
-        if (continuePromptRoutine != null)
-        {
+    private void CancelContinuePrompt() {
+        if (continuePromptRoutine != null) {
             StopCoroutine(continuePromptRoutine);
             continuePromptRoutine = null;
         }
     }
 
-    private void CancelPendingAdvance()
-    {
-        if (pendingAdvanceRoutine != null)
-        {
-            StopCoroutine(pendingAdvanceRoutine);
-            pendingAdvanceRoutine = null;
+    private void SubscribeToDialogueManager() {
+        var manager = DialogueManager.Instance;
+        if (manager == null || manager == subscribedManager) {
+            return;
         }
 
-        hasPendingAdvance = false;
+        UnsubscribeFromDialogueManager();
+
+        subscribedManager = manager;
+        subscribedManager.DialogueStarted += HandleDialogueStarted;
+        subscribedManager.DialogueAdvanced += HandleDialogueChanged;
+        subscribedManager.DialogueFinished += HandleDialogueFinished;
     }
 
-    private void SetDialoguePanelVisible(bool visible)
-    {
-        if (dialoguePanel != null)
-        {
+    private void UnsubscribeFromDialogueManager() {
+        if (subscribedManager == null) {
+            return;
+        }
+
+        subscribedManager.DialogueStarted -= HandleDialogueStarted;
+        subscribedManager.DialogueAdvanced -= HandleDialogueChanged;
+        subscribedManager.DialogueFinished -= HandleDialogueFinished;
+        subscribedManager = null;
+    }
+
+    private void EnsureEventSystem() {
+        runtimeEventSystem = EventSystem.current;
+        if (runtimeEventSystem == null) {
+            var eventSystemObject = new GameObject("EventSystem");
+            runtimeEventSystem = eventSystemObject.AddComponent<EventSystem>();
+        }
+
+        if (runtimeEventSystem.GetComponent<InputSystemUIInputModule>() == null) {
+            var existingStandaloneModule = runtimeEventSystem.GetComponent<StandaloneInputModule>();
+            if (existingStandaloneModule != null) {
+                Destroy(existingStandaloneModule);
+            }
+
+            runtimeEventSystem.gameObject.AddComponent<InputSystemUIInputModule>();
+        }
+    }
+
+    private void SetCursorForDialogue(bool dialogueActive) {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        if (!dialogueActive && DialogueManager.Instance != null && DialogueManager.Instance.HasDialogue) {
+            return;
+        }
+    }
+
+    private void SetDialoguePanelVisible(bool visible) {
+        if (dialoguePanel != null) {
             dialoguePanel.SetActive(visible);
         }
     }
 
-    private void SetContinueIndicatorVisible(bool visible)
-    {
+    private void SetContinueIndicatorVisible(bool visible) {
         continuePromptVisible = visible;
-        if (continueIndicator != null)
-        {
+        if (continueIndicator != null) {
             continueIndicator.SetActive(visible);
         }
     }
 
-    private void SetContainerMode(bool showingChoices)
-    {
-        if (dialogueLineContainer != null)
-        {
+    private void SetContainerMode(bool showingChoices) {
+        if (dialogueLineContainer != null) {
             dialogueLineContainer.SetActive(!showingChoices);
         }
 
-        if (choicesContainer != null)
-        {
+        if (choicesContainer != null) {
             choicesContainer.SetActive(showingChoices);
         }
     }
 
-    private void ClearChoices()
-    {
+    private void ClearChoices() {
         SetContainerMode(false);
     }
 }
