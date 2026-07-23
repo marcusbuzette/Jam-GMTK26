@@ -1,5 +1,6 @@
 using System;
 using Unity.AI.Navigation;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -19,7 +20,9 @@ public class LevelManager : MonoBehaviour {
 
     [Header("Referências Globais")]
     [SerializeField] private Transform playerTransform;
+    [SerializeField] private GameObject playerPrefab; // Prefab do player, caso seja necessário instanciá-lo
     [SerializeField] private NavMeshSurface levelNavMesh; // Referência ao NavMesh do nível, caso seja necessário para navegação
+    [SerializeField] private CinemachineCamera cmCam; // Referência à câmera principal, caso seja necessário para ajustes de zoom ou posicionamento
 
     // Estado Runtime
     public LevelState CurrentState { get; private set; } = LevelState.Setup;
@@ -40,14 +43,18 @@ public class LevelManager : MonoBehaviour {
     }
 
     private void Start() {
-        if (currentLevelData != null) {
+        // Pega o SO selecionado no GameManager
+        if (GameManager.Instance != null && GameManager.Instance.SelectedLevel != null) {
+            LoadLevel(GameManager.Instance.SelectedLevel);
+        } else if (currentLevelData != null) {
             LoadLevel(currentLevelData);
+        } else {
+            Debug.LogError("Nenhum LevelDataSO foi fornecido ao LevelManager!");
         }
     }
 
     private void Update() {
         if (CurrentState != LevelState.Playing) return;
-
         UpdateTimer();
     }
 
@@ -65,11 +72,18 @@ public class LevelManager : MonoBehaviour {
             playerTransform.GetComponent<NavMeshAgent>().enabled = false; // Desativar temporariamente o NavMeshAgent para evitar colisões durante o posicionamento
             // Se estiver usando NavMeshAgent no player, desative-o antes do Warp ou Mova pelo agent.Warp
             playerTransform.position = currentLevelData.playerSpawnPosition;
-            Debug.Log($"Player posicionado em: {playerTransform.position}");
             playerTransform.rotation = Quaternion.Euler(currentLevelData.playerSpawnRotation);
             playerTransform.GetComponent<CharacterController>().enabled = true;
             playerTransform.GetComponent<NavMeshAgent>().enabled = true;
+        } else {
+            // Se o player não estiver presente na cena, instancia
+            GameObject playerInstance = Instantiate(playerPrefab, currentLevelData.playerSpawnPosition,
+                                            Quaternion.Euler(currentLevelData.playerSpawnRotation));
+            playerTransform = playerInstance.transform;
         }
+
+        cmCam.Follow = playerTransform;
+
 
         //Spawnar Prefab dos itens de Cenário em suas posicoes configuradas
         SpawnLevelPrefab();
@@ -115,7 +129,8 @@ public class LevelManager : MonoBehaviour {
 
         CurrentState = LevelState.Victory;
         OnLevelVictory?.Invoke();
-        Debug.Log("VITÓRIA! Bomba desarmada a tempo.");
+        
+        GameManager.Instance.LoadNextLevel();
     }
 
 
