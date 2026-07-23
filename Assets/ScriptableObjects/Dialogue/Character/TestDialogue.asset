@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e2fc63825895e8429f9d28a3a6515a6, type: 3}
+  m_Name: TestDialogue
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  conversationId: conversation_test
+  displayName: Dialogue
+  lines:
+  - character: {fileID: 11400000, guid: c052724c165f89a43a01ab84f981b02c, type: 2}
+    localizedTexts:
+    - languageCode: pt
+      text: Ei, seu bunda mole!
+  - character: {fileID: 11400000, guid: 434505ccd8a2eaa4f9a25d48cf8701b0, type: 2}
+    localizedTexts:
+    - languageCode: pt
+      text: Falou comigo?
+  - character: {fileID: 11400000, guid: c052724c165f89a43a01ab84f981b02c, type: 2}
+    localizedTexts:
+    - languageCode: pt
+      text: "N\xE3o, gracinha! Falei com a puta que te pariu!"
+  - character: {fileID: 11400000, guid: 434505ccd8a2eaa4f9a25d48cf8701b0, type: 2}
+    localizedTexts:
+    - languageCode: pt
+      text: "Ainda bem! At\xE9 um outro dia!"
+  - character: {fileID: 11400000, guid: c052724c165f89a43a01ab84f981b02c, type: 2}
+    localizedTexts:
+    - languageCode: pt
+      text: Um momento, amigo.
+  - character: {fileID: 11400000, guid: 434505ccd8a2eaa4f9a25d48cf8701b0, type: 2}
+    localizedTexts:
+    - languageCode: pt
+      text: "Fala o que voc\xEA quer de uma vez, caralho!"
+  - character: {fileID: 11400000, guid: c052724c165f89a43a01ab84f981b02c, type: 2}
+    localizedTexts:
+    - languageCode: pt
+      text: "Que levas nesse caix\xE3o?"
+  - character: {fileID: 11400000, guid: 434505ccd8a2eaa4f9a25d48cf8701b0, type: 2}
+    localizedTexts:
+    - languageCode: pt
+      text: Um monte de bosta!
+  - character: {fileID: 11400000, guid: c052724c165f89a43a01ab84f981b02c, type: 2}
+    localizedTexts:
+    - languageCode: pt
+      text: "E quem foi o cag\xE3o?"
+  - character: {fileID: 11400000, guid: 434505ccd8a2eaa4f9a25d48cf8701b0, type: 2}
+    localizedTexts:
+    - languageCode: pt
+      text: "Aposto que n\xE3o foi o cu de sua m\xE3e!"
+  - character: {fileID: 11400000, guid: c052724c165f89a43a01ab84f981b02c, type: 2}
+    localizedTexts:
+    - languageCode: pt
+      text: "Voc\xEA fala demais, amigo!"
+  - character: {fileID: 11400000, guid: c052724c165f89a43a01ab84f981b02c, type: 2}
+    localizedTexts:
+    - languageCode: pt
+      text: Acabei de me aborrecer
+  dialogueChoice: {fileID: 11400000, guid: 2c5114e510f41f64689031e8b09f402f, type: 2}
