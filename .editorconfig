@@ -1,0 +1,23 @@
+root = true
+
+[*.cs]
+
+# Não quebrar antes da chave
+csharp_new_line_before_open_brace = none
+
+# Não inserir quebras extras
+csharp_new_line_before_else = false
+csharp_new_line_before_catch = false
+csharp_new_line_before_finally = false
+
+# Preferir chaves obrigatórias sempre (boa prática)
+csharp_prefer_braces = true:suggestion
+
+# Usar estilo de espaços consistente
+csharp_space_after_keywords_in_control_flow_statements = true
+csharp_space_between_method_declaration_parameter_list_parentheses = false
+csharp_space_between_method_call_parameter_list_parentheses = false
+
+# Se quiser one-liner para métodos/propriedades pequenas
+csharp_preserve_single_line_blocks = true
+csharp_preserve_single_line_statements = true
