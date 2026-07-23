@@ -869,6 +869,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1556294904}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: -270}
+--- !u!1 &1274631364 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 896664772234552446, guid: 0b4fb1cb3ee394af8bb6eebee6959ce2, type: 3}
+  m_PrefabInstance: {fileID: 2303162520671325161}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1274631370 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2535272656158526019, guid: 0b4fb1cb3ee394af8bb6eebee6959ce2, type: 3}
@@ -1263,7 +1268,9 @@ MonoBehaviour:
   currentLevelData: {fileID: 11400000, guid: c036e3134c8044d23b567e8eee354afa, type: 2}
   itemsContainer: {fileID: 2093977518}
   playerTransform: {fileID: 1274631370}
+  playerPrefab: {fileID: 1274631364}
   levelNavMesh: {fileID: 1978835396}
+  cmCam: {fileID: 1137642248}
 --- !u!4 &2100942161
 Transform:
   m_ObjectHideFlags: 0
