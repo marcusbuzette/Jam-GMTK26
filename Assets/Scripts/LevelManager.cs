@@ -43,14 +43,18 @@ public class LevelManager : MonoBehaviour {
     }
 
     private void Start() {
-        if (currentLevelData != null) {
+        // Pega o SO selecionado no GameManager
+        if (GameManager.Instance != null && GameManager.Instance.SelectedLevel != null) {
+            LoadLevel(GameManager.Instance.SelectedLevel);
+        } else if (currentLevelData != null) {
             LoadLevel(currentLevelData);
+        } else {
+            Debug.LogError("Nenhum LevelDataSO foi fornecido ao LevelManager!");
         }
     }
 
     private void Update() {
         if (CurrentState != LevelState.Playing) return;
-
         UpdateTimer();
     }
 
@@ -73,7 +77,7 @@ public class LevelManager : MonoBehaviour {
             playerTransform.GetComponent<NavMeshAgent>().enabled = true;
         } else {
             // Se o player não estiver presente na cena, instancia
-            GameObject playerInstance = Instantiate(playerPrefab, currentLevelData.playerSpawnPosition, 
+            GameObject playerInstance = Instantiate(playerPrefab, currentLevelData.playerSpawnPosition,
                                             Quaternion.Euler(currentLevelData.playerSpawnRotation));
             playerTransform = playerInstance.transform;
         }
@@ -125,7 +129,8 @@ public class LevelManager : MonoBehaviour {
 
         CurrentState = LevelState.Victory;
         OnLevelVictory?.Invoke();
-        Debug.Log("VITÓRIA! Bomba desarmada a tempo.");
+        
+        GameManager.Instance.LoadNextLevel();
     }
 
 
