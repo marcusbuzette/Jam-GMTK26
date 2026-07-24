@@ -45,6 +45,20 @@ public class GameManager : MonoBehaviour {
     }
 
 
+    public void RestartCurrentLevel() {
+        if (LevelManager.Instance == null) return; // Se não houver LevelManager ativo, não faz nada
+        if (CurrentLevelIndex < 0 || CurrentLevelIndex >= allLevels.Length) return;
+
+        SelectedLevel = allLevels[CurrentLevelIndex];
+
+        // Salva o progresso localmente (para o botão "Continuar")
+        PlayerPrefs.SetInt(SAVED_LEVEL_KEY, CurrentLevelIndex);
+        PlayerPrefs.Save();
+
+        LevelManager.Instance.RestartLevel(SelectedLevel);
+
+    }
+
     public void ContinueGame() {
         int savedIndex = PlayerPrefs.GetInt(SAVED_LEVEL_KEY, 0);
         SelectAndStartLevel(savedIndex);
