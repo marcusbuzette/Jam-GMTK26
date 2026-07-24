@@ -10,10 +10,11 @@ public class MiniGameWire : MinigameBase
     [SerializeField]Color[] possibleColors;
     public int correctWire; //vai receber isso de algum lugar
     void Start() {
-        Settup();
+        //Settup();
     }
     public override void Settup() {
-        correctWire = Random.Range(0,NumberOfWires);
+        NumberOfWires = Random.Range(3,5);
+        correctWire = Random.Range(0,NumberOfWires);//Provisorio
         for(int i = 0; i < NumberOfWires; i++) {
             int colorIndex = Random.Range(0,possibleColors.Length);
             GameObject go=Instantiate(wirePrefab,wireLayoutGroup);
