@@ -15,6 +15,7 @@ public class EndGameUIController : MonoBehaviour {
 
     private void ShowWinPanel() {
         winPanel.SetActive(true);
+        LevelManager.Instance.HandleOpenedPannel(); // Desabilita movimento e interação do player
     }
     
     private void ShowFailPanel() {
@@ -34,6 +35,7 @@ public class EndGameUIController : MonoBehaviour {
     public void HandleRestartLevel() {
         GameManager.Instance.RestartCurrentLevel();
         failPanel.SetActive(false);
+        LevelManager.Instance.HandleClosedPannel();
     }
 
     public void HandleNextLevel() {
