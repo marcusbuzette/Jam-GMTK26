@@ -82,6 +82,8 @@ public class LevelManager : MonoBehaviour {
             playerTransform = playerInstance.transform;
         }
 
+        playerTransform.GetComponent<PlayerMovement>().EnableMovement(true); // Habilitar movimento do player
+
         cmCam.Follow = playerTransform;
 
 
@@ -120,22 +122,26 @@ public class LevelManager : MonoBehaviour {
         if (RemainingTime <= 0f) {
             RemainingTime = 0f;
             TriggerDefeat("O tempo acabou! A bomba explodiu.");
+            OnLevelDefeat?.Invoke();
         }
     }
 
 
     public void TriggerVictory() {
         if (CurrentState != LevelState.Playing) return;
+        playerTransform.GetComponent<PlayerMovement>().EnableMovement(false); // Desabilitar movimento do player
+        playerTransform.GetComponent<PlayerInteract>().EnableInteraction(false); // Desabilitar interação do player
+        GameManager.Instance.UnlockNextLevel(); // Desbloqueia a próxima fase
 
         CurrentState = LevelState.Victory;
         OnLevelVictory?.Invoke();
-        
-        GameManager.Instance.LoadNextLevel();
     }
 
 
     public void TriggerDefeat(string reason) {
         if (CurrentState != LevelState.Playing) return;
+        playerTransform.GetComponent<PlayerMovement>().EnableMovement(false); // Desabilitar movimento do player
+        playerTransform.GetComponent<PlayerInteract>().EnableInteraction(false); // Desabilitar interação do player
 
         CurrentState = LevelState.Defeat;
         OnLevelDefeat?.Invoke();

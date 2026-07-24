@@ -46,8 +46,7 @@ public class PlayerInteract : MonoBehaviour {
         inputActions.UI.Submit.performed += OnUISubmit;
 
         var manager = DialogueManager.Instance;
-        if (manager != null)
-        {
+        if (manager != null) {
             manager.DialogueStarted += OnDialogueStarted;
             manager.DialogueFinished += OnDialogueFinished;
         }
@@ -61,8 +60,7 @@ public class PlayerInteract : MonoBehaviour {
         inputActions.UI.Disable();
 
         var manager = DialogueManager.Instance;
-        if (manager != null)
-        {
+        if (manager != null) {
             manager.DialogueStarted -= OnDialogueStarted;
             manager.DialogueFinished -= OnDialogueFinished;
         }
@@ -74,7 +72,7 @@ public class PlayerInteract : MonoBehaviour {
         }
 
         HandleHover();
-        
+
         if (isNavigatingToInteract) {
             HandleNavMeshMovement();
         } else if (isAligningToInteract) {
@@ -143,7 +141,7 @@ public class PlayerInteract : MonoBehaviour {
         agent.enabled = true;
         agent.stoppingDistance = stopDistance;
         agent.SetDestination(destination);
-        
+
         currentState = newState;
 
         isNavigatingToInteract = true;
@@ -165,7 +163,7 @@ public class PlayerInteract : MonoBehaviour {
     private void StartAlignment() {
         playerMovementScript.enabled = false;
         characterController.enabled = false;
-        
+
         if (agent.enabled) agent.isStopped = true;
 
         isNavigatingToInteract = false;
@@ -185,7 +183,7 @@ public class PlayerInteract : MonoBehaviour {
 
         if (targetDir.sqrMagnitude > 0.01f) {
             targetDir.Normalize();
-            
+
             Quaternion targetRot = Quaternion.LookRotation(targetDir);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, playerMovementScript.RotationSpeed * Time.deltaTime);
 
@@ -201,7 +199,7 @@ public class PlayerInteract : MonoBehaviour {
         }
 
         Transform targetTransform = (targetInteractable as MonoBehaviour)?.transform ?? targetInteractable.InteractionPoint;
-        
+
         Vector3 dirToTarget = targetTransform.position - transform.position;
         dirToTarget.y = 0;
 
@@ -246,55 +244,56 @@ public class PlayerInteract : MonoBehaviour {
         targetInteractable = null;
         isNavigatingToInteract = false;
         isAligningToInteract = false;
-        
+
         if (agent.enabled && agent.isOnNavMesh) {
             agent.ResetPath();
         }
-        
+
         RestoreManualMovement();
     }
 
     private void RestoreManualMovement() {
+        if (LevelManager.Instance != null && LevelManager.Instance.CurrentState == LevelState.Playing) {
+            agent.enabled = false;
+            characterController.enabled = true;
+            playerMovementScript.enabled = true;
+
+        }
+    }
+
+    private void DisableManualMovement() {
         agent.enabled = false;
-        characterController.enabled = true;
-        playerMovementScript.enabled = true;
+        characterController.enabled = false;
+        playerMovementScript.enabled = false;
     }
 
-    private void OnUIClicked(InputAction.CallbackContext context)
-    {
-        if (!isDialogueMode || context.phase != InputActionPhase.Performed)
-        {
+    private void OnUIClicked(InputAction.CallbackContext context) {
+        if (!isDialogueMode || context.phase != InputActionPhase.Performed) {
             return;
         }
 
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-        {
-            return;
-        }
-
-        var dialogueUI = DialogueUI.Instance;
-        if (dialogueUI != null)
-        {
-            dialogueUI.HandleAdvanceInput();
-        }
-    }
-
-    private void OnUISubmit(InputAction.CallbackContext context)
-    {
-        if (!isDialogueMode || context.phase != InputActionPhase.Performed)
-        {
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) {
             return;
         }
 
         var dialogueUI = DialogueUI.Instance;
-        if (dialogueUI != null)
-        {
+        if (dialogueUI != null) {
             dialogueUI.HandleAdvanceInput();
         }
     }
 
-    private void OnDialogueStarted(Dialogue dialogue)
-    {
+    private void OnUISubmit(InputAction.CallbackContext context) {
+        if (!isDialogueMode || context.phase != InputActionPhase.Performed) {
+            return;
+        }
+
+        var dialogueUI = DialogueUI.Instance;
+        if (dialogueUI != null) {
+            dialogueUI.HandleAdvanceInput();
+        }
+    }
+
+    private void OnDialogueStarted(Dialogue dialogue) {
         isDialogueMode = true;
 
         targetInteractable = null;
@@ -305,18 +304,20 @@ public class PlayerInteract : MonoBehaviour {
             agent.ResetPath();
         }
 
-        agent.enabled = false;
-        characterController.enabled = false;
-        playerMovementScript.enabled = false;
+        DisableManualMovement();
         inputActions.Player.Disable();
         inputActions.UI.Enable();
     }
 
-    private void OnDialogueFinished(Dialogue dialogue)
-    {
+    private void OnDialogueFinished(Dialogue dialogue) {
         isDialogueMode = false;
         inputActions.Player.Enable();
         inputActions.UI.Enable();
         RestoreManualMovement();
+    }
+
+    public void EnableInteraction(bool enable) {
+        enabled = enable;
+        inputActions.Player.Interact.Disable(); // Desabilita o input de interação
     }
 }
