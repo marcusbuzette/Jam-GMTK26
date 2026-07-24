@@ -2701,6 +2701,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 1805189158}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 459630648}
         m_TargetAssemblyTypeName: EndGameUIController, Assembly-CSharp
         m_MethodName: HandleRestartLevel
@@ -3877,7 +3889,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   allLevels:
-  - {fileID: 11400000, guid: 63fa91bb891b7452a9053d044ea81880, type: 2}
+  - {fileID: 11400000, guid: c036e3134c8044d23b567e8eee354afa, type: 2}
   - {fileID: 11400000, guid: 267dc3332c0d242b99308c0adcbc8629, type: 2}
   - {fileID: 11400000, guid: 0bc1e048080394d48b47c23b7de7dd41, type: 2}
   mainMenuSceneName: MainMenu

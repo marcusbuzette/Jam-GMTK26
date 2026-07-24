@@ -82,7 +82,8 @@ public class LevelManager : MonoBehaviour {
             playerTransform = playerInstance.transform;
         }
 
-        playerTransform.GetComponent<PlayerMovement>().EnableMovement(true); // Habilitar movimento do player
+        playerTransform.GetComponent<PlayerMovement>().EnableMovement(true); // Desabilitar movimento do player
+        playerTransform.GetComponent<PlayerInteract>().EnableInteraction(true); // Desabilitar interação do player
 
         cmCam.Follow = playerTransform;
 
@@ -148,5 +149,14 @@ public class LevelManager : MonoBehaviour {
         CurrentState = LevelState.Defeat;
         OnLevelDefeat?.Invoke();
         Debug.Log($"DERROTA: {reason}");
+    }
+
+    public void RestartLevel(LevelSetupSO levelData) {
+        if (levelData != null) {
+            LoadLevel(levelData);
+        } else {
+            LoadLevel(currentLevelData);
+            Debug.LogError("Não há LevelSetupSO carregado para reiniciar o nível!");
+        }
     }
 }

@@ -32,7 +32,8 @@ public class EndGameUIController : MonoBehaviour {
     }
 
     public void HandleRestartLevel() {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
+        GameManager.Instance.RestartCurrentLevel();
+        failPanel.SetActive(false);
     }
 
     public void HandleNextLevel() {
