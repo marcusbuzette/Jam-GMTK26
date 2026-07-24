@@ -5,7 +5,7 @@ public class CharacterDefinition : ScriptableObject
 {
     [SerializeField] private string characterName = "Character";
     [SerializeField] private GameObject portraitPrefab;
-    [SerializeField] private Color characterAccentColor = Color.white;
+    [SerializeField] private Color characterAccentColor = new Color(37,36,34);
 
     public string CharacterName => characterName;
     public GameObject PortraitPrefab => portraitPrefab;
