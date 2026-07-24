@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BombZoomTest : MonoBehaviour
@@ -18,6 +19,7 @@ public class BombZoomTest : MonoBehaviour
         originalScale = bomb.localScale;
     }
     public void ZoomTo(RectTransform module) {
+        if(module==targetModule)return;//don't zoom if already zoomed
         targetModule=module;
         StartCoroutine(nameof(ZoomToCor));
     }
@@ -30,6 +32,7 @@ public class BombZoomTest : MonoBehaviour
         bomb.anchoredPosition = -modulePos * zoomScale;
     } */
     IEnumerator ZoomToCor() {
+        if(targetModule==null)yield break;
         Vector2 modulePos = targetModule.anchoredPosition;
         float timer = 0;
         while(timer<duration){
@@ -41,6 +44,7 @@ public class BombZoomTest : MonoBehaviour
         }
     }
     public void ResetView() {
+        targetModule=null;
         StartCoroutine(nameof(ResetViewCor));
     }
     /* public void ResetView()

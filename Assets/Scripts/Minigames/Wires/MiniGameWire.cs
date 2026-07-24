@@ -30,7 +30,7 @@ public class MiniGameWire : MinigameBase
         int childCount = wireLayoutGroup.childCount;
         for(int i = 0; i < childCount; i++) {
             GameObject go = wireLayoutGroup.transform.GetChild(0).gameObject;
-            go.transform.parent=null;
+            go.transform.SetParent(null);
             Destroy(go);
         }
         Settup();

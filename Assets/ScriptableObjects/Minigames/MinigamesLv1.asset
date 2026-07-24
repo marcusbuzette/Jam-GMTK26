@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ModulesCombination
   minigames:
   - {fileID: 3593052707274217180, guid: a608aad88e6fd5649a4cfa6fad2797b7, type: 3}
+  - {fileID: 3960859175987532577, guid: 0e662a132aa52104eab490a688ec9ad7, type: 3}
+  - {fileID: 390548641311531448, guid: 8b1b6b4de46c51142bba64a13d0a1046, type: 3}
