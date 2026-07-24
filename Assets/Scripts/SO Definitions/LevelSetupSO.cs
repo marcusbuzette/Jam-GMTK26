@@ -12,6 +12,7 @@ public class LevelSetupSO : ScriptableObject {
     [Header("Player Spawn Configuration")]
     public Vector3 playerSpawnPosition;
     public Vector3 playerSpawnRotation;
+    public int startingFloorIndex = 0;
 
 
     [Header("Prefab com os itens a serem instanciados")]

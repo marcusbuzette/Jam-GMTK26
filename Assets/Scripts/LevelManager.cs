@@ -90,6 +90,8 @@ public class LevelManager : MonoBehaviour {
         //Spawnar Prefab dos itens de Cenário em suas posicoes configuradas
         SpawnLevelPrefab();
 
+        FloorManager.Instance.ShowFloor(currentLevelData.startingFloorIndex); // Mostrar o andar inicial configurado no LevelSetupSO
+
         //Iniciar Gameplay
         CurrentState = LevelState.Playing;
         OnLevelStarted?.Invoke();
