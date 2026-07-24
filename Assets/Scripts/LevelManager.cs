@@ -132,8 +132,6 @@ public class LevelManager : MonoBehaviour {
 
     public void TriggerVictory() {
         if (CurrentState != LevelState.Playing) return;
-        playerTransform.GetComponent<PlayerMovement>().EnableMovement(false); // Desabilitar movimento do player
-        playerTransform.GetComponent<PlayerInteract>().EnableInteraction(false); // Desabilitar interação do player
         GameManager.Instance.UnlockNextLevel(); // Desbloqueia a próxima fase
 
         CurrentState = LevelState.Victory;
@@ -143,8 +141,6 @@ public class LevelManager : MonoBehaviour {
 
     public void TriggerDefeat(string reason) {
         if (CurrentState != LevelState.Playing) return;
-        playerTransform.GetComponent<PlayerMovement>().EnableMovement(false); // Desabilitar movimento do player
-        playerTransform.GetComponent<PlayerInteract>().EnableInteraction(false); // Desabilitar interação do player
 
         CurrentState = LevelState.Defeat;
         OnLevelDefeat?.Invoke();
@@ -158,5 +154,15 @@ public class LevelManager : MonoBehaviour {
             LoadLevel(currentLevelData);
             Debug.LogError("Não há LevelSetupSO carregado para reiniciar o nível!");
         }
+    }
+
+    public void HandleOpenedPannel() {
+        playerTransform.GetComponent<PlayerMovement>().EnableMovement(false); // Desabilitar movimento do player
+        playerTransform.GetComponent<PlayerInteract>().EnableInteraction(false); // Desabilitar interação do player
+    }
+
+    public void HandleClosedPannel() {
+        playerTransform.GetComponent<PlayerMovement>().EnableMovement(true); // Habilitar movimento do player
+        playerTransform.GetComponent<PlayerInteract>().EnableInteraction(true); // Habilitar interação do player
     }
 }
