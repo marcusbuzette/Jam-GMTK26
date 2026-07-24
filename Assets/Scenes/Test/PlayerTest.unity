@@ -1028,6 +1028,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   contentContainer: {fileID: 1899366575}
+  panelWrapper: {fileID: 843337359}
   closeButton: {fileID: 1656873773}
 --- !u!1 &293858505
 GameObject:
@@ -5989,7 +5990,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1588181781}
+  - {fileID: 730058224}
   - {fileID: 315568322}
   - {fileID: 1114548675}
-  - {fileID: 730058224}
   - {fileID: 208938902}

@@ -6,6 +6,7 @@ public class InteractPannelController : MonoBehaviour {
     public static InteractPannelController Instance;
 
     [SerializeField] private RectTransform contentContainer;
+    [SerializeField] private GameObject panelWrapper;
 
     [SerializeField] private Button closeButton;
 
@@ -17,27 +18,21 @@ public class InteractPannelController : MonoBehaviour {
         }
     }
 
-    void OnEnable() {
-        LevelManager.Instance.HandleOpenedPannel();
-        closeButton.onClick.AddListener(() => HidePannel());
-    }
-
     public void ShowPannel(GameObject content) {
         if (contentContainer.childCount > 0) {
             for (int i = contentContainer.childCount - 1; i >= 0; i--) {
                 Destroy(contentContainer.GetChild(i));
             }
         }
-
+        LevelManager.Instance.HandleOpenedPannel();
+        closeButton.onClick.AddListener(() => HidePannel());
         Instantiate(content, contentContainer);
+        panelWrapper.SetActive(true);
     }
 
     public void HidePannel() {
-        closeButton.onClick.RemoveAllListeners();
-        gameObject.SetActive(false);
-    }
-
-    private void OnDisable() {
         LevelManager.Instance.HandleClosedPannel();
+        closeButton.onClick.RemoveAllListeners();
+        panelWrapper.SetActive(false);
     }
 }

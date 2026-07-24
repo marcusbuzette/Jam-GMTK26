@@ -319,9 +319,12 @@ public class PlayerInteract : MonoBehaviour {
     public void EnableInteraction(bool enable) {
         enabled = enable;
         if (enable) {
-            inputActions.Player.Interact.Enable(); // Habilita o input de interação
+            inputActions.Player.Enable(); // Habilita o input de interação
+            inputActions.UI.Enable();
+            RestoreManualMovement();
         } else {
-            inputActions.Player.Interact.Disable(); // Desabilita o input de interação
+            inputActions.Player.Disable(); // Desabilita o input de interação
+            DisableManualMovement();
         }
     }
 }
