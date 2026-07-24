@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Generic NPC
   m_EditorClassIdentifier: Assembly-CSharp::CharacterDefinition
   characterName: ???
-  portraitPrefab: {fileID: 0}
+  portraitPrefab: {fileID: 1554944141622961326, guid: d0203cbac1c48ef4f8bdf8aad2b17c5f, type: 3}
   characterAccentColor: {r: 0.7075472, g: 0.7075472, b: 0.7075472, a: 1}
