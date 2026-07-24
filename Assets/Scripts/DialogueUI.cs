@@ -209,6 +209,14 @@ public class DialogueUI : MonoBehaviour {
             return;
         }
 
+        var activeSpeakerAppearance = manager.ActiveSpeakerAppearance;
+        if (activeSpeakerAppearance != null && characterAnchor != null) {
+            currentPortraitInstance = activeSpeakerAppearance.CreatePortraitInstance(characterAnchor);
+            if (currentPortraitInstance != null) {
+                return;
+            }
+        }
+
         var line = manager.GetCurrentLine();
         if (line == null || line.Character == null || line.Character.PortraitPrefab == null || characterAnchor == null) {
             return;

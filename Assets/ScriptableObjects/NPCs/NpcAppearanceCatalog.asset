@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb1d761de912d6b42a791921b10e45af, type: 3}
+  m_Name: NpcAppearanceCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::NpcAppearanceCatalog
+  baseBodies:
+  - bodyType: 0
+    baseBodyPrefab: {fileID: 0}
+  - bodyType: 1
+    baseBodyPrefab: {fileID: 0}
+  slotDefinitions:
+  - slotType: 0
+    variants:
+    - id: 
+      prefab: {fileID: 0}
+      referenceMaterial: {fileID: 0}
+      supportedBodyTypes: 
+  - slotType: 1
+    variants: []
+  - slotType: 2
+    variants: []
+  materialBindings:
+  - channel: 0
+    colorProperty: 
+  - channel: 1
+    colorProperty: 
+  - channel: 2
+    colorProperty: 
+  - channel: 3
+    colorProperty: 
+  - channel: 4
+    colorProperty: 
+  - channel: 5
+    colorProperty: 
+  skinTone:
+    baseColor: {r: 0.78, g: 0.62, b: 0.52, a: 1}
+    minDarknessShift: -0.15
+    maxDarknessShift: 0.2
+  palettes:
+  - channel: 1
+    colors:
+    - value: {r: 1, g: 0.64289945, b: 0, a: 1}
+    - value: {r: 0.2924528, g: 0.21062702, b: 0.08966714, a: 1}
+    - value: {r: 1, g: 0.52006483, b: 0, a: 1}
+    - value: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 1}
+    - value: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
+    - value: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 1}
+  - channel: 2
+    colors:
+    - value: {r: 0.8113208, g: 0.8113208, b: 0.8113208, a: 1}
+    - value: {r: 0.26415092, g: 0.26415092, b: 0.26415092, a: 1}
+    - value: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 1}
+  - channel: 3
+    colors:
+    - value: {r: 0.3962264, g: 0, b: 0.052830186, a: 1}
+    - value: {r: 1, g: 1, b: 1, a: 1}
+    - value: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 1}
+    - value: {r: 0.33201686, g: 0.2736739, b: 0.4716981, a: 1}
+  - channel: 4
+    colors:
+    - value: {r: 0.3962264, g: 0, b: 0.052830186, a: 1}
+    - value: {r: 1, g: 1, b: 1, a: 1}
+    - value: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 1}
+    - value: {r: 0.33201686, g: 0.2736739, b: 0.4716981, a: 1}
+  - channel: 5
+    colors:
+    - value: {r: 0.3962264, g: 0, b: 0.052830186, a: 1}
+    - value: {r: 1, g: 1, b: 1, a: 1}
+    - value: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 1}
+    - value: {r: 0.33201686, g: 0.2736739, b: 0.4716981, a: 1}

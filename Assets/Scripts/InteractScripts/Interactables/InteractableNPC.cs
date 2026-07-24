@@ -58,7 +58,8 @@ public class InteractableNPC : InteractableBase {
         {
             FaceInteractor(interactor);
             activeConversationId = dialogue.ConversationId;
-            DialogueManager.Instance.StartDialogue(dialogue);
+            var appearanceIdentity = GetComponent<NpcAppearanceIdentity>();
+            DialogueManager.Instance.StartDialogue(dialogue, appearanceIdentity);
         }
         else
         {
