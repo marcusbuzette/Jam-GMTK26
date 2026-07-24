@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: LevelTest
   m_EditorClassIdentifier: Assembly-CSharp::LevelSetupSO
   levelName: Level Teste
-  durationInSeconds: 30
+  durationInSeconds: 180
   levelMusic: {fileID: 0}
   playerSpawnPosition: {x: -7, y: 0, z: 0.4}
   playerSpawnRotation: {x: 0, y: 180, z: 0}
+  startingFloorIndex: 0
   itemsToSpawn: {fileID: 1145893291012582295, guid: 9bc5001b58c6848a1b0a3b5f33d8fb05, type: 3}

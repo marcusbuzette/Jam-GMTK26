@@ -21,7 +21,7 @@ public class FloorManager : MonoBehaviour {
 
         for (int i = 0; i < floors.Length; i++) {
             // Ativa apenas o andar atual e desativa o resto
-            floors[i].SetActive(i == floorIndex);
+            floors[i].SetActive(i <= floorIndex);
         }
     }
 }
