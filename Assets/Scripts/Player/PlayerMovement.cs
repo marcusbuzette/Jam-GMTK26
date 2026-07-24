@@ -60,6 +60,10 @@ public class PlayerMovement : MonoBehaviour {
     public void EnableMovement(bool enable) {
         Debug.Log($"PlayerMovement: EnableMovement({enable}) called.");
         enabled = enable;
-        inputActions.Player.Move.Disable(); // Desabilita o input de movimento
+        if (enable) {
+            inputActions.Player.Move.Enable(); // Habilita o input de movimento
+        } else {
+            inputActions.Player.Move.Disable(); // Desabilita o input de movimento
+        }
     }
 }
