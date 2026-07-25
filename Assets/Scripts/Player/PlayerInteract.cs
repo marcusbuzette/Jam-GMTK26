@@ -42,6 +42,7 @@ public class PlayerInteract : MonoBehaviour {
         inputActions.Player.Enable();
         inputActions.Player.Interact.performed += OnInteractClicked;
         inputActions.UI.Enable();
+        inputActions.UI.Manual.performed += OnToggleManualClicked;
         inputActions.UI.Click.performed += OnUIClicked;
         inputActions.UI.Submit.performed += OnUISubmit;
 
@@ -57,6 +58,7 @@ public class PlayerInteract : MonoBehaviour {
         inputActions.Player.Interact.performed -= OnInteractClicked;
         inputActions.UI.Click.performed -= OnUIClicked;
         inputActions.UI.Submit.performed -= OnUISubmit;
+        inputActions.UI.Manual.performed -= OnToggleManualClicked;
         inputActions.UI.Disable();
 
         var manager = DialogueManager.Instance;
@@ -171,6 +173,7 @@ public class PlayerInteract : MonoBehaviour {
     }
 
     private void HandleNavMeshMovement() {
+        if (agent == null || !agent.enabled || !agent.isOnNavMesh)return;
         if (agent.pathPending) return;
 
         if (agent.remainingDistance <= agent.stoppingDistance) {
@@ -317,7 +320,7 @@ public class PlayerInteract : MonoBehaviour {
     }
 
     public void EnableInteraction(bool enable) {
-        enabled = enable;
+        // enabled = enable;
         if (enable) {
             inputActions.Player.Enable(); // Habilita o input de interação
             inputActions.UI.Enable();
@@ -326,5 +329,19 @@ public class PlayerInteract : MonoBehaviour {
             inputActions.Player.Disable(); // Desabilita o input de interação
             DisableManualMovement();
         }
+    }
+
+    private void OnToggleManualClicked(InputAction.CallbackContext context) {
+        if(!CanOpenManual()) return;
+        ManualManager.Instance.ToggleManual();
+    }
+
+    private bool CanOpenManual() {
+        if (isDialogueMode) return false;
+        if (ManualManager.Instance == null) return false;
+        if (isNavigatingToInteract || isAligningToInteract) return false;
+        if (EndGameUIController.Instance != null && EndGameUIController.Instance.IsEndGameUIActive) return false;
+        if (InteractPannelController.Instance != null && InteractPannelController.Instance.IsInteractPanelOpen) return false;
+        return true;
     }
 }
