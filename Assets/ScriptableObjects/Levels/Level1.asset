@@ -15,6 +15,7 @@ MonoBehaviour:
   levelName: Level 1
   durationInSeconds: 180
   levelMusic: {fileID: 0}
-  playerSpawnPosition: {x: -7, y: 0, z: 0.4}
-  playerSpawnRotation: {x: 0, y: 180, z: 0}
+  playerSpawnPosition: {x: -0.24, y: 0, z: -9.51}
+  playerSpawnRotation: {x: 0, y: 0, z: 0}
+  startingFloorIndex: 0
   itemsToSpawn: {fileID: 1145893291012582295, guid: c9e919c6ca13e457daf19afc4187f525, type: 3}

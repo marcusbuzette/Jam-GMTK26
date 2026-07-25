@@ -82,11 +82,16 @@ public class LevelManager : MonoBehaviour {
             playerTransform = playerInstance.transform;
         }
 
+        playerTransform.GetComponent<PlayerMovement>().EnableMovement(true); // Desabilitar movimento do player
+        playerTransform.GetComponent<PlayerInteract>().EnableInteraction(true); // Desabilitar interação do player
+
         cmCam.Follow = playerTransform;
 
 
         //Spawnar Prefab dos itens de Cenário em suas posicoes configuradas
         SpawnLevelPrefab();
+
+        FloorManager.Instance.ShowFloor(currentLevelData.startingFloorIndex); // Mostrar o andar inicial configurado no LevelSetupSO
 
         //Iniciar Gameplay
         CurrentState = LevelState.Playing;
@@ -120,17 +125,17 @@ public class LevelManager : MonoBehaviour {
         if (RemainingTime <= 0f) {
             RemainingTime = 0f;
             TriggerDefeat("O tempo acabou! A bomba explodiu.");
+            OnLevelDefeat?.Invoke();
         }
     }
 
 
     public void TriggerVictory() {
         if (CurrentState != LevelState.Playing) return;
+        GameManager.Instance.UnlockNextLevel(); // Desbloqueia a próxima fase
 
         CurrentState = LevelState.Victory;
         OnLevelVictory?.Invoke();
-        
-        GameManager.Instance.LoadNextLevel();
     }
 
 
@@ -140,5 +145,24 @@ public class LevelManager : MonoBehaviour {
         CurrentState = LevelState.Defeat;
         OnLevelDefeat?.Invoke();
         Debug.Log($"DERROTA: {reason}");
+    }
+
+    public void RestartLevel(LevelSetupSO levelData) {
+        if (levelData != null) {
+            LoadLevel(levelData);
+        } else {
+            LoadLevel(currentLevelData);
+            Debug.LogError("Não há LevelSetupSO carregado para reiniciar o nível!");
+        }
+    }
+
+    public void HandleOpenedPannel() {
+        playerTransform.GetComponent<PlayerMovement>().EnableMovement(false); // Desabilitar movimento do player
+        playerTransform.GetComponent<PlayerInteract>().EnableInteraction(false); // Desabilitar interação do player
+    }
+
+    public void HandleClosedPannel() {
+        playerTransform.GetComponent<PlayerMovement>().EnableMovement(true); // Habilitar movimento do player
+        playerTransform.GetComponent<PlayerInteract>().EnableInteraction(true); // Habilitar interação do player
     }
 }

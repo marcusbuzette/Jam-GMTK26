@@ -172,7 +172,7 @@ public class DialogueUI : MonoBehaviour {
         if (line != null) {
             if (characterNameText != null) {
                 characterNameText.text = manager.GetCurrentSpeakerName();
-                characterNameText.color = line.Character != null ? line.Character.CharacterAccentColor : Color.white;
+                characterNameText.color = line.Character != null ? line.Character.CharacterAccentColor : new Color32(0x25, 0x24, 0x22, 255);
             }
 
             if (dialogueTextAnimator != null) {

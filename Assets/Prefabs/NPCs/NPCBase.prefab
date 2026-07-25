@@ -32,6 +32,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5088320482580070158}
   - {fileID: 4173856228179821121}
   m_Father: {fileID: 525561265595630024}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -137,7 +138,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3662258185514211375}
-  - {fileID: 5088320482580070158}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6728713344550381537
@@ -156,6 +156,7 @@ MonoBehaviour:
   interactionPoint: {fileID: 4173856228179821121}
   outlineComponent: {fileID: 7670244819969403357}
   dialogue: {fileID: 0}
+  turnSpeed: 360
 --- !u!136 &2852882715226471053
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -238,11 +239,11 @@ Transform:
   m_GameObject: {fileID: 8775638339178040961}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.9839, z: 0.458}
+  m_LocalPosition: {x: 0, y: 0.4809, z: 0.45799994}
   m_LocalScale: {x: 0.5223326, y: 0.20894156, z: 0.35363}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 525561265595630024}
+  m_Father: {fileID: 3662258185514211375}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2331127551761330980
 MeshFilter:

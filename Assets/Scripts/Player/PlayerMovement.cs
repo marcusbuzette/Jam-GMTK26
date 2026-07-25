@@ -56,4 +56,14 @@ public class PlayerMovement : MonoBehaviour {
             controller.Move(transform.forward * moveSpeed * Time.deltaTime);
         }
     }
+
+    public void EnableMovement(bool enable) {
+        Debug.Log($"PlayerMovement: EnableMovement({enable}) called.");
+        enabled = enable;
+        if (enable) {
+            inputActions.Player.Enable(); // Habilita o input de movimento
+        } else {
+            inputActions.Player.Disable(); // Desabilita o input de movimento
+        }
+    }
 }

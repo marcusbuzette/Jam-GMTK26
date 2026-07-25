@@ -13,7 +13,7 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable {
     [SerializeField] private InteractableOutline outlineComponent;
 
     public float InteractionDistance => interactionDistance;
-    public Transform InteractionPoint => interactionPoint != null ? interactionPoint : transform;
+    public virtual Transform InteractionPoint => interactionPoint != null ? interactionPoint : transform;
 
     public virtual void OnHoverEnter() {
         if (outlineComponent != null) outlineComponent.EnableOutline();
