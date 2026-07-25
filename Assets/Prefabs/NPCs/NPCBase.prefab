@@ -1602,7 +1602,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractableNPC
   interactionDistance: 1
-  interactionPoint: {fileID: 0}
+  interactionPoint: {fileID: 5177598379261719925}
   outlineComponent: {fileID: 0}
   dialogue: {fileID: 11400000, guid: afc010e45746403409d060c4fea7d787, type: 2}
   turnSpeed: 360
@@ -1736,8 +1736,8 @@ MonoBehaviour:
   targetAnimator: {fileID: 7848902791616166269}
   portraitVisualPrefab: {fileID: 2641594791896409068}
   keepAnimatorOnPortrait: 1
-  maleAnimatorController: {fileID: 9100000, guid: 37b995e8e379ab349a025af5587c34f8, type: 2}
-  femaleAnimatorController: {fileID: 9100000, guid: b395344c5ca31ff438975109ee6cfa4d, type: 2}
+  maleAnimatorController: {fileID: 9100000, guid: e1b917f903efc7c4484e55524386dc5f, type: 2}
+  femaleAnimatorController: {fileID: 9100000, guid: 0f1b36ad263b48945b7f811f82a4d5a5, type: 2}
   generateOnAwake: 1
   useFixedSeed: 0
   fixedSeed: 0
