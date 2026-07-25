@@ -6,7 +6,7 @@ using UnityEngine;
 public class LevelSetupSO : ScriptableObject {
     [Header("Identificação do Nível")]
     public string levelName = "Level 1";
-    public float durationInSeconds = 180f; // Remover depois para pegar automaticamente a duração da musica
+    public int rpm = 63;
     public AudioClip levelMusic;
 
     [Header("Player Spawn Configuration")]
