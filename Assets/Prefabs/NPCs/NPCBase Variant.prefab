@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 525561265595630024, guid: 2561ce177dd0e4767bfb4aea94ee2d85, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.98
       objectReference: {fileID: 0}
     - target: {fileID: 525561265595630024, guid: 2561ce177dd0e4767bfb4aea94ee2d85, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 525561265595630024, guid: 2561ce177dd0e4767bfb4aea94ee2d85, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 5.85
       objectReference: {fileID: 0}
     - target: {fileID: 525561265595630024, guid: 2561ce177dd0e4767bfb4aea94ee2d85, type: 3}
       propertyPath: m_LocalRotation.w
@@ -52,6 +52,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 5341541534172024640, guid: 2561ce177dd0e4767bfb4aea94ee2d85, type: 3}
+      propertyPath: speakerCharacter
+      value: 
+      objectReference: {fileID: 11400000, guid: c052724c165f89a43a01ab84f981b02c, type: 2}
+    - target: {fileID: 6728713344550381537, guid: 2561ce177dd0e4767bfb4aea94ee2d85, type: 3}
+      propertyPath: outlineComponents.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6728713344550381537, guid: 2561ce177dd0e4767bfb4aea94ee2d85, type: 3}
+      propertyPath: 'outlineComponents.Array.data[0]'
+      value: 
+      objectReference: {fileID: 435087730020830130}
+    - target: {fileID: 6728713344550381537, guid: 2561ce177dd0e4767bfb4aea94ee2d85, type: 3}
+      propertyPath: 'outlineComponents.Array.data[1]'
+      value: 
+      objectReference: {fileID: 4002809656097456169}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

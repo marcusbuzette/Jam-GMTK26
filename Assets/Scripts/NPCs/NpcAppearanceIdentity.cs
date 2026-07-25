@@ -9,6 +9,7 @@ public class NpcAppearanceIdentity : MonoBehaviour
     [SerializeField] private NpcAppearanceCatalog catalog;
     [SerializeField] private NpcAppearanceVisual worldVisual;
     [SerializeField] private Animator targetAnimator;
+    [SerializeField] private CharacterDefinition speakerCharacter;
     [SerializeField] private GameObject portraitVisualPrefab;
     [SerializeField] private bool keepAnimatorOnPortrait = true;
 
@@ -28,6 +29,7 @@ public class NpcAppearanceIdentity : MonoBehaviour
     public NpcAppearanceCatalog Catalog => catalog;
     public NpcAppearanceData CurrentAppearance => currentAppearance;
     public bool HasAppearance => !string.IsNullOrWhiteSpace(currentAppearance.appearanceId);
+    public CharacterDefinition SpeakerCharacter => speakerCharacter;
 
     private void Awake()
     {
@@ -115,6 +117,11 @@ public class NpcAppearanceIdentity : MonoBehaviour
         SanitizePortraitInstance(instance, portraitVisual);
 
         return instance;
+    }
+
+    public bool MatchesCharacter(CharacterDefinition character)
+    {
+        return character != null && speakerCharacter == character;
     }
 
     private void SanitizePortraitInstance(GameObject instance, NpcAppearanceVisual portraitVisual)
@@ -222,6 +229,11 @@ public class NpcAppearanceIdentity : MonoBehaviour
         {
             targetAnimator = GetComponent<Animator>();
         }
+
+        if (targetAnimator == null)
+        {
+            targetAnimator = GetComponentInChildren<Animator>(true);
+        }
     }
 
     private Animator ResolveAnimatorForTarget(NpcAppearanceVisual targetVisual)
@@ -236,7 +248,13 @@ public class NpcAppearanceIdentity : MonoBehaviour
             return targetAnimator;
         }
 
-        return targetVisual.GetComponent<Animator>();
+        var portraitAnimator = targetVisual.GetComponent<Animator>();
+        if (portraitAnimator != null)
+        {
+            return portraitAnimator;
+        }
+
+        return targetVisual.GetComponentInChildren<Animator>(true);
     }
 
     private NpcAppearanceData BuildAppearance(int seed)

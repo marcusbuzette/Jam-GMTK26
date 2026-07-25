@@ -47,7 +47,6 @@ public class InteractableNPC : InteractableBase {
         {
             transform.rotation = targetRotation;
             isTurning = false;
-            Debug.Log($"[NPC] Finished turning. Current rotation: {transform.rotation.eulerAngles}, shouldReturnToOriginalRotation: {shouldReturnToOriginalRotation}");
         }
     }
 
@@ -75,7 +74,6 @@ public class InteractableNPC : InteractableBase {
         }
 
         originalRotation = transform.rotation;
-        Debug.Log($"[NPC] FaceInteractor called. Saved originalRotation: {originalRotation.eulerAngles}");
 
         var directionToInteractor = interactor.transform.position - transform.position;
         directionToInteractor.y = 0f;
@@ -87,12 +85,10 @@ public class InteractableNPC : InteractableBase {
         targetRotation = Quaternion.LookRotation(directionToInteractor.normalized);
         isTurning = true;
         shouldReturnToOriginalRotation = true;
-        Debug.Log($"[NPC] Starting turn to face interactor. targetRotation: {targetRotation.eulerAngles}");
     }
 
     private void HandleDialogueFinished(Dialogue finishedDialogue)
     {
-        Debug.Log($"[NPC] HandleDialogueFinished called. finishedDialogue={finishedDialogue?.ConversationId}, activeConversationId={activeConversationId}, shouldReturn={shouldReturnToOriginalRotation}");
         
         if (finishedDialogue == null || finishedDialogue.ConversationId != activeConversationId)
         {
@@ -102,11 +98,8 @@ public class InteractableNPC : InteractableBase {
 
         if (!shouldReturnToOriginalRotation)
         {
-            Debug.Log($"[NPC] shouldReturnToOriginalRotation is false");
             return;
         }
-
-        Debug.Log($"[NPC] Setting rotation back to original: {originalRotation.eulerAngles}");
         targetRotation = originalRotation;
         isTurning = true;
         shouldReturnToOriginalRotation = false;

@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1660510059384103112, guid: 356a700ca535730409ac5834c13ac81d, type: 3}
       propertyPath: m_Name
-      value: CharacterName Variant
+      value: CharacterName
       objectReference: {fileID: 0}
     - target: {fileID: 5171649360318950986, guid: 356a700ca535730409ac5834c13ac81d, type: 3}
       propertyPath: m_margin.x

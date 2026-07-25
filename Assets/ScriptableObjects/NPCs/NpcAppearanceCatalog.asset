@@ -13,43 +13,257 @@ MonoBehaviour:
   m_Name: NpcAppearanceCatalog
   m_EditorClassIdentifier: Assembly-CSharp::NpcAppearanceCatalog
   skinTone:
-    baseColor: {r: 0.78, g: 0.62, b: 0.52, a: 1}
-    minDarknessShift: -0.6
-    maxDarknessShift: 0.58
+    baseColor: {r: 0.990566, g: 0.8657541, b: 0.7896493, a: 1}
+    minDarknessShift: -0.63
+    maxDarknessShift: 1
   palettes:
   - channel: 1
     colors:
     - value: {r: 1, g: 0.64289945, b: 0, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Yellow
+      - languageCode: pt
+        text: Amarelo
     - value: {r: 0.2924528, g: 0.21062702, b: 0.08966714, a: 1}
+      localizedDescriptions:
+      - languageCode: pt
+        text: Marrom Escuro
+      - languageCode: en
+        text: Dark Brown
     - value: {r: 1, g: 0.52006483, b: 0, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Orange
+      - languageCode: pt
+        text: Laranja
     - value: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Dark Gray
+      - languageCode: pt
+        text: Escuro Cinza
     - value: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Gray
+      - languageCode: pt
+        text: Cinza
     - value: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Dark Gray
+      - languageCode: pt
+        text: Escuro Cinza
+    - value: {r: 0.084905684, g: 0.084905684, b: 0.084905684, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Dark Gray
+      - languageCode: pt
+        text: Escuro Cinza
   - channel: 2
     colors:
     - value: {r: 0.8113208, g: 0.8113208, b: 0.8113208, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Light Gray
+      - languageCode: pt
+        text: Claro Cinza
     - value: {r: 0.26415092, g: 0.26415092, b: 0.26415092, a: 1}
-    - value: {r: 0.4292453, g: 0.6713836, b: 1, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Dark Gray
+      - languageCode: pt
+        text: Escuro Cinza
+    - value: {r: 0.14244395, g: 0.21415877, b: 0.31132078, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Dark Blue
+      - languageCode: pt
+        text: Escuro Azul
+    - value: {r: 0.8962264, g: 0, b: 0.21239251, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Red
+      - languageCode: pt
+        text: Vermelho
   - channel: 3
     colors:
     - value: {r: 0.8113208, g: 0, b: 0.104427345, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Red
+      - languageCode: pt
+        text: Vermelho
     - value: {r: 1, g: 1, b: 1, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: White
+      - languageCode: pt
+        text: Branco
     - value: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Gray
+      - languageCode: pt
+        text: Cinza
     - value: {r: 0.33201686, g: 0.2736739, b: 0.4716981, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Purple
+      - languageCode: pt
+        text: Roxo
     - value: {r: 0.43867922, g: 0.81782204, b: 1, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Blue
+      - languageCode: pt
+        text: Azul
     - value: {r: 1, g: 0.43921566, b: 0.89148694, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Pink
+      - languageCode: pt
+        text: Rosa
+    - value: {r: 0.5030705, g: 0.8962264, b: 0.61215186, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Light Green
+      - languageCode: pt
+        text: Claro Verde
+    - value: {r: 0.25767687, g: 0.461, b: 0.31404367, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Green
+      - languageCode: pt
+        text: Verde
+    - value: {r: 1, g: 0.89657533, b: 0.4292453, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Yellow
+      - languageCode: pt
+        text: Amarelo
+    - value: {r: 0.709, g: 0.6367098, b: 0.30306277, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Yellow
+      - languageCode: pt
+        text: Amarelo
+    - value: {r: 0.25862274, g: 0.25787646, b: 0.5754717, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Blue
+      - languageCode: pt
+        text: Azul
+    - value: {r: 0.25882354, g: 0.5764706, b: 0.566307, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Cyan
+      - languageCode: pt
+        text: Ciano
+    - value: {r: 0.7264151, g: 0.28439835, b: 0.5793577, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Pink
+      - languageCode: pt
+        text: Rosa
   - channel: 4
     colors:
     - value: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Dark Gray
+      - languageCode: pt
+        text: Escuro Cinza
     - value: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Gray
+      - languageCode: pt
+        text: Cinza
     - value: {r: 0.5943396, g: 0.35755968, b: 0.14297791, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Brown
+      - languageCode: pt
+        text: Marrom
     - value: {r: 0.46226418, g: 0.46226418, b: 0.46226418, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Gray
+      - languageCode: pt
+        text: Cinza
+    - value: {r: 0, g: 0, b: 0, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Black
+      - languageCode: pt
+        text: Preto
+    - value: {r: 1, g: 1, b: 1, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: White
+      - languageCode: pt
+        text: Branco
   - channel: 5
     colors:
     - value: {r: 0.8018868, g: 0, b: 0.10321307, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Red
+      - languageCode: pt
+        text: Vermelho
     - value: {r: 1, g: 1, b: 1, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: White
+      - languageCode: pt
+        text: Branco
     - value: {r: 0.13207549, g: 0.13207549, b: 0.13207549, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Dark Gray
+      - languageCode: pt
+        text: Escuro Cinza
     - value: {r: 0.33201686, g: 0.2736739, b: 0.4716981, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Purple
+      - languageCode: pt
+        text: Roxo
     - value: {r: 1, g: 0.8735535, b: 0, a: 1}
-    - value: {r: 0.15100831, g: 1, b: 0, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Yellow
+      - languageCode: pt
+        text: Amarelo
+    - value: {r: 0.18269853, g: 0.6415094, b: 0.099857606, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Green
+      - languageCode: pt
+        text: Verde
     - value: {r: 0.5518868, g: 0.7645241, b: 1, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Light Blue
+      - languageCode: pt
+        text: Claro Azul
+    - value: {r: 1, g: 0.5291431, b: 0, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Orange
+      - languageCode: pt
+        text: Laranja
+    - value: {r: 0.4339623, g: 0.30380973, b: 0.13714845, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Brown
+      - languageCode: pt
+        text: Marrom
+    - value: {r: 1, g: 0.2216981, b: 0.47475675, a: 1}
+      localizedDescriptions:
+      - languageCode: en
+        text: Pink
+      - languageCode: pt
+        text: Rosa
