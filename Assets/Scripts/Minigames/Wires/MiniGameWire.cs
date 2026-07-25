@@ -37,10 +37,10 @@ public class MiniGameWire : MinigameBase
     }
 
     public override void MiniGameSolved() {
-        Debug.Log("O detetive mais brabo da historia");
+        base.MiniGameSolved();
     }
 
     public override void MiniGameFailed() {
-        Debug.Log("Kabum!");
+        base.MiniGameFailed();
     }
 }
