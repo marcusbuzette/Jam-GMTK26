@@ -23,6 +23,7 @@ public class LevelManager : MonoBehaviour {
     [SerializeField] private GameObject playerPrefab; // Prefab do player, caso seja necessário instanciá-lo
     [SerializeField] private NavMeshSurface levelNavMesh; // Referência ao NavMesh do nível, caso seja necessário para navegação
     [SerializeField] private CinemachineCamera cmCam; // Referência à câmera principal, caso seja necessário para ajustes de zoom ou posicionamento
+    [SerializeField] private AudioSource levelAudioSource;
 
     // Estado Runtime
     public LevelState CurrentState { get; private set; } = LevelState.Setup;
@@ -64,7 +65,16 @@ public class LevelManager : MonoBehaviour {
         CurrentState = LevelState.Setup;
 
         // Configurar Timer
-        RemainingTime = currentLevelData.durationInSeconds;
+        // RemainingTime = currentLevelData.durationInSeconds;
+
+        if (currentLevelData.levelMusic != null) {
+            levelAudioSource.clip = currentLevelData.levelMusic;
+            RemainingTime = currentLevelData.levelMusic.length; // Pega o tempo exato do clipe
+            levelAudioSource.Play();
+        } else {
+            RemainingTime = 180f; // Fallback de segurança
+            Debug.LogWarning("Nenhuma música configurada no LevelSetupSO!");
+        }
 
         // Posicionar Player
         if (playerTransform != null) {
@@ -164,5 +174,11 @@ public class LevelManager : MonoBehaviour {
     public void HandleClosedPannel() {
         playerTransform.GetComponent<PlayerMovement>().EnableMovement(true); // Habilitar movimento do player
         playerTransform.GetComponent<PlayerInteract>().EnableInteraction(true); // Habilitar interação do player
+    }
+
+    public void TurnOnNowPlayingUI() {
+        if (NowPlayingUI.Instance != null && currentLevelData.levelMusic != null) {
+            NowPlayingUI.Instance.ToggleNowPlaying(levelAudioSource, currentLevelData.levelMusic.name, currentLevelData.rpm);
+        }
     }
 }
