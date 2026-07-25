@@ -9,7 +9,7 @@ public class MiniGameColors : MinigameBase {
     public int numberOfSteps;
     bool alreadyCompleted;
     public override void MiniGameFailed() {
-        Debug.Log("Kabum!");
+        base.MiniGameFailed();
         Restart();
     }
     public void Awake() {
@@ -22,7 +22,7 @@ public class MiniGameColors : MinigameBase {
         Settup();
     } */
     public override void MiniGameSolved() {
-        Debug.Log("O detetime mais brabo do mundo");
+        base.MiniGameSolved();
     }
 
     public override void Restart() {

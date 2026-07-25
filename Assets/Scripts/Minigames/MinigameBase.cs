@@ -3,9 +3,32 @@ using UnityEngine.UI;
 
 public abstract class MinigameBase : MonoBehaviour
 {
+    public Image state;
+    public Sprite chechMark;
+    public Sprite redX;
     public Button zoomButton;
+    public BombController bombController;
+    bool isZoomed =false;
+    public Image cover;
     public abstract void Settup();
-    public abstract void MiniGameSolved();//Chamado pelo fio quando cortar o fio certo, decidir aqui o que acontece
-    public abstract void MiniGameFailed();//Chamado pelo fio quando cortar o fio errado, decidir aqui o que acontece
+    public virtual void MiniGameSolved(){
+        state.sprite=chechMark;
+        cover.enabled=true;
+        Debug.Log("O detetive mais brabo da historia");
+    }
+    public virtual void MiniGameFailed() {
+        bombController.FailedMinigame();
+        Debug.Log("Kabum!");
+    }
     public abstract void Restart();
+
+    public void ToggleZoom() {//Chamado pelo zoom da bomba
+        if (isZoomed) {
+            isZoomed=false;
+            zoomButton.GetComponent<Image>().enabled=true;
+        } else {
+            isZoomed=true;
+            zoomButton.GetComponent<Image>().enabled=false;
+        }
+    }
 }
