@@ -106,11 +106,6 @@ public class LevelManager : MonoBehaviour {
         //Iniciar Gameplay
         CurrentState = LevelState.Playing;
         OnLevelStarted?.Invoke();
-
-        if (NowPlayingUI.Instance != null && currentLevelData.levelMusic != null) {
-            // Passamos o AudioSource do LevelManager, o nome do nível (como nome da música) e um RPM de teste
-            NowPlayingUI.Instance.ToggleNowPlaying(levelAudioSource, currentLevelData.levelMusic.name, currentLevelData.rpm);
-        }
     }
 
     private void SpawnLevelPrefab() {
@@ -179,5 +174,11 @@ public class LevelManager : MonoBehaviour {
     public void HandleClosedPannel() {
         playerTransform.GetComponent<PlayerMovement>().EnableMovement(true); // Habilitar movimento do player
         playerTransform.GetComponent<PlayerInteract>().EnableInteraction(true); // Habilitar interação do player
+    }
+
+    public void TurnOnNowPlayingUI() {
+        if (NowPlayingUI.Instance != null && currentLevelData.levelMusic != null) {
+            NowPlayingUI.Instance.ToggleNowPlaying(levelAudioSource, currentLevelData.levelMusic.name, currentLevelData.rpm);
+        }
     }
 }
