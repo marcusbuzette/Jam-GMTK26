@@ -52,47 +52,9 @@ public struct NpcColorPalette
 }
 
 [Serializable]
-public class NpcBaseBodyOption
-{
-    public NpcBodyType bodyType;
-    public GameObject baseBodyPrefab;
-}
-
-[Serializable]
-public class NpcAppearanceVariant
-{
-    public string id = "variant";
-    public GameObject prefab;
-    public Material referenceMaterial;
-    public NpcBodyType[] supportedBodyTypes = Array.Empty<NpcBodyType>();
-}
-
-[Serializable]
-public class NpcAppearanceSlotDefinition
-{
-    public NpcAppearanceSlotType slotType;
-    public List<NpcAppearanceVariant> variants = new List<NpcAppearanceVariant>();
-}
-
-[Serializable]
-public class NpcMaterialBinding
-{
-    public NpcColorChannel channel;
-    public string colorProperty = "_BaseColor";
-}
-
-[CreateAssetMenu(fileName = "NpcAppearanceCatalog", menuName = "Scriptable Objects/NPC Appearance Catalog")]
+[CreateAssetMenu(fileName = "NpcColorPaletteCatalog", menuName = "Scriptable Objects/NPC Color Palette Catalog")]
 public class NpcAppearanceCatalog : ScriptableObject
 {
-    [Header("Base Bodies")]
-    [SerializeField] private List<NpcBaseBodyOption> baseBodies = new List<NpcBaseBodyOption>();
-
-    [Header("Modular Slots")]
-    [SerializeField] private List<NpcAppearanceSlotDefinition> slotDefinitions = new List<NpcAppearanceSlotDefinition>();
-
-    [Header("Material Bindings")]
-    [SerializeField] private List<NpcMaterialBinding> materialBindings = new List<NpcMaterialBinding>();
-
     [Header("Skin Tone")]
     [SerializeField] private NpcSkinToneSettings skinTone = new NpcSkinToneSettings
     {
@@ -104,37 +66,8 @@ public class NpcAppearanceCatalog : ScriptableObject
     [Header("Palettes")]
     [SerializeField] private List<NpcColorPalette> palettes = new List<NpcColorPalette>();
 
-    public IReadOnlyList<NpcBaseBodyOption> BaseBodies => baseBodies;
-    public IReadOnlyList<NpcAppearanceSlotDefinition> SlotDefinitions => slotDefinitions;
-    public IReadOnlyList<NpcMaterialBinding> MaterialBindings => materialBindings;
     public NpcSkinToneSettings SkinTone => skinTone;
     public IReadOnlyList<NpcColorPalette> Palettes => palettes;
-
-    public NpcBaseBodyOption GetBaseBody(NpcBodyType bodyType)
-    {
-        for (int i = 0; i < baseBodies.Count; i++)
-        {
-            if (baseBodies[i] != null && baseBodies[i].bodyType == bodyType)
-            {
-                return baseBodies[i];
-            }
-        }
-
-        return null;
-    }
-
-    public NpcAppearanceSlotDefinition GetSlotDefinition(NpcAppearanceSlotType slotType)
-    {
-        for (int i = 0; i < slotDefinitions.Count; i++)
-        {
-            if (slotDefinitions[i] != null && slotDefinitions[i].slotType == slotType)
-            {
-                return slotDefinitions[i];
-            }
-        }
-
-        return null;
-    }
 
     public NpcColorPalette GetPalette(NpcColorChannel channel)
     {
@@ -147,19 +80,6 @@ public class NpcAppearanceCatalog : ScriptableObject
         }
 
         return default;
-    }
-
-    public NpcMaterialBinding GetMaterialBinding(NpcColorChannel channel)
-    {
-        for (int i = 0; i < materialBindings.Count; i++)
-        {
-            if (materialBindings[i] != null && materialBindings[i].channel == channel)
-            {
-                return materialBindings[i];
-            }
-        }
-
-        return null;
     }
 }
 

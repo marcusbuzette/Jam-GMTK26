@@ -1,13 +1,20 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class NpcAppearanceIdentity : MonoBehaviour
 {
     [Header("Setup")]
     [SerializeField] private NpcAppearanceCatalog catalog;
     [SerializeField] private NpcAppearanceVisual worldVisual;
+    [SerializeField] private Animator targetAnimator;
     [SerializeField] private GameObject portraitVisualPrefab;
+    [SerializeField] private bool keepAnimatorOnPortrait = true;
+
+    [Header("Animation")]
+    [SerializeField] private RuntimeAnimatorController maleAnimatorController;
+    [SerializeField] private RuntimeAnimatorController femaleAnimatorController;
 
     [Header("Identity")]
     [SerializeField] private bool generateOnAwake = true;
@@ -15,7 +22,7 @@ public class NpcAppearanceIdentity : MonoBehaviour
     [SerializeField] private int fixedSeed;
     [SerializeField] private string explicitAppearanceId;
 
-    [Header("Debug")]
+    [HideInInspector]
     [SerializeField] private NpcAppearanceData currentAppearance;
 
     public NpcAppearanceCatalog Catalog => catalog;
@@ -24,9 +31,21 @@ public class NpcAppearanceIdentity : MonoBehaviour
 
     private void Awake()
     {
+        ResolveComponentReferences();
+
         if (generateOnAwake)
         {
             EnsureAppearance();
+        }
+    }
+
+    private void OnValidate()
+    {
+        ResolveComponentReferences();
+
+        if (!Application.isPlaying)
+        {
+            currentAppearance = default;
         }
     }
 
@@ -48,6 +67,17 @@ public class NpcAppearanceIdentity : MonoBehaviour
         if (catalog == null)
         {
             Debug.LogWarning($"{nameof(NpcAppearanceIdentity)} on {name} is missing an appearance catalog.");
+            return;
+        }
+
+        if (worldVisual == null)
+        {
+            worldVisual = GetComponent<NpcAppearanceVisual>();
+        }
+
+        if (worldVisual == null)
+        {
+            Debug.LogWarning($"{nameof(NpcAppearanceIdentity)} on {name} is missing a {nameof(NpcAppearanceVisual)} reference.");
             return;
         }
 
@@ -79,9 +109,73 @@ public class NpcAppearanceIdentity : MonoBehaviour
         if (portraitVisual != null)
         {
             portraitVisual.ApplyAppearance(currentAppearance, catalog);
+            ApplyAnimatorController(portraitVisual, currentAppearance.bodyType);
         }
 
+        SanitizePortraitInstance(instance, portraitVisual);
+
         return instance;
+    }
+
+    private void SanitizePortraitInstance(GameObject instance, NpcAppearanceVisual portraitVisual)
+    {
+        if (instance == null)
+        {
+            return;
+        }
+
+        var behaviours = instance.GetComponentsInChildren<Behaviour>(true);
+        for (int i = 0; i < behaviours.Length; i++)
+        {
+            var behaviour = behaviours[i];
+            if (behaviour == null)
+            {
+                continue;
+            }
+
+            if (ReferenceEquals(behaviour, portraitVisual))
+            {
+                continue;
+            }
+
+            if (keepAnimatorOnPortrait && behaviour is Animator)
+            {
+                continue;
+            }
+
+            behaviour.enabled = false;
+        }
+
+        var colliders = instance.GetComponentsInChildren<Collider>(true);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            colliders[i].enabled = false;
+        }
+
+        var colliders2D = instance.GetComponentsInChildren<Collider2D>(true);
+        for (int i = 0; i < colliders2D.Length; i++)
+        {
+            colliders2D[i].enabled = false;
+        }
+
+        var rigidbodies = instance.GetComponentsInChildren<Rigidbody>(true);
+        for (int i = 0; i < rigidbodies.Length; i++)
+        {
+            rigidbodies[i].isKinematic = true;
+            rigidbodies[i].detectCollisions = false;
+        }
+
+        var rigidbodies2D = instance.GetComponentsInChildren<Rigidbody2D>(true);
+        for (int i = 0; i < rigidbodies2D.Length; i++)
+        {
+            rigidbodies2D[i].simulated = false;
+        }
+
+        var characterControllers = instance.GetComponentsInChildren<CharacterController>(true);
+        for (int i = 0; i < characterControllers.Length; i++)
+        {
+            characterControllers[i].enabled = false;
+        }
     }
 
     private void ApplyAppearance()
@@ -94,18 +188,66 @@ public class NpcAppearanceIdentity : MonoBehaviour
         if (worldVisual != null)
         {
             worldVisual.ApplyAppearance(currentAppearance, catalog);
+            ApplyAnimatorController(worldVisual, currentAppearance.bodyType);
         }
+    }
+
+    private void ApplyAnimatorController(NpcAppearanceVisual targetVisual, NpcBodyType bodyType)
+    {
+        var animator = ResolveAnimatorForTarget(targetVisual);
+        if (animator == null)
+        {
+            return;
+        }
+
+        var controller = bodyType == NpcBodyType.Female
+            ? femaleAnimatorController
+            : maleAnimatorController;
+        if (controller == null)
+        {
+            return;
+        }
+
+        animator.runtimeAnimatorController = controller;
+    }
+
+    private void ResolveComponentReferences()
+    {
+        if (worldVisual == null)
+        {
+            worldVisual = GetComponent<NpcAppearanceVisual>();
+        }
+
+        if (targetAnimator == null)
+        {
+            targetAnimator = GetComponent<Animator>();
+        }
+    }
+
+    private Animator ResolveAnimatorForTarget(NpcAppearanceVisual targetVisual)
+    {
+        if (targetVisual == null)
+        {
+            return null;
+        }
+
+        if (ReferenceEquals(targetVisual, worldVisual))
+        {
+            return targetAnimator;
+        }
+
+        return targetVisual.GetComponent<Animator>();
     }
 
     private NpcAppearanceData BuildAppearance(int seed)
     {
         var random = new System.Random(seed);
-        var bodyType = random.Next(0, 2) == 0 ? NpcBodyType.Male : NpcBodyType.Female;
+        var bodyType = PickBodyType(random);
 
         var slotSelections = new List<NpcAppearanceSlotSelection>();
-        for (int i = 0; i < catalog.SlotDefinitions.Count; i++)
+        for (int i = 0; i < worldVisual.SlotDefinitions.Count; i++)
         {
-            var slotDefinition = catalog.SlotDefinitions[i];
+            var slotDefinition = worldVisual.SlotDefinitions[i];
             if (slotDefinition == null)
             {
                 continue;
@@ -149,6 +291,27 @@ public class NpcAppearanceIdentity : MonoBehaviour
             slotSelections = slotSelections,
             paletteSelections = paletteSelections
         };
+    }
+
+    private NpcBodyType PickBodyType(System.Random random)
+    {
+        var availableBodyTypes = new List<NpcBodyType>();
+        if (worldVisual.HasBaseBody(NpcBodyType.Male))
+        {
+            availableBodyTypes.Add(NpcBodyType.Male);
+        }
+
+        if (worldVisual.HasBaseBody(NpcBodyType.Female))
+        {
+            availableBodyTypes.Add(NpcBodyType.Female);
+        }
+
+        if (availableBodyTypes.Count == 0)
+        {
+            return NpcBodyType.Male;
+        }
+
+        return availableBodyTypes[random.Next(0, availableBodyTypes.Count)];
     }
 
     private static List<int> GetCompatibleVariantIndexes(NpcAppearanceSlotDefinition slotDefinition, NpcBodyType bodyType)

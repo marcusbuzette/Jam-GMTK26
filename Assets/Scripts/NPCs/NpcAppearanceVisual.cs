@@ -3,23 +3,40 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class NpcAppearanceSlotAnchor
-{
-    public NpcAppearanceSlotType slotType;
-    public Transform parent;
-}
-
-[Serializable]
 public class NpcAppearanceMaterialTarget
 {
     public NpcColorChannel channel;
     [Min(0)] public int materialIndex;
-    public Material referenceMaterial;
+    public string colorProperty = "_BaseColor";
+}
+
+[Serializable]
+public class NpcBaseBodyOption
+{
+    public NpcBodyType bodyType;
+    public GameObject baseBodyPrefab;
+}
+
+[Serializable]
+public class NpcAppearanceVariant
+{
+    public GameObject prefab;
+    public NpcBodyType[] supportedBodyTypes = Array.Empty<NpcBodyType>();
+
+    public string Identifier => prefab != null ? prefab.name : string.Empty;
+}
+
+[Serializable]
+public class NpcAppearanceSlotDefinition
+{
+    public NpcAppearanceSlotType slotType;
+    public List<NpcAppearanceVariant> variants = new List<NpcAppearanceVariant>();
 }
 
 public class NpcAppearanceColorTarget : MonoBehaviour
 {
     [SerializeField] private Renderer targetRenderer;
+    [ReadOnlyInInspector]
     [SerializeField] private List<NpcAppearanceMaterialTarget> materialTargets = new List<NpcAppearanceMaterialTarget>();
 
     public Renderer TargetRenderer => targetRenderer != null ? targetRenderer : GetComponent<Renderer>();
@@ -31,6 +48,64 @@ public class NpcAppearanceColorTarget : MonoBehaviour
         {
             targetRenderer = GetComponent<Renderer>();
         }
+
+        AutoConfigureMaterialTargets();
+    }
+
+    private void OnValidate()
+    {
+        if (targetRenderer == null)
+        {
+            targetRenderer = GetComponent<Renderer>();
+        }
+
+        AutoConfigureMaterialTargets();
+    }
+
+    public IReadOnlyList<NpcAppearanceMaterialTarget> GetEffectiveMaterialTargets()
+    {
+        AutoConfigureMaterialTargets();
+        return materialTargets;
+    }
+
+    private void AutoConfigureMaterialTargets()
+    {
+        var renderer = TargetRenderer;
+        if (renderer == null)
+        {
+            return;
+        }
+
+        var sharedMaterials = renderer.sharedMaterials;
+        if (sharedMaterials == null || sharedMaterials.Length == 0)
+        {
+            return;
+        }
+
+        var detectedTargets = new List<NpcAppearanceMaterialTarget>();
+        for (int i = 0; i < sharedMaterials.Length; i++)
+        {
+            var material = sharedMaterials[i];
+            if (material == null)
+            {
+                continue;
+            }
+
+            if (!NpcAppearanceVisual.TryInferChannelFromMaterial(material.name, out var channel))
+            {
+                continue;
+            }
+
+            var colorProperty = material.HasProperty("_BaseColor") ? "_BaseColor" : "_Color";
+            detectedTargets.Add(new NpcAppearanceMaterialTarget
+            {
+                channel = channel,
+                materialIndex = i,
+                colorProperty = colorProperty
+            });
+        }
+
+        materialTargets = detectedTargets;
     }
 }
 
@@ -39,18 +114,78 @@ public class NpcAppearanceVisual : MonoBehaviour
     [Header("Catalog")]
     [SerializeField] private NpcAppearanceCatalog catalog;
 
+    [Header("Module Prefabs")]
+    [SerializeField] private List<NpcBaseBodyOption> baseBodies = new List<NpcBaseBodyOption>();
+    [SerializeField] private List<NpcAppearanceSlotDefinition> slotDefinitions = new List<NpcAppearanceSlotDefinition>();
+
     [Header("Anchors")]
     [SerializeField] private Transform baseBodyAnchor;
-    [SerializeField] private List<NpcAppearanceSlotAnchor> slotAnchors = new List<NpcAppearanceSlotAnchor>();
 
     private readonly List<Material> runtimeMaterials = new List<Material>();
     private readonly List<GameObject> spawnedSlotInstances = new List<GameObject>();
 
     private GameObject currentBaseBodyInstance;
     private NpcAppearanceData currentAppearance;
+    private bool ownsBaseBodyInstance;
 
     public NpcAppearanceCatalog Catalog => catalog;
+    public IReadOnlyList<NpcBaseBodyOption> BaseBodies => baseBodies;
+    public IReadOnlyList<NpcAppearanceSlotDefinition> SlotDefinitions => slotDefinitions;
     public NpcAppearanceData CurrentAppearance => currentAppearance;
+
+    public Animator GetActiveBodyAnimator()
+    {
+        if (currentBaseBodyInstance == null)
+        {
+            return null;
+        }
+
+        return currentBaseBodyInstance.GetComponentInChildren<Animator>(true);
+    }
+
+    public static bool TryInferChannelFromMaterial(string materialName, out NpcColorChannel channel)
+    {
+        var normalizedName = NormalizeMaterialName(materialName);
+
+        if (normalizedName.Contains("skin"))
+        {
+            channel = NpcColorChannel.Skin;
+            return true;
+        }
+
+        if (normalizedName.Contains("cabelo") || normalizedName.Contains("hair"))
+        {
+            channel = NpcColorChannel.Hair;
+            return true;
+        }
+
+        if (normalizedName.Contains("undershirt") || normalizedName.Contains("shirtbeneath") || normalizedName.Contains("inner"))
+        {
+            channel = NpcColorChannel.Undershirt;
+            return true;
+        }
+
+        if (normalizedName.Contains("clothespants") || normalizedName.Contains("pants") || normalizedName.Contains("shirt") || normalizedName.Contains("clothes") || normalizedName.Contains("coat") || normalizedName.Contains("suit"))
+        {
+            channel = NpcColorChannel.Clothing;
+            return true;
+        }
+
+        if (normalizedName.Contains("shoe"))
+        {
+            channel = NpcColorChannel.Shoes;
+            return true;
+        }
+
+        if (normalizedName.Contains("mask"))
+        {
+            channel = NpcColorChannel.Mask;
+            return true;
+        }
+
+        channel = default;
+        return false;
+    }
 
     public void ApplyAppearance(NpcAppearanceData appearanceData, NpcAppearanceCatalog overrideCatalog = null)
     {
@@ -63,18 +198,20 @@ public class NpcAppearanceVisual : MonoBehaviour
 
         currentAppearance = appearanceData;
 
-        RebuildBody(sourceCatalog, appearanceData);
-        RebuildSlots(sourceCatalog, appearanceData);
+        RebuildBody(appearanceData);
+        RebuildSlots(appearanceData);
         ApplyColors(sourceCatalog, appearanceData);
     }
 
     public void ClearAppearance()
     {
-        if (currentBaseBodyInstance != null)
+        if (currentBaseBodyInstance != null && ownsBaseBodyInstance)
         {
             Destroy(currentBaseBodyInstance);
-            currentBaseBodyInstance = null;
         }
+
+        currentBaseBodyInstance = null;
+        ownsBaseBodyInstance = false;
 
         for (int i = 0; i < spawnedSlotInstances.Count; i++)
         {
@@ -93,18 +230,59 @@ public class NpcAppearanceVisual : MonoBehaviour
         CleanupRuntimeMaterials();
     }
 
-    private void RebuildBody(NpcAppearanceCatalog sourceCatalog, NpcAppearanceData appearanceData)
+    public bool HasBaseBody(NpcBodyType bodyType)
     {
-        if (currentBaseBodyInstance != null)
+        return GetBaseBody(bodyType) != null;
+    }
+
+    public NpcBaseBodyOption GetBaseBody(NpcBodyType bodyType)
+    {
+        for (int i = 0; i < baseBodies.Count; i++)
         {
-            Destroy(currentBaseBodyInstance);
-            currentBaseBodyInstance = null;
+            if (baseBodies[i] != null && baseBodies[i].bodyType == bodyType)
+            {
+                return baseBodies[i];
+            }
         }
 
-        var baseBody = sourceCatalog.GetBaseBody(appearanceData.bodyType);
+        return null;
+    }
+
+    public NpcAppearanceSlotDefinition GetSlotDefinition(NpcAppearanceSlotType slotType)
+    {
+        for (int i = 0; i < slotDefinitions.Count; i++)
+        {
+            if (slotDefinitions[i] != null && slotDefinitions[i].slotType == slotType)
+            {
+                return slotDefinitions[i];
+            }
+        }
+
+        return null;
+    }
+
+    private void RebuildBody(NpcAppearanceData appearanceData)
+    {
+        if (currentBaseBodyInstance != null && ownsBaseBodyInstance)
+        {
+            Destroy(currentBaseBodyInstance);
+        }
+
+        currentBaseBodyInstance = null;
+        ownsBaseBodyInstance = false;
+
+        var baseBody = GetBaseBody(appearanceData.bodyType);
         if (baseBody == null || baseBody.baseBodyPrefab == null)
         {
-            Debug.LogWarning($"No base body configured for {appearanceData.bodyType} in {sourceCatalog.name}.");
+            Debug.LogWarning($"No base body configured for {appearanceData.bodyType} on {name}.");
+            return;
+        }
+
+        var authoredInstance = FindAuthoredBaseBodyInstance(baseBody.baseBodyPrefab);
+        if (authoredInstance != null)
+        {
+            currentBaseBodyInstance = authoredInstance;
+            currentBaseBodyInstance.SetActive(true);
             return;
         }
 
@@ -113,10 +291,16 @@ public class NpcAppearanceVisual : MonoBehaviour
         currentBaseBodyInstance.transform.localPosition = Vector3.zero;
         currentBaseBodyInstance.transform.localRotation = Quaternion.identity;
         currentBaseBodyInstance.transform.localScale = Vector3.one;
+        ownsBaseBodyInstance = true;
     }
 
-    private void RebuildSlots(NpcAppearanceCatalog sourceCatalog, NpcAppearanceData appearanceData)
+    private void RebuildSlots(NpcAppearanceData appearanceData)
     {
+        if (currentBaseBodyInstance == null)
+        {
+            return;
+        }
+
         for (int i = 0; i < spawnedSlotInstances.Count; i++)
         {
             if (spawnedSlotInstances[i] != null)
@@ -126,11 +310,17 @@ public class NpcAppearanceVisual : MonoBehaviour
         }
 
         spawnedSlotInstances.Clear();
+        DisableRegisteredVariants();
 
-        for (int i = 0; i < slotAnchors.Count; i++)
+        for (int i = 0; i < slotDefinitions.Count; i++)
         {
-            var slotType = slotAnchors[i].slotType;
-            var slotDefinition = sourceCatalog.GetSlotDefinition(slotType);
+            var slotDefinition = slotDefinitions[i];
+            if (slotDefinition == null)
+            {
+                continue;
+            }
+
+            var slotType = slotDefinition.slotType;
             if (slotDefinition == null || slotDefinition.variants == null || slotDefinition.variants.Count == 0)
             {
                 continue;
@@ -148,17 +338,18 @@ public class NpcAppearanceVisual : MonoBehaviour
                 continue;
             }
 
-            var parent = slotAnchors[i].parent != null ? slotAnchors[i].parent : transform;
-            var instance = Instantiate(variant.prefab, parent);
+            if (TryResolveVariantInstance(variant, out var existingVariant))
+            {
+                existingVariant.gameObject.SetActive(true);
+                continue;
+            }
+
+            var instance = Instantiate(variant.prefab, currentBaseBodyInstance.transform);
             instance.transform.localPosition = Vector3.zero;
             instance.transform.localRotation = Quaternion.identity;
             instance.transform.localScale = Vector3.one;
+            instance.SetActive(true);
             spawnedSlotInstances.Add(instance);
-
-            if (variant.referenceMaterial != null)
-            {
-                ApplyReferenceMaterialToAllRenderers(instance, variant.referenceMaterial);
-            }
         }
     }
 
@@ -166,16 +357,15 @@ public class NpcAppearanceVisual : MonoBehaviour
     {
         CleanupRuntimeMaterials();
 
-        var colorTargets = GetComponentsInChildren<NpcAppearanceColorTarget>(true);
-        for (int i = 0; i < colorTargets.Length; i++)
+        if (currentBaseBodyInstance == null)
         {
-            var colorTarget = colorTargets[i];
-            var rendererTarget = colorTarget.TargetRenderer;
-            if (rendererTarget == null)
-            {
-                continue;
-            }
+            return;
+        }
 
+        var renderers = currentBaseBodyInstance.GetComponentsInChildren<Renderer>(true);
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            var rendererTarget = renderers[i];
             var sharedMaterials = rendererTarget.sharedMaterials;
             if (sharedMaterials == null || sharedMaterials.Length == 0)
             {
@@ -185,24 +375,15 @@ public class NpcAppearanceVisual : MonoBehaviour
             var runtimeSet = new Material[sharedMaterials.Length];
             Array.Copy(sharedMaterials, runtimeSet, sharedMaterials.Length);
 
-            var materialTargets = colorTarget.MaterialTargets;
-            for (int targetIndex = 0; targetIndex < materialTargets.Count; targetIndex++)
+            for (int materialIndex = 0; materialIndex < sharedMaterials.Length; materialIndex++)
             {
-                var target = materialTargets[targetIndex];
-                if (target == null)
-                {
-                    continue;
-                }
-
-                if (target.materialIndex < 0 || target.materialIndex >= runtimeSet.Length)
-                {
-                    continue;
-                }
-
-                var referenceMaterial = target.referenceMaterial != null
-                    ? target.referenceMaterial
-                    : sharedMaterials[target.materialIndex];
+                var referenceMaterial = sharedMaterials[materialIndex];
                 if (referenceMaterial == null)
+                {
+                    continue;
+                }
+
+                if (!TryInferChannelFromMaterial(referenceMaterial.name, out var channel))
                 {
                     continue;
                 }
@@ -210,11 +391,8 @@ public class NpcAppearanceVisual : MonoBehaviour
                 var runtimeMaterial = new Material(referenceMaterial);
                 runtimeMaterials.Add(runtimeMaterial);
 
-                var color = ResolveColor(sourceCatalog, appearanceData, target.channel);
-                var binding = sourceCatalog.GetMaterialBinding(target.channel);
-                var propertyName = binding != null && !string.IsNullOrWhiteSpace(binding.colorProperty)
-                    ? binding.colorProperty
-                    : "_BaseColor";
+                var color = ResolveColor(sourceCatalog, appearanceData, channel);
+                var propertyName = referenceMaterial.HasProperty("_BaseColor") ? "_BaseColor" : "_Color";
 
                 if (runtimeMaterial.HasProperty(propertyName))
                 {
@@ -225,7 +403,7 @@ public class NpcAppearanceVisual : MonoBehaviour
                     runtimeMaterial.SetColor("_Color", color);
                 }
 
-                runtimeSet[target.materialIndex] = runtimeMaterial;
+                runtimeSet[materialIndex] = runtimeMaterial;
             }
 
             rendererTarget.materials = runtimeSet;
@@ -262,25 +440,120 @@ public class NpcAppearanceVisual : MonoBehaviour
         return Color.HSVToRGB(hue, saturation, adjustedValue);
     }
 
-    private void ApplyReferenceMaterialToAllRenderers(GameObject root, Material referenceMaterial)
+    private static string NormalizeMaterialName(string materialName)
     {
-        var renderers = root.GetComponentsInChildren<Renderer>(true);
-        for (int i = 0; i < renderers.Length; i++)
+        if (string.IsNullOrWhiteSpace(materialName))
         {
-            var sharedMaterials = renderers[i].sharedMaterials;
-            if (sharedMaterials == null || sharedMaterials.Length == 0)
+            return string.Empty;
+        }
+
+        var instanceSuffixIndex = materialName.IndexOf(" (Instance)", StringComparison.OrdinalIgnoreCase);
+        if (instanceSuffixIndex >= 0)
+        {
+            materialName = materialName.Substring(0, instanceSuffixIndex);
+        }
+
+        return materialName.Replace("_", string.Empty).Replace(" ", string.Empty).ToLowerInvariant();
+    }
+
+    private GameObject FindAuthoredBaseBodyInstance(GameObject baseBodyPrefab)
+    {
+        if (baseBodyPrefab == null)
+        {
+            return null;
+        }
+
+        if (baseBodyAnchor != null && string.Equals(baseBodyAnchor.name, baseBodyPrefab.name, StringComparison.Ordinal))
+        {
+            return baseBodyAnchor.gameObject;
+        }
+
+        var searchRoot = baseBodyAnchor != null ? baseBodyAnchor : transform;
+        var match = FindDeepChildByName(searchRoot, baseBodyPrefab.name);
+        return match != null ? match.gameObject : null;
+    }
+
+    private void DisableRegisteredVariants()
+    {
+        if (currentBaseBodyInstance == null)
+        {
+            return;
+        }
+
+        for (int slotIndex = 0; slotIndex < slotDefinitions.Count; slotIndex++)
+        {
+            var slotDefinition = slotDefinitions[slotIndex];
+            if (slotDefinition == null || slotDefinition.variants == null)
             {
                 continue;
             }
 
-            var replaced = new Material[sharedMaterials.Length];
-            for (int materialIndex = 0; materialIndex < replaced.Length; materialIndex++)
+            for (int variantIndex = 0; variantIndex < slotDefinition.variants.Count; variantIndex++)
             {
-                replaced[materialIndex] = referenceMaterial;
-            }
+                var variant = slotDefinition.variants[variantIndex];
+                if (variant == null || variant.prefab == null)
+                {
+                    continue;
+                }
 
-            renderers[i].sharedMaterials = replaced;
+                if (TryResolveVariantInstance(variant, out var existingVariant))
+                {
+                    existingVariant.gameObject.SetActive(false);
+                }
+            }
         }
+    }
+
+    private bool TryResolveVariantInstance(NpcAppearanceVariant variant, out Transform match)
+    {
+        match = null;
+        if (variant == null || variant.prefab == null || currentBaseBodyInstance == null)
+        {
+            return false;
+        }
+
+        var variantObject = variant.prefab;
+        if (variantObject != null && variantObject.scene.IsValid())
+        {
+            var variantTransform = variantObject.transform;
+            if (variantTransform.IsChildOf(currentBaseBodyInstance.transform))
+            {
+                match = variantTransform;
+                return true;
+            }
+        }
+
+        return TryFindVariantInstance(currentBaseBodyInstance.transform, variant.Identifier, out match);
+    }
+
+    private static bool TryFindVariantInstance(Transform root, string variantName, out Transform match)
+    {
+        match = FindDeepChildByName(root, variantName);
+        return match != null;
+    }
+
+    private static Transform FindDeepChildByName(Transform root, string targetName)
+    {
+        if (root == null || string.IsNullOrWhiteSpace(targetName))
+        {
+            return null;
+        }
+
+        if (string.Equals(root.name, targetName, StringComparison.Ordinal))
+        {
+            return root;
+        }
+
+        for (int i = 0; i < root.childCount; i++)
+        {
+            var match = FindDeepChildByName(root.GetChild(i), targetName);
+            if (match != null)
+            {
+                return match;
+            }
+        }
+
+        return null;
     }
 
     private void CleanupRuntimeMaterials()
