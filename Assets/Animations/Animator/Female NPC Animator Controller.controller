@@ -28,7 +28,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Male NPC Animator Controller
+  m_Name: Female NPC Animator Controller
   serializedVersion: 6
   m_AnimatorParameters:
   - m_Name: Walk
@@ -197,7 +197,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: -2315019748112500802, guid: f1361a9d725a30f4cabc4d460f5c5636, type: 3}
+  m_Motion: {fileID: 7946353385293988929, guid: f1361a9d725a30f4cabc4d460f5c5636, type: 3}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

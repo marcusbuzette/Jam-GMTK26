@@ -9,6 +9,30 @@ public class DialogueUI : MonoBehaviour {
     private static DialogueUI instance;
     private DialogueManager subscribedManager;
     private EventSystem runtimeEventSystem;
+    private static readonly string[] PortraitExpressionTriggers = {
+        nameof(DialoguePortraitExpression.Walk),
+        nameof(DialoguePortraitExpression.Run),
+        nameof(DialoguePortraitExpression.SpinL),
+        nameof(DialoguePortraitExpression.SpinR),
+        nameof(DialoguePortraitExpression.Idle1),
+        nameof(DialoguePortraitExpression.Idle2),
+        nameof(DialoguePortraitExpression.Idle3),
+        nameof(DialoguePortraitExpression.Dance1),
+        nameof(DialoguePortraitExpression.Dance2),
+        nameof(DialoguePortraitExpression.Dance3),
+        nameof(DialoguePortraitExpression.Idle_Var1),
+        nameof(DialoguePortraitExpression.Idle_Var2),
+        nameof(DialoguePortraitExpression.Idle_Var3),
+        nameof(DialoguePortraitExpression.Idle_Var4),
+        nameof(DialoguePortraitExpression.Idle_Var5),
+        nameof(DialoguePortraitExpression.Inter_Question),
+        nameof(DialoguePortraitExpression.Inter_Happy),
+        nameof(DialoguePortraitExpression.Inter_Exclamation),
+        nameof(DialoguePortraitExpression.Inter_Angry),
+        nameof(DialoguePortraitExpression.Inter_Sad),
+        nameof(DialoguePortraitExpression.Inter_Closed),
+        nameof(DialoguePortraitExpression.Inter_Talking)
+    };
 
     public static DialogueUI Instance {
         get {
@@ -225,6 +249,25 @@ public class DialogueUI : MonoBehaviour {
         currentPortraitInstance = Instantiate(line.Character.PortraitPrefab, characterAnchor);
         currentPortraitInstance.transform.localPosition = Vector3.zero;
         currentPortraitInstance.transform.localRotation = Quaternion.identity;
+
+        ApplyPortraitExpression(currentPortraitInstance, line.PortraitExpression);
+    }
+
+    private void ApplyPortraitExpression(GameObject portraitInstance, DialoguePortraitExpression expression) {
+        if (portraitInstance == null || expression == DialoguePortraitExpression.Neutral) {
+            return;
+        }
+
+        var portraitAnimator = portraitInstance.GetComponentInChildren<Animator>(true);
+        if (portraitAnimator == null) {
+            return;
+        }
+
+        for (int i = 0; i < PortraitExpressionTriggers.Length; i++) {
+            portraitAnimator.ResetTrigger(PortraitExpressionTriggers[i]);
+        }
+
+        portraitAnimator.SetTrigger(expression.ToString());
     }
 
     private void ClearPortrait() {
