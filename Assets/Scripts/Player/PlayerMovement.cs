@@ -58,7 +58,6 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     public void EnableMovement(bool enable) {
-        Debug.Log($"PlayerMovement: EnableMovement({enable}) called.");
         enabled = enable;
         if (enable) {
             inputActions.Player.Enable(); // Habilita o input de movimento

@@ -10,6 +10,12 @@ public class InteractPannelController : MonoBehaviour {
 
     [SerializeField] private Button closeButton;
 
+    public bool IsInteractPanelOpen {
+        get {
+            return panelWrapper.activeSelf;
+        }
+    }
+
     void Awake() {
         if (Instance == null) {
             Instance = this;
