@@ -25,6 +25,7 @@ public class MiniGameCountDown : MinigameBase {
     }
 
     public override void Settup() {
+        base.Settup();
         timerIsRunning=false;
         timerText.color=Color.black;
         timerText.text="00:00";
@@ -52,7 +53,7 @@ public class MiniGameCountDown : MinigameBase {
         correctTime = Random.Range(1.0f,9.9f);
     }
     public void Update() {
-        if (Keyboard.current.enterKey.wasPressedThisFrame) {
+        /* if (Keyboard.current.enterKey.wasPressedThisFrame) {
             Restart();
         }
         if (Keyboard.current.sKey.wasPressedThisFrame) {
@@ -60,7 +61,7 @@ public class MiniGameCountDown : MinigameBase {
         }
         if (Keyboard.current.wKey.wasPressedThisFrame) {
             Time.timeScale=1;
-        }
+        } */
         if (timerIsRunning) {
             elapsedTime -= Time.deltaTime;
 

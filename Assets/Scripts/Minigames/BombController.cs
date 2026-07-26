@@ -104,8 +104,10 @@ public class BombController : MonoBehaviour {
     }
 
     public void LevelStarted() {
+        /* Não sei pq isso ta aqui, mas ela fez a bomba começar aberta, e rodar o settup 2 vezes, que são ambas coisas que n deveriam acontecer, ent eu tirei isso
         SetUpBomb();
-        OpenCloseBomb();
+        OpenCloseBomb(); 
+        */
     }
 
     void OnDestroy() {

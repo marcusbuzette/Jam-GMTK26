@@ -10,7 +10,9 @@ public abstract class MinigameBase : MonoBehaviour
     public BombController bombController;
     bool isZoomed =false;
     public Image cover;
-    public abstract void Settup();
+    public virtual void Settup() {
+        MinigameAnswerController.singleton?.ProvideAnswer(this);
+    }
     public virtual void MiniGameSolved(){
         state.sprite=chechMark;
         cover.enabled=true;

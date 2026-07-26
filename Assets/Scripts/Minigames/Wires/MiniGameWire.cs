@@ -13,6 +13,7 @@ public class MiniGameWire : MinigameBase
         //Settup();
     }
     public override void Settup() {
+        base.Settup();
         NumberOfWires = Random.Range(3,5);
         correctWire = Random.Range(0,NumberOfWires);//Provisorio
         for(int i = 0; i < NumberOfWires; i++) {
@@ -21,11 +22,11 @@ public class MiniGameWire : MinigameBase
             go.GetComponent<WireMouseControl>().Settup(possibleColors[colorIndex],i==correctWire,this);
         }
     }
-    private void Update() {
+    /* private void Update() {
         if (Keyboard.current.enterKey.wasPressedThisFrame) {
             Restart();
         }
-    }
+    } */
     public override void Restart() {
         int childCount = wireLayoutGroup.childCount;
         for(int i = 0; i < childCount; i++) {

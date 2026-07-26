@@ -27,11 +27,11 @@ public class MiniGameMasks : MinigameBase {
     /* public void Start() {
         Settup();
     } */
-    public void Update() {
+    /* public void Update() {
         if (Keyboard.current.enterKey.wasPressedThisFrame) {
             Restart();
         }
-    }
+    } */
     public override void Restart() {
         int childCount = masksLayoutGroup.childCount;
         for(int i = 0; i < childCount; i++) {
@@ -45,6 +45,7 @@ public class MiniGameMasks : MinigameBase {
     }
 
     public override void Settup() {
+        base.Settup();
         numberOfMasks = Random.Range(2,maskImages.Length+1);
         if (numberOfMasks < 4) {
             gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;

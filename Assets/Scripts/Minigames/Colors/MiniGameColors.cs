@@ -10,7 +10,7 @@ public class MiniGameColors : MinigameBase {
     bool alreadyCompleted;
     public override void MiniGameFailed() {
         base.MiniGameFailed();
-        Restart();
+        //Restart();
     }
     public void Awake() {
         answer = new();
@@ -34,11 +34,18 @@ public class MiniGameColors : MinigameBase {
     }
 
     public override void Settup() {
-        numberOfSteps = Random.Range(4,6);
+        base.Settup();
+        /* numberOfSteps = Random.Range(4,6);
         for(int i = 0; i < numberOfSteps; i++) {
             int aux = Random.Range(0,4);
             answer.Add((ColorsMinigame)aux);
             answerDebug.Add(aux);
+        } */
+    }
+    public void ReciveAnswer(List<ColorsMinigame> answer) {
+        this.answer=answer;
+        foreach(ColorsMinigame c in answer) {
+            answerDebug.Add((int)c);
         }
     }
     public void ClickedColor(ColorsMinigame color) {
