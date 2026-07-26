@@ -14,6 +14,7 @@ public abstract class MinigameBase : MonoBehaviour
     public virtual void MiniGameSolved(){
         state.sprite=chechMark;
         cover.enabled=true;
+        bombController.MinigameSuccess();
         Debug.Log("O detetive mais brabo da historia");
     }
     public virtual void MiniGameFailed() {

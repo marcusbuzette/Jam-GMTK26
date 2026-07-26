@@ -12,6 +12,7 @@ public class MiniGameMasks : MinigameBase {
     List<Sprite>sprites;
     List<MaskButtonControl>masks;
     [SerializeField]MaskType correctMask;
+    
     void Awake() {
         masks = new();
         sprites = new();

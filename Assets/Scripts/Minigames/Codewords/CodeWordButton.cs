@@ -7,6 +7,8 @@ public class CodeWordButton : MonoBehaviour
     bool isAnwser;
     string word;
     [SerializeField]TextMeshProUGUI text;
+    [SerializeField]AudioPlayerLocal audioPlayerLocal;
+    [SerializeField]AudioClip buttonPress;
     public void Settup(bool isAnwser,string word,MiniGameCodeWords miniGameController) {
         this.isAnwser=isAnwser;
         this.word=word;
@@ -15,6 +17,7 @@ public class CodeWordButton : MonoBehaviour
     }
     public void Clicked() {
         miniGameCodeWords?.ClickedOption(isAnwser);
+        audioPlayerLocal?.PlayAudioClip(buttonPress);
     }
     
 }
