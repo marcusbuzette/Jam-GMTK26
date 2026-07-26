@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Level3
   m_EditorClassIdentifier: Assembly-CSharp::LevelSetupSO
   levelName: Level 3
-  durationInSeconds: 180
+  rpm: 63
+  levelImage: {fileID: 21300000, guid: a279eff798e24f749aa721a8c11e5f6a, type: 3}
   levelMusic: {fileID: 0}
   playerSpawnPosition: {x: -0.24, y: 0, z: -9.51}
   playerSpawnRotation: {x: 0, y: 0, z: 0}
