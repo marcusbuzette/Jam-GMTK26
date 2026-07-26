@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e2fc63825895e8429f9d28a3a6515a6, type: 3}
+  m_Name: MainTip Level 1
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  conversationId: useless_dialogue_09
+  displayName: Useless Dialogue 09
+  lines:
+  - character: {fileID: 11400000, guid: 434505ccd8a2eaa4f9a25d48cf8701b0, type: 2}
+    portraitExpression: 16
+    localizedTexts:
+    - languageCode: en
+      text: There is a bomb in ths party! Have you seen a silver suitcase?
+  - character: {fileID: 11400000, guid: c052724c165f89a43a01ab84f981b02c, type: 2}
+    portraitExpression: 18
+    localizedTexts:
+    - languageCode: en
+      text: Oh my god!
+  - character: {fileID: 11400000, guid: c052724c165f89a43a01ab84f981b02c, type: 2}
+    portraitExpression: 22
+    localizedTexts:
+    - languageCode: en
+      text: I think I saw a silver suitcase in the kitchen!
+  - character: {fileID: 11400000, guid: 434505ccd8a2eaa4f9a25d48cf8701b0, type: 2}
+    portraitExpression: 19
+    localizedTexts:
+    - languageCode: en
+      text: Thanks! I'll take a look.
+  dialogueChoice: {fileID: 0}

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7e2fc63825895e8429f9d28a3a6515a6, type: 3}
-  m_Name: MainTip
+  m_Name: MainTip Level 3
   m_EditorClassIdentifier: Assembly-CSharp::Dialogue
   conversationId: useless_dialogue_09
   displayName: Useless Dialogue 09
@@ -29,7 +29,7 @@ MonoBehaviour:
     portraitExpression: 22
     localizedTexts:
     - languageCode: en
-      text: I think I saw a silver suitcase in the kitchen!
+      text: I think I saw a silver suitcase in the bedroom!
   - character: {fileID: 11400000, guid: 434505ccd8a2eaa4f9a25d48cf8701b0, type: 2}
     portraitExpression: 19
     localizedTexts:
