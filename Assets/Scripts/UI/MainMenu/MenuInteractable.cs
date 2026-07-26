@@ -19,7 +19,7 @@ public class MenuInteractable : InteractableBase {
 
     [SerializeField] private Color onSelectedColor;
 
-    void Awake() {
+    void Start() {
         SetCanInteract(true);
     }
 
@@ -44,7 +44,6 @@ public class MenuInteractable : InteractableBase {
 
         if (canInteract) {
             if (outlineComponentSelected != null) outlineComponentSelected.EnableOutline();
-            Debug.Log("Entrou");
         } else {
             if (outlineComponentSelected != null) outlineComponentSelected.DisableOutline();
         }
