@@ -2,9 +2,18 @@ using UnityEngine;
 
 public class EndGameUIController : MonoBehaviour {
 
+    public static EndGameUIController Instance { get; private set; }
+
     [SerializeField] private GameObject failPanel;
     [SerializeField] private GameObject winPanel;
 
+    void Awake() {
+        if (Instance == null) {
+            Instance = this;
+        } else {
+            Destroy(gameObject);
+        }
+    }
 
     void Start() {
         failPanel.SetActive(false);
@@ -40,6 +49,12 @@ public class EndGameUIController : MonoBehaviour {
 
     public void HandleNextLevel() {
         GameManager.Instance.SelectAndStartLevel(GameManager.Instance.CurrentLevelIndex);
+    }
+
+    public bool IsEndGameUIActive {
+        get {
+            return failPanel.activeSelf || winPanel.activeSelf;
+        }
     }
 
 }

@@ -9,18 +9,32 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable {
     [SerializeField] private Transform interactionPoint;
 
     [Header("Visual Feedback")]
-    [Tooltip("Coloque aqui o componente de Outline (ou outro script de feedback visual).")]
-    [SerializeField] private InteractableOutline outlineComponent;
+    [Tooltip("Componente responsável por ligar/desligar o outline do objeto interagível.")]
+    [SerializeField] private InteractableOutline outline;
 
     public float InteractionDistance => interactionDistance;
     public virtual Transform InteractionPoint => interactionPoint != null ? interactionPoint : transform;
 
     public virtual void OnHoverEnter() {
-        if (outlineComponent != null) outlineComponent.EnableOutline();
+        EnsureOutlineReference();
+        if (outline != null) {
+            outline.EnableOutline();
+        }
     }
 
     public virtual void OnHoverExit() {
-        if (outlineComponent != null) outlineComponent.DisableOutline();
+        EnsureOutlineReference();
+        if (outline != null) {
+            outline.DisableOutline();
+        }
+    }
+
+    private void EnsureOutlineReference()
+    {
+        if (outline == null)
+        {
+            outline = GetComponentInChildren<InteractableOutline>(true);
+        }
     }
 
     public abstract void Interact(GameObject interactor);

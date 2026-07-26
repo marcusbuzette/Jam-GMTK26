@@ -12,16 +12,17 @@ public class MiniGameMasks : MinigameBase {
     List<Sprite>sprites;
     List<MaskButtonControl>masks;
     [SerializeField]MaskType correctMask;
+    
     void Awake() {
         masks = new();
         sprites = new();
     }
     public override void MiniGameFailed() {
-        Debug.Log("Kabum!");
+        base.MiniGameFailed();
     }
 
     public override void MiniGameSolved() {
-        Debug.Log("O detetime mais brabo do mundo");
+        base.MiniGameSolved();
     }
     /* public void Start() {
         Settup();

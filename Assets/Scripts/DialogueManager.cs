@@ -22,6 +22,7 @@ public class DialogueManager : MonoBehaviour
     [Header("Current Dialogue")]
     [SerializeField] private Dialogue currentDialogue;
     [SerializeField] private string currentLanguageCode;
+    [SerializeField] private NpcAppearanceIdentity activeSpeakerAppearance;
 
     private int currentLineIndex;
     private bool awaitingChoiceSelection;
@@ -33,6 +34,7 @@ public class DialogueManager : MonoBehaviour
     public Dialogue CurrentDialogue => currentDialogue;
     public int CurrentLineIndex => currentLineIndex;
     public string CurrentLanguageCode => currentLanguageCode;
+    public NpcAppearanceIdentity ActiveSpeakerAppearance => activeSpeakerAppearance;
 
     public bool HasDialogue => currentDialogue != null;
 
@@ -53,12 +55,18 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(Dialogue dialogue, string languageCode = null)
     {
+        StartDialogue(dialogue, null, languageCode);
+    }
+
+    public void StartDialogue(Dialogue dialogue, NpcAppearanceIdentity speakerAppearance, string languageCode = null)
+    {
         if (dialogue == null)
         {
             return;
         }
 
         currentDialogue = dialogue;
+        activeSpeakerAppearance = speakerAppearance;
         currentLanguageCode = string.IsNullOrWhiteSpace(languageCode)
             ? Dialogue.GetCurrentLanguageCode()
             : languageCode;
@@ -181,7 +189,7 @@ public class DialogueManager : MonoBehaviour
 
         if (selectedOption.NextDialogue != null)
         {
-            StartDialogue(selectedOption.NextDialogue, currentLanguageCode);
+            StartDialogue(selectedOption.NextDialogue, activeSpeakerAppearance, currentLanguageCode);
             return;
         }
 
@@ -197,6 +205,7 @@ public class DialogueManager : MonoBehaviour
 
         DialogueFinished?.Invoke(currentDialogue);
         currentDialogue = null;
+        activeSpeakerAppearance = null;
         currentLineIndex = 0;
         awaitingChoiceSelection = false;
     }

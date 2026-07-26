@@ -9,6 +9,32 @@ public class DialogueUI : MonoBehaviour {
     private static DialogueUI instance;
     private DialogueManager subscribedManager;
     private EventSystem runtimeEventSystem;
+    private static readonly string[] PortraitExpressionBools = {
+        nameof(DialoguePortraitExpression.Walk),
+        nameof(DialoguePortraitExpression.Run)
+    };
+    private static readonly string[] PortraitExpressionTriggers = {
+        nameof(DialoguePortraitExpression.SpinL),
+        nameof(DialoguePortraitExpression.SpinR),
+        nameof(DialoguePortraitExpression.Idle1),
+        nameof(DialoguePortraitExpression.Idle2),
+        nameof(DialoguePortraitExpression.Idle3),
+        nameof(DialoguePortraitExpression.Dance1),
+        nameof(DialoguePortraitExpression.Dance2),
+        nameof(DialoguePortraitExpression.Dance3),
+        nameof(DialoguePortraitExpression.Idle_Var1),
+        nameof(DialoguePortraitExpression.Idle_Var2),
+        nameof(DialoguePortraitExpression.Idle_Var3),
+        nameof(DialoguePortraitExpression.Idle_Var4),
+        nameof(DialoguePortraitExpression.Idle_Var5),
+        nameof(DialoguePortraitExpression.Inter_Question),
+        nameof(DialoguePortraitExpression.Inter_Happy),
+        nameof(DialoguePortraitExpression.Inter_Exclamation),
+        nameof(DialoguePortraitExpression.Inter_Angry),
+        nameof(DialoguePortraitExpression.Inter_Sad),
+        nameof(DialoguePortraitExpression.Inter_Closed),
+        nameof(DialoguePortraitExpression.Inter_Talking)
+    };
 
     public static DialogueUI Instance {
         get {
@@ -39,6 +65,9 @@ public class DialogueUI : MonoBehaviour {
     [SerializeField, Min(0f)] private float continueDelay = 0.15f;
 
     private GameObject currentPortraitInstance;
+    private UnityEngine.Object currentPortraitSource;
+    private bool currentPortraitUsesNpcAppearance;
+    private DialoguePortraitExpression currentPortraitExpression;
     private Coroutine continuePromptRoutine;
     private bool continuePromptVisible;
 
@@ -202,21 +231,96 @@ public class DialogueUI : MonoBehaviour {
     }
 
     private void RefreshPortrait() {
-        ClearPortrait();
-
         var manager = DialogueManager.Instance;
         if (manager == null || !manager.HasDialogue) {
+            ClearPortrait();
             return;
         }
 
         var line = manager.GetCurrentLine();
-        if (line == null || line.Character == null || line.Character.PortraitPrefab == null || characterAnchor == null) {
+        if (line == null || characterAnchor == null) {
+            ClearPortrait();
             return;
         }
 
-        currentPortraitInstance = Instantiate(line.Character.PortraitPrefab, characterAnchor);
-        currentPortraitInstance.transform.localPosition = Vector3.zero;
-        currentPortraitInstance.transform.localRotation = Quaternion.identity;
+        var activeSpeakerAppearance = manager.ActiveSpeakerAppearance;
+        if (activeSpeakerAppearance != null && activeSpeakerAppearance.MatchesCharacter(line.Character)) {
+            if (!currentPortraitUsesNpcAppearance || currentPortraitSource != activeSpeakerAppearance || currentPortraitInstance == null) {
+                ClearPortrait();
+                currentPortraitInstance = activeSpeakerAppearance.CreatePortraitInstance(characterAnchor);
+                currentPortraitSource = activeSpeakerAppearance;
+                currentPortraitUsesNpcAppearance = currentPortraitInstance != null;
+                currentPortraitExpression = DialoguePortraitExpression.Neutral;
+            }
+
+            if (currentPortraitInstance != null) {
+                ApplyPortraitExpressionIfNeeded(currentPortraitInstance, line.PortraitExpression);
+                return;
+            }
+        }
+
+        if (line.Character == null || line.Character.PortraitPrefab == null) {
+            ClearPortrait();
+            return;
+        }
+
+        if (currentPortraitUsesNpcAppearance || currentPortraitSource != line.Character.PortraitPrefab || currentPortraitInstance == null) {
+            ClearPortrait();
+            currentPortraitInstance = Instantiate(line.Character.PortraitPrefab, characterAnchor);
+            currentPortraitInstance.transform.localPosition = Vector3.zero;
+            currentPortraitInstance.transform.localRotation = Quaternion.identity;
+            currentPortraitSource = line.Character.PortraitPrefab;
+            currentPortraitUsesNpcAppearance = false;
+            currentPortraitExpression = DialoguePortraitExpression.Neutral;
+        }
+
+        ApplyPortraitExpressionIfNeeded(currentPortraitInstance, line.PortraitExpression);
+    }
+
+    private void ApplyPortraitExpressionIfNeeded(GameObject portraitInstance, DialoguePortraitExpression expression) {
+        if (currentPortraitExpression == expression) {
+            return;
+        }
+
+        ApplyPortraitExpression(portraitInstance, expression);
+        currentPortraitExpression = expression;
+    }
+
+    private void ApplyPortraitExpression(GameObject portraitInstance, DialoguePortraitExpression expression) {
+        if (portraitInstance == null) {
+            return;
+        }
+
+        var portraitAnimator = portraitInstance.GetComponentInChildren<Animator>(true);
+        if (portraitAnimator == null) {
+            return;
+        }
+
+        for (int i = 0; i < PortraitExpressionBools.Length; i++) {
+            if (portraitAnimator.HasParameterOfType(PortraitExpressionBools[i], AnimatorControllerParameterType.Bool)) {
+                portraitAnimator.SetBool(PortraitExpressionBools[i], false);
+            }
+        }
+
+        for (int i = 0; i < PortraitExpressionTriggers.Length; i++) {
+            if (portraitAnimator.HasParameterOfType(PortraitExpressionTriggers[i], AnimatorControllerParameterType.Trigger)) {
+                portraitAnimator.ResetTrigger(PortraitExpressionTriggers[i]);
+            }
+        }
+
+        if (expression == DialoguePortraitExpression.Neutral) {
+            return;
+        }
+
+        var parameterName = expression.ToString();
+        if (portraitAnimator.HasParameterOfType(parameterName, AnimatorControllerParameterType.Bool)) {
+            portraitAnimator.SetBool(parameterName, true);
+            return;
+        }
+
+        if (portraitAnimator.HasParameterOfType(parameterName, AnimatorControllerParameterType.Trigger)) {
+            portraitAnimator.SetTrigger(parameterName);
+        }
     }
 
     private void ClearPortrait() {
@@ -224,6 +328,10 @@ public class DialogueUI : MonoBehaviour {
             Destroy(currentPortraitInstance);
             currentPortraitInstance = null;
         }
+
+        currentPortraitSource = null;
+        currentPortraitUsesNpcAppearance = false;
+        currentPortraitExpression = DialoguePortraitExpression.Neutral;
     }
 
     private void HandleTypingFinished() {
@@ -323,5 +431,27 @@ public class DialogueUI : MonoBehaviour {
 
     private void ClearChoices() {
         SetContainerMode(false);
+    }
+}
+
+public static class AnimatorParameterExtensions
+{
+    public static bool HasParameterOfType(this Animator animator, string parameterName, AnimatorControllerParameterType parameterType)
+    {
+        if (animator == null || string.IsNullOrWhiteSpace(parameterName))
+        {
+            return false;
+        }
+
+        var parameters = animator.parameters;
+        for (int i = 0; i < parameters.Length; i++)
+        {
+            if (parameters[i].type == parameterType && parameters[i].name == parameterName)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

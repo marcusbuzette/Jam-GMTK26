@@ -11,11 +11,11 @@ public class MiniGameCountDown : MinigameBase {
     [SerializeField] float correctTime;
     [SerializeField]float maxTimeDiference;
     public override void MiniGameFailed() {
-        Debug.Log("Kabum");
+        base.MiniGameFailed();
     }
 
     public override void MiniGameSolved() {
-        Debug.Log("O detetive mais brabo da historia");
+        base.MiniGameSolved();
     }
     public override void Restart() {
         timerIsRunning=false;

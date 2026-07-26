@@ -7,6 +7,9 @@ public class MaskButtonControl : MonoBehaviour
     [SerializeField]Button button;
     [SerializeField]bool isAnwser;
     MiniGameMasks miniGameController;
+    [SerializeField]AudioPlayerLocal audioPlayerLocal;
+    [SerializeField]AudioClip buttonPress;
+    
     public void Settup(Sprite s,bool isAnwser,MiniGameMasks miniGameMasks) {
         image.sprite=s;
         this.isAnwser = isAnwser;
@@ -14,5 +17,8 @@ public class MaskButtonControl : MonoBehaviour
     }
     public void Clicked() {
         miniGameController?.ClickedMask(isAnwser);
+        audioPlayerLocal?.PlayAudioClip(buttonPress);
+        
     }
+    
 }

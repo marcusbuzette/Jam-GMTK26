@@ -36,11 +36,9 @@ public class InteractableItem : InteractableBase {
         } else if (interactionType == InteractionType.PopUp) {
             PopUpInteraction(interactor);
         }
-        Debug.Log("Interagindo com item");
     }
 
     private void SimpleInteraction() {
-        Debug.Log("Interação simples com balão de texto: " + textToShow);
         // Se o jogador clicar várias vezes, paramos a animação atual e reiniciamos
         if (simpleInteractionCoroutine != null) {
             StopCoroutine(simpleInteractionCoroutine);
