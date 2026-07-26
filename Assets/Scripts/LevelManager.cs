@@ -29,6 +29,8 @@ public class LevelManager : MonoBehaviour {
     public LevelState CurrentState { get; private set; } = LevelState.Setup;
     public float RemainingTime { get; private set; }
 
+    public Transform PlayerTransform => playerTransform;
+
     // Eventos para acoplar UI e Audio sem dependência direta
     public static event Action<float> OnTimerUpdated; // Passa o tempo restante
     public static event Action OnLevelStarted;

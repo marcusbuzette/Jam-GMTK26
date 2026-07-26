@@ -266,7 +266,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2641594791896409068, guid: 2561ce177dd0e4767bfb4aea94ee2d85, type: 3}
       propertyPath: m_Name
-      value: NPCBase Variant
+      value: NPCBase Josnei
+      objectReference: {fileID: 0}
+    - target: {fileID: 5341541534172024640, guid: 2561ce177dd0e4767bfb4aea94ee2d85, type: 3}
+      propertyPath: useFixedSeed
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5341541534172024640, guid: 2561ce177dd0e4767bfb4aea94ee2d85, type: 3}
       propertyPath: speakerCharacter
