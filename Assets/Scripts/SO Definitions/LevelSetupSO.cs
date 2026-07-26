@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "LevelSetupSO", menuName = "Scriptable Objects/LevelSetupSO")]
