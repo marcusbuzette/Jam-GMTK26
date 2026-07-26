@@ -401,6 +401,7 @@ MonoBehaviour:
   zoomButton: {fileID: 1200832624301269616}
   bombController: {fileID: 0}
   cover: {fileID: 5103433610179634628}
+  minigameType: 2
   maskImages:
   - {fileID: 21300000, guid: 9a6a0248bc066824f9efbfecb704785a, type: 3}
   - {fileID: 21300000, guid: bdeeed17bd9556d4ab38d328e7875167, type: 3}

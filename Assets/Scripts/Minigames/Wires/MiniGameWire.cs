@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,12 +15,19 @@ public class MiniGameWire : MinigameBase
     }
     public override void Settup() {
         base.Settup();
-        NumberOfWires = Random.Range(3,5);
+        /* NumberOfWires = Random.Range(3,5);
         correctWire = Random.Range(0,NumberOfWires);//Provisorio
         for(int i = 0; i < NumberOfWires; i++) {
             int colorIndex = Random.Range(0,possibleColors.Length);
             GameObject go=Instantiate(wirePrefab,wireLayoutGroup);
             go.GetComponent<WireMouseControl>().Settup(possibleColors[colorIndex],i==correctWire,this);
+        } */
+    }
+    public void ReciveAnswer(List<MinigameWireAnswer>answers) {
+        NumberOfWires = answers.Count;
+        for(int i = 0; i < NumberOfWires; i++) {
+            GameObject go=Instantiate(wirePrefab,wireLayoutGroup);
+            go.GetComponent<WireMouseControl>().Settup(answers[i].color,answers[i].isAnswer,this);
         }
     }
     /* private void Update() {

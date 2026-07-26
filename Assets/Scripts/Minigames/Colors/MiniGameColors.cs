@@ -10,6 +10,8 @@ public class MiniGameColors : MinigameBase {
     bool alreadyCompleted;
     public override void MiniGameFailed() {
         base.MiniGameFailed();
+        attempt.Clear();
+        attemptDebug.Clear();
         //Restart();
     }
     public void Awake() {
@@ -44,6 +46,7 @@ public class MiniGameColors : MinigameBase {
     }
     public void ReciveAnswer(List<ColorsMinigame> answer) {
         this.answer=answer;
+        numberOfSteps=answer.Count;
         foreach(ColorsMinigame c in answer) {
             answerDebug.Add((int)c);
         }

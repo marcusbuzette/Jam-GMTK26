@@ -60,6 +60,7 @@ MonoBehaviour:
   zoomButton: {fileID: 5787379517810770297}
   bombController: {fileID: 0}
   cover: {fileID: 570077738441499961}
+  minigameType: 1
   placeText: {fileID: 7828164762948433095}
   timerText: {fileID: 2432951081883883134}
   elapsedTime: 0

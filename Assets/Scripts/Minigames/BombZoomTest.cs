@@ -21,7 +21,7 @@ public class BombZoomTest : MonoBehaviour
     bool alreadyZoomed;
     MinigameBase openMinigame;
     [SerializeField]GameObject beepingSound;
-    void Awake()
+    void Start()
     {
         canavasHeight = bomb.parent.GetComponent<RectTransform>().rect.height;
         Vector2 pos = new Vector2(0,canavasHeight);
