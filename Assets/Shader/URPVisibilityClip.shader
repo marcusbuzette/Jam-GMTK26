@@ -4,6 +4,9 @@ Shader "Custom/URPVisibilityClip"
     {
         _BaseMap ("Base Map", 2D) = "white" {}
         _BaseColor ("Base Color", Color) = (1,1,1,1)
+        _HoleCenterViewport ("Hole Center Viewport", Vector) = (0.5,0.5,0,1)
+        _HoleRadiusPixels ("Hole Radius Pixels", Float) = 40
+        _HoleSoftnessPixels ("Hole Softness Pixels", Float) = 8
         _HoleEnabled ("Enable Hole", Float) = 1
         _PlaneEnabled ("Enable Plane Clip", Float) = 0
         _CutoutRadius ("Hole Radius", Float) = 1.4
@@ -32,6 +35,7 @@ Shader "Custom/URPVisibilityClip"
             #pragma fragment frag
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
             struct Attributes
             {
@@ -54,15 +58,14 @@ Shader "Custom/URPVisibilityClip"
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseMap_ST;
                 float4 _BaseColor;
+                float4 _HoleCenterViewport;
+                float _HoleRadiusPixels;
+                float _HoleSoftnessPixels;
                 float _HoleEnabled;
                 float _PlaneEnabled;
                 float _CutoutRadius;
                 float _CutoutSoftness;
             CBUFFER_END
-
-            float3 _Vis_TargetPos;
-            float3 _Vis_PlanePoint;
-            float3 _Vis_PlaneNormal;
 
             Varyings vert(Attributes IN)
             {
@@ -81,20 +84,27 @@ Shader "Custom/URPVisibilityClip"
             {
                 if (_HoleEnabled > 0.5)
                 {
-                    float distanceToTarget = distance(IN.positionWS, _Vis_TargetPos);
-                    float holeMask = smoothstep(_CutoutRadius, _CutoutRadius + max(_CutoutSoftness, 0.0001), distanceToTarget);
+                    float2 fragPixel = IN.positionCS.xy;
+                    float2 holePixel = saturate(_HoleCenterViewport.xy) * _ScaledScreenParams.xy;
+
+                    float distanceToHoleCenterPx = distance(fragPixel, holePixel);
+                    float safeRadius = max(_HoleRadiusPixels, 0.5);
+                    float safeSoftness = max(_HoleSoftnessPixels, 0.5);
+                    float holeMask = smoothstep(safeRadius, safeRadius + safeSoftness, distanceToHoleCenterPx);
                     clip(holeMask - 0.001);
                 }
 
                 if (_PlaneEnabled > 0.5)
                 {
-                    float3 planeNormal = normalize(_Vis_PlaneNormal);
-                    float signedDistance = dot(IN.positionWS - _Vis_PlanePoint, planeNormal);
-                    clip(signedDistance);
+                    // Plane clipping is intentionally disabled in the simplified occluder-only setup.
                 }
 
                 half4 baseSample = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv) * _BaseColor;
-                return baseSample;
+                Light mainLight = GetMainLight();
+                half3 normalWS = normalize(IN.normalWS);
+                half ndotl = saturate(dot(normalWS, mainLight.direction));
+                half3 litColor = baseSample.rgb * (0.25h + ndotl * mainLight.color);
+                return half4(litColor, baseSample.a);
             }
             ENDHLSL
         }
