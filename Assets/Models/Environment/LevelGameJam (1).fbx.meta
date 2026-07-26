@@ -17,6 +17,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Glass
+    second: {fileID: 2100000, guid: c76a5bc39e95adb4782f1dcb7f001650, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: GradientMapMat
     second: {fileID: 2100000, guid: fa5a10ea4c35d4ac5acd4827b8862701, type: 2}
   materials:
