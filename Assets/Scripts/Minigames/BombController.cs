@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class BombController : MonoBehaviour
 {
+    public static BombController singleton;
     [SerializeField]TextMeshProUGUI timerText;
     [SerializeField]Vector2[] minigamePositions;
     [SerializeField]ModulesCombination[] possibleMinigames;
@@ -18,6 +20,12 @@ public class BombController : MonoBehaviour
     [SerializeField]AudioClip ModuleCompleted;
     int nMinigames;
     int completedMinigames;
+    public bool isOpen = false;
+    public void Awake() {
+        if (singleton == null) {
+            singleton=this;
+        }
+    }
     public void Start() {
         minigames = new();
         for(int i = 0; i < lifes; i++) {
@@ -45,9 +53,10 @@ public class BombController : MonoBehaviour
         audioPlayerLocal?.PlayAudioClip(ModuleCompleted);
         completedMinigames++;
         if (completedMinigames >= nMinigames) {
-            //WIN THE GAME!!!
+            LevelManager.Instance.TriggerVictory();
         }
     }
+    
     public void LoseLife() {
         if (lifes>0) {
             //Destroy(lifesLayout.GetChild(lifesLayout.childCount-1).gameObject);
@@ -58,7 +67,31 @@ public class BombController : MonoBehaviour
         }
         lifes--;
         if (lifes <= 0) {
-            //Lose Game
+            LevelManager.Instance.TriggerDefeat("Erros d+");
         }
+    }
+    void Update() {
+        if (Keyboard.current.enterKey.wasPressedThisFrame) {
+            OpenCloseBomb();
+        }
+    }
+    public void OpenCloseBomb() {
+        bool attempt =false;
+        if (isOpen) {//se ta aberto ent fecha
+            attempt=bombZoomTest.OpenClose(false);
+            if(attempt)LevelManager.Instance.HandleClosedPannel();
+        } else {//se ta fechado ent abre
+            attempt=bombZoomTest.OpenClose(true); 
+        }
+        if(attempt)isOpen=!isOpen;
+    }
+    public void UpdateTimer(float RemainingTime) {
+        int minutes = Mathf.FloorToInt(RemainingTime / 60f);
+        
+        // Get the remainder after dividing by 60 to get seconds
+        int seconds = Mathf.FloorToInt(RemainingTime % 60f);
+
+        // "D2" forces the string to display at least 2 digits (adds leading zero)
+        timerText.text = minutes.ToString("D2") + ":" + seconds.ToString("D2");
     }
 }
