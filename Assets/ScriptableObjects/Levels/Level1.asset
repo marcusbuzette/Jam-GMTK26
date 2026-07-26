@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelSetupSO
   levelName: Level 1
   rpm: 63
-  levelImage: {fileID: 21300000, guid: 9a6a0248bc066824f9efbfecb704785a, type: 3}
+  levelImage: {fileID: 21300000, guid: 680d3113caea6b046ab874bec2ec2cb3, type: 3}
   levelMusic: {fileID: 0}
   playerSpawnPosition: {x: -0.24, y: 0, z: -9.51}
   playerSpawnRotation: {x: 0, y: 0, z: 0}
