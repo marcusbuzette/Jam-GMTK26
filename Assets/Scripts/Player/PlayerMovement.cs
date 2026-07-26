@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour {
 
     public float RotationSpeed => rotationSpeed;
     public float AngleToStartMoving => angleToStartMoving;
+    public float MoveSpeed => moveSpeed;
 
     private void Awake() {
         inputActions = new InputSystem_Actions();
@@ -40,8 +41,7 @@ public class PlayerMovement : MonoBehaviour {
         moveInput = inputActions.Player.Move.ReadValue<Vector2>();
     }
 
-    private void HandleMovementAndRotation()
-    {
+    private void HandleMovementAndRotation() {
         if (moveInput.sqrMagnitude < 0.01f) return;
 
         Vector3 targetDirection = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
@@ -51,8 +51,7 @@ public class PlayerMovement : MonoBehaviour {
 
         float currentAngleDifference = Vector3.Angle(transform.forward, targetDirection);
 
-        if (currentAngleDifference <= angleToStartMoving)
-        {
+        if (currentAngleDifference <= angleToStartMoving) {
             controller.Move(transform.forward * moveSpeed * Time.deltaTime);
         }
     }
