@@ -4,8 +4,7 @@ using TMPro;
 
 public class LevelSelectionUI : MonoBehaviour {
     [Header("Referências de UI")]
-    [SerializeField] private Transform buttonsContainer; // Objeto com componente Grid Layout Group
-    [SerializeField] private GameObject levelButtonPrefab; // Prefab de um botão de fase
+    [SerializeField] private LevelButton[] levelButtons; // Botoes de fase na ordem
 
     private void Start() {
         GenerateLevelButtons();
@@ -14,33 +13,22 @@ public class LevelSelectionUI : MonoBehaviour {
     private void GenerateLevelButtons() {
         if (GameManager.Instance == null) return;
 
-        // Limpa botões antigos se houver
-        foreach (Transform child in buttonsContainer) {
-            Destroy(child.gameObject);
-        }
-
         LevelSetupSO[] levels = GameManager.Instance.GetAllLevels();
 
         for (int i = 0; i < levels.Length; i++) {
             int levelIndex = i; // Copia local da variável para o callback da lambda
-            GameObject btnObj = Instantiate(levelButtonPrefab, buttonsContainer);
-
-            // Atualiza o texto do botão (ex: "Fase 1", "Fase 2"...)
-            TMP_Text btnText = btnObj.GetComponentInChildren<TMP_Text>();
-            if (btnText != null) {
-                btnText.text = (levelIndex + 1).ToString();
-            }
+            GameObject btnObj = levelButtons[levelIndex].gameObject;
 
             // Configura o evento do clique
-            Button btn = btnObj.GetComponent<Button>();
+            Button btn = levelButtons[levelIndex].levelButton;
             if (btn != null) {
                 btn.onClick.AddListener(() => GameManager.Instance.SelectAndStartLevel(levelIndex));
             }
 
-            LevelButton levelButtonComponent = btnObj.GetComponent<LevelButton>();
+            LevelButton levelButtonComponent = levelButtons[levelIndex];
             if (levelButtonComponent != null) {
                 levelButtonComponent.SetLevelIndex(levelIndex);
-                levelButtonComponent.SetInteractable(GameManager.Instance.IsLevelUnlocked(levelIndex));
+                levelButtonComponent.SetLevelButton(GameManager.Instance.IsLevelUnlocked(levelIndex), levels[levelIndex].levelName, levels[levelIndex].levelImage, levels);
             }
         }
     }
