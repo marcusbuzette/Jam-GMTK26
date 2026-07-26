@@ -407,7 +407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9149906427f01484cb7a94589b7c1486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SettingsManager
-  audioMixer: {fileID: 24100000, guid: adab48823940f4e4b925fc67f815d22c, type: 2}
+  audioMixer: {fileID: 24100000, guid: d19a951e21cce264ea5e6239dcaeeb62, type: 2}
 --- !u!1 &63139933
 GameObject:
   m_ObjectHideFlags: 0
