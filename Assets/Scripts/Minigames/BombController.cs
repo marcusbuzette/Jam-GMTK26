@@ -13,12 +13,18 @@ public class BombController : MonoBehaviour
     [SerializeField]RectTransform lifesLayout;
     [SerializeField]int lifes =3;
     [SerializeField]GameObject heartPrefab;
+    [SerializeField]AudioPlayerLocal audioPlayerLocal;
+    [SerializeField]AudioClip ModuleFailure;
+    [SerializeField]AudioClip ModuleCompleted;
+    int nMinigames;
+    int completedMinigames;
     public void Start() {
         minigames = new();
         for(int i = 0; i < lifes; i++) {
             Instantiate(heartPrefab,lifesLayout);
         }
         ModulesCombination selectedModules = possibleMinigames[Random.Range(0,possibleMinigames.Length)];
+        nMinigames = selectedModules.minigames.Length;
         for(int i = 0; i < selectedModules.minigames.Length; i++) {
             GameObject go = Instantiate(selectedModules.minigames[i].gameObject,transform);
             RectTransform rectTransform = go.GetComponent<RectTransform>();
@@ -33,6 +39,14 @@ public class BombController : MonoBehaviour
     public void FailedMinigame() {
         LoseLife();
         bombZoomTest.TriggerShake();
+        audioPlayerLocal?.PlayAudioClip(ModuleFailure);
+    }
+    public void MinigameSuccess() {
+        audioPlayerLocal?.PlayAudioClip(ModuleCompleted);
+        completedMinigames++;
+        if (completedMinigames >= nMinigames) {
+            //WIN THE GAME!!!
+        }
     }
     public void LoseLife() {
         if (lifes>0) {

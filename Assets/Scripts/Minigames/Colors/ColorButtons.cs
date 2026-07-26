@@ -7,8 +7,11 @@ public class ColorButtons : MonoBehaviour
     [SerializeField]ColorsMinigame colorsMinigame;
     public Vector2 moveAmountPressed = new Vector2(0,-10);
     public float duration = 0.3f;
+    [SerializeField]AudioPlayerLocal audioPlayerLocal;
+    [SerializeField]AudioClip buttonPress;
     public void Clicked() {
         miniGameController?.ClickedColor(colorsMinigame);
+        audioPlayerLocal?.PlayAudioClip(buttonPress);
         StartCoroutine(nameof(PressAnimation));
     }
     IEnumerator PressAnimation() {

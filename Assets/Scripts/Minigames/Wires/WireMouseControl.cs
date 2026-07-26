@@ -11,16 +11,21 @@ public class WireMouseControl : MonoBehaviour, IPointerClickHandler, IPointerEnt
     MiniGameWire miniGameWireController;
     bool isRightWire;
     [SerializeField]RectTransform rectTransform;
+    [SerializeField]AudioPlayerLocal audioPlayerLocal;
+    [SerializeField]AudioClip wireCut;
     public void OnPointerClick(PointerEventData eventData) {
         fullWireGO.SetActive(false);
         cutWireGO.SetActive(true);
-        if (isRightWire) {
+        audioPlayerLocal?.PlayAudioClip(wireCut);
+        Invoke(nameof(AcessMinigame),wireCut.length);
+    }
+    public void AcessMinigame() {
+    if (isRightWire) {
             miniGameWireController?.MiniGameSolved();
         } else {
             miniGameWireController?.MiniGameFailed();
         }
     }
-
     public void OnPointerEnter(PointerEventData eventData) {
         rectTransform.localScale=new Vector3(1.5f,1,1);
     }

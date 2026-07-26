@@ -20,6 +20,7 @@ public class BombZoomTest : MonoBehaviour
     bool isOpen = true;
     bool alreadyZoomed;
     MinigameBase openMinigame;
+    [SerializeField]GameObject beepingSound;
     /* void Awake()
     {
         originalPosition = bomb.anchoredPosition;
@@ -146,6 +147,7 @@ public class BombZoomTest : MonoBehaviour
         }
         isOpen=!isOpen;
         isOpeningClosing = false;
+        beepingSound.SetActive(isOpen);
     }
 
 }
