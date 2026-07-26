@@ -10,17 +10,25 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable {
 
     [Header("Visual Feedback")]
     [Tooltip("Coloque aqui o componente de Outline (ou outro script de feedback visual).")]
-    [SerializeField] private InteractableOutline outlineComponent;
+    [SerializeField] private InteractableOutline[] outlineComponents;
 
     public float InteractionDistance => interactionDistance;
     public virtual Transform InteractionPoint => interactionPoint != null ? interactionPoint : transform;
 
     public virtual void OnHoverEnter() {
-        if (outlineComponent != null) outlineComponent.EnableOutline();
+        for (int i = 0; i < outlineComponents.Length; i++) {
+            if (outlineComponents[i] != null) {
+                outlineComponents[i].EnableOutline();
+            }
+        }
     }
 
     public virtual void OnHoverExit() {
-        if (outlineComponent != null) outlineComponent.DisableOutline();
+        for (int i = 0; i < outlineComponents.Length; i++) {
+            if (outlineComponents[i] != null) {
+                outlineComponents[i].DisableOutline();
+            }
+        }
     }
 
     public abstract void Interact(GameObject interactor);

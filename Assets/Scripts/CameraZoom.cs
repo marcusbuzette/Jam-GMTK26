@@ -39,7 +39,7 @@ public class CameraZoom : MonoBehaviour {
     }
 
     private void HandleZoomInput() {
-        if (LevelManager.Instance.CurrentState != LevelState.Playing) return; // Só permite zoom durante o jogo
+        if (LevelManager.Instance && LevelManager.Instance.CurrentState != LevelState.Playing) return; // Só permite zoom durante o jogo
         // Lê o valor Vector2 do scroll do mouse (o eixo Y guarda a rolagem vertical)
         Vector2 scrollValue = zoomAction.action.ReadValue<Vector2>();
 

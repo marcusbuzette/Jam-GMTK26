@@ -2,6 +2,33 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum DialoguePortraitExpression
+{
+    Neutral,
+    Walk,
+    Run,
+    SpinL,
+    SpinR,
+    Idle1,
+    Idle2,
+    Idle3,
+    Dance1,
+    Dance2,
+    Dance3,
+    Idle_Var1,
+    Idle_Var2,
+    Idle_Var3,
+    Idle_Var4,
+    Idle_Var5,
+    Inter_Question,
+    Inter_Happy,
+    Inter_Exclamation,
+    Inter_Angry,
+    Inter_Sad,
+    Inter_Closed,
+    Inter_Talking
+}
+
 [CreateAssetMenu(fileName = "Dialogue", menuName = "Scriptable Objects/Dialogue")]
 public class Dialogue : ScriptableObject
 {
@@ -89,6 +116,7 @@ public class Dialogue : ScriptableObject
 public class DialogueLine
 {
     [SerializeField] private CharacterDefinition character;
+    [SerializeField] private DialoguePortraitExpression portraitExpression = DialoguePortraitExpression.Neutral;
     [SerializeField] private List<LocalizedText> localizedTexts = new List<LocalizedText>();
 
     public CharacterDefinition Character
@@ -97,6 +125,7 @@ public class DialogueLine
         set => character = value;
     }
 
+    public DialoguePortraitExpression PortraitExpression => portraitExpression;
     public List<LocalizedText> LocalizedTexts => localizedTexts;
 
     public void SetText(string languageCode, string text)
