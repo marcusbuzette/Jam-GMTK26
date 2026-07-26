@@ -110,6 +110,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 3a79c27a7d2b43b8b9b6fbf8397d8c03, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -172,6 +176,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 8b0fd55f0f374b9da65f1ff196263808, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -234,6 +242,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 1378f3136c7a468f8ad0f6d5ab4b2c01, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -296,6 +308,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (22)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 65a8a06d3d4f46d7ba967d7cc8a58a06, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -358,6 +374,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 95c73a0effb34f7b81d4f02c8519d309, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -420,6 +440,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (14)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 1378f3136c7a468f8ad0f6d5ab4b2c01, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -429,6 +453,72 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 833237324706175023, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
   m_PrefabInstance: {fileID: 2933143235927662640}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3273162680550959742
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 243846952576160496}
+    m_Modifications:
+    - target: {fileID: 1491424488202084584, guid: d2452ace1c6501748bdf35e14ee61efe, type: 3}
+      propertyPath: m_Name
+      value: Bomba
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839549224507389349, guid: d2452ace1c6501748bdf35e14ee61efe, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839549224507389349, guid: d2452ace1c6501748bdf35e14ee61efe, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839549224507389349, guid: d2452ace1c6501748bdf35e14ee61efe, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839549224507389349, guid: d2452ace1c6501748bdf35e14ee61efe, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839549224507389349, guid: d2452ace1c6501748bdf35e14ee61efe, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839549224507389349, guid: d2452ace1c6501748bdf35e14ee61efe, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839549224507389349, guid: d2452ace1c6501748bdf35e14ee61efe, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839549224507389349, guid: d2452ace1c6501748bdf35e14ee61efe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839549224507389349, guid: d2452ace1c6501748bdf35e14ee61efe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4839549224507389349, guid: d2452ace1c6501748bdf35e14ee61efe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4979897230541040274, guid: d2452ace1c6501748bdf35e14ee61efe, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.437
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d2452ace1c6501748bdf35e14ee61efe, type: 3}
+--- !u!4 &7945779646237876187 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4839549224507389349, guid: d2452ace1c6501748bdf35e14ee61efe, type: 3}
+  m_PrefabInstance: {fileID: 3273162680550959742}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3497238648260966607
 PrefabInstance:
@@ -482,6 +572,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (16)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 79f45268d4c24497b4740bd2bc1d8107, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -544,6 +638,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 56f2c20d4f1444b8b2df9487d4afee05, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -606,6 +704,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (21)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 56f2c20d4f1444b8b2df9487d4afee05, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -668,6 +770,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 95c73a0effb34f7b81d4f02c8519d309, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -792,6 +898,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (12)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 8b0fd55f0f374b9da65f1ff196263808, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -854,6 +964,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 2d2cd0f6fc4343f6877c51b26d0b3102, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -916,6 +1030,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: a4f918cf53de4fd283db58f2391ae410, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -978,6 +1096,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: a4f918cf53de4fd283db58f2391ae410, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1040,6 +1162,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 2d2cd0f6fc4343f6877c51b26d0b3102, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1102,6 +1228,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (19)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 4e72ff4a5a1a40c5a0a34ec8d1ae3904, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1164,6 +1294,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (15)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 65a8a06d3d4f46d7ba967d7cc8a58a06, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1226,6 +1360,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 56f2c20d4f1444b8b2df9487d4afee05, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1235,101 +1373,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 833237324706175023, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
   m_PrefabInstance: {fileID: 6806401143393726394}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &7233548666139258952
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 243846952576160496}
-    m_Modifications:
-    - target: {fileID: 731745134016901011, guid: 80f67e2b3b6e24f90bfd934beb3f8dec, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -3.03
-      objectReference: {fileID: 0}
-    - target: {fileID: 731745134016901011, guid: 80f67e2b3b6e24f90bfd934beb3f8dec, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 731745134016901011, guid: 80f67e2b3b6e24f90bfd934beb3f8dec, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.42
-      objectReference: {fileID: 0}
-    - target: {fileID: 731745134016901011, guid: 80f67e2b3b6e24f90bfd934beb3f8dec, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 731745134016901011, guid: 80f67e2b3b6e24f90bfd934beb3f8dec, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 731745134016901011, guid: 80f67e2b3b6e24f90bfd934beb3f8dec, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 731745134016901011, guid: 80f67e2b3b6e24f90bfd934beb3f8dec, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 731745134016901011, guid: 80f67e2b3b6e24f90bfd934beb3f8dec, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 731745134016901011, guid: 80f67e2b3b6e24f90bfd934beb3f8dec, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 731745134016901011, guid: 80f67e2b3b6e24f90bfd934beb3f8dec, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 998161796428109394, guid: 80f67e2b3b6e24f90bfd934beb3f8dec, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 2467001961425477aa3de1e5657a3305, type: 2}
-    - target: {fileID: 6754480910364555998, guid: 80f67e2b3b6e24f90bfd934beb3f8dec, type: 3}
-      propertyPath: m_Name
-      value: Bomba
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 3698178876447291366, guid: 80f67e2b3b6e24f90bfd934beb3f8dec, type: 3}
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6754480910364555998, guid: 80f67e2b3b6e24f90bfd934beb3f8dec, type: 3}
-      insertIndex: 1
-      addedObject: {fileID: 3138560375792138360}
-  m_SourcePrefab: {fileID: 100100000, guid: 80f67e2b3b6e24f90bfd934beb3f8dec, type: 3}
---- !u!1 &4169777684799589014 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6754480910364555998, guid: 80f67e2b3b6e24f90bfd934beb3f8dec, type: 3}
-  m_PrefabInstance: {fileID: 7233548666139258952}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3138560375792138360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4169777684799589014}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbad71840c5a44bcea051be4ad9d4f32, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Bomb
-  interactionDistance: 1
-  interactionPoint: {fileID: 4905198107718151491}
-  outline: {fileID: 0}
---- !u!4 &4905198107718151491 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2337501932522724619, guid: 80f67e2b3b6e24f90bfd934beb3f8dec, type: 3}
-  m_PrefabInstance: {fileID: 7233548666139258952}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &7945779646237876187 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 731745134016901011, guid: 80f67e2b3b6e24f90bfd934beb3f8dec, type: 3}
-  m_PrefabInstance: {fileID: 7233548666139258952}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7357373719120409896
 PrefabInstance:
@@ -1383,6 +1426,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (11)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 1378f3136c7a468f8ad0f6d5ab4b2c01, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1445,6 +1492,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (23)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 79f45268d4c24497b4740bd2bc1d8107, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1507,6 +1558,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 79f45268d4c24497b4740bd2bc1d8107, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1569,6 +1624,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (18)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 3a79c27a7d2b43b8b9b6fbf8397d8c03, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1631,6 +1690,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (20)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 4e72ff4a5a1a40c5a0a34ec8d1ae3904, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1693,6 +1756,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (17)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 3a79c27a7d2b43b8b9b6fbf8397d8c03, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1755,6 +1822,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPCBase Variant (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 5889119397609881094, guid: 4fb346142856e6546b995b3423920e3b, type: 3}
+      propertyPath: dialogue
+      value: 
+      objectReference: {fileID: 11400000, guid: 56f2c20d4f1444b8b2df9487d4afee05, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
