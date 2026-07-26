@@ -17,15 +17,16 @@ public class BombZoomTest : MonoBehaviour
     Vector3 preShakePos;
     private Coroutine shakeCoroutine;
     private Coroutine openCloseCoroutine;
-    bool isOpen = true;
+    //bool isOpen = true;
     bool alreadyZoomed;
     MinigameBase openMinigame;
     [SerializeField]GameObject beepingSound;
-    /* void Awake()
+    void Awake()
     {
-        originalPosition = bomb.anchoredPosition;
-        originalScale = bomb.localScale;
-    } */
+        canavasHeight = bomb.parent.GetComponent<RectTransform>().rect.height;
+        Vector2 pos = new Vector2(0,canavasHeight);
+        bomb.anchoredPosition=pos;
+    }
     public void ZoomTo(RectTransform module) {
         //if(module==targetModule)return;//don't zoom if already zoomed
         if(alreadyZoomed)return;
@@ -108,32 +109,37 @@ public class BombZoomTest : MonoBehaviour
         // Return precisely to the original position once completed
         bomb.localPosition = preShakePos;
     }
-    void Update() {
+    /* void Update() {
         if (Keyboard.current.oKey.wasPressedThisFrame) {
             OpenClose();
-        }
-    }
-    float bombHeight;
-    public void OpenClose()
+        }.
+    } */
+    float canavasHeight;
+    public bool OpenClose(bool isOpening)
     {
-        bombHeight = bomb.rect.height;
+        canavasHeight = bomb.parent.GetComponent<RectTransform>().rect.height;
         if (alreadyZoomed) {
             ResetView();
         }
-        if(!isOpeningClosing)StartCoroutine(OpenCloseRoutine(durationOpen));
+        if(!isOpeningClosing){
+            StartCoroutine(OpenCloseRoutine(durationOpen,isOpening));
+            return true;
+        } else {
+            return false;
+        }
     }
     bool isOpeningClosing;
-    private IEnumerator OpenCloseRoutine(float duration)
+    private IEnumerator OpenCloseRoutine(float duration,bool isOpening)
     {
         isOpeningClosing = true;
         float elapsedTime = 0f;
         float posY,finalPosY;
-        if (isOpen) {
-            posY=0;
-            finalPosY=1080;
-        } else {
-            posY=1080;
+        if (isOpening) {
+            posY=canavasHeight;
             finalPosY=0;
+        } else {
+            posY=0;
+            finalPosY=canavasHeight;
         }
         Vector2 ini=new Vector2(0,posY);
         Vector2 fin=new Vector2(0,finalPosY);
@@ -145,9 +151,9 @@ public class BombZoomTest : MonoBehaviour
             bomb.anchoredPosition=Vector2.Lerp(ini,fin,progress);
             yield return null;
         }
-        isOpen=!isOpen;
+        //isOpen=!isOpen;
         isOpeningClosing = false;
-        beepingSound.SetActive(isOpen);
+        beepingSound.SetActive(isOpening);
     }
 
 }

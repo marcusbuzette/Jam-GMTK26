@@ -131,6 +131,7 @@ public class LevelManager : MonoBehaviour {
     private void UpdateTimer() {
         RemainingTime -= Time.deltaTime;
         OnTimerUpdated?.Invoke(RemainingTime);
+        BombController.singleton?.UpdateTimer(RemainingTime);
 
         if (RemainingTime <= 0f) {
             RemainingTime = 0f;
@@ -165,15 +166,19 @@ public class LevelManager : MonoBehaviour {
             Debug.LogError("Não há LevelSetupSO carregado para reiniciar o nível!");
         }
     }
-
+    int thigsBlockingMovemet =0;
     public void HandleOpenedPannel() {
+        thigsBlockingMovemet++;
         playerTransform.GetComponent<PlayerMovement>().EnableMovement(false); // Desabilitar movimento do player
         playerTransform.GetComponent<PlayerInteract>().EnableInteraction(false); // Desabilitar interação do player
     }
 
     public void HandleClosedPannel() {
-        playerTransform.GetComponent<PlayerMovement>().EnableMovement(true); // Habilitar movimento do player
-        playerTransform.GetComponent<PlayerInteract>().EnableInteraction(true); // Habilitar interação do player
+        thigsBlockingMovemet--;//Feito pra n liberar o movimento ao fechar 1 das coisas que bloqueia quando tem 2 abertas
+        if(thigsBlockingMovemet<=0){
+            playerTransform.GetComponent<PlayerMovement>().EnableMovement(true); // Habilitar movimento do player
+            playerTransform.GetComponent<PlayerInteract>().EnableInteraction(true); // Habilitar interação do player
+        }
     }
 
     public void TurnOnNowPlayingUI() {
