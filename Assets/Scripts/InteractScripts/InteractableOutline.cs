@@ -3,51 +3,90 @@ using UnityEngine;
 public class InteractableOutline : MonoBehaviour {
     [Tooltip("O material que será usado como borda (Outline).")]
     [SerializeField] private Material outlineMaterial;
+    [Tooltip("Renderers afetados pelo outline. Se vazio, usa todos os renderers filhos.")]
+    [SerializeField] private Renderer[] targetRenderers;
+    [Tooltip("Inclui renderers inativos ao buscar automaticamente.")]
+    [SerializeField] private bool includeInactiveChildren = true;
 
-    private Renderer _renderer;
-    private Material[] _originalMaterials;
+    private Material[][] _originalMaterialsByRenderer;
     private bool _isOutlined;
 
     private void Awake() {
-        _renderer = GetComponent<Renderer>();
-        CacheCurrentMaterials();
+        EnsureTargetRenderers();
+    }
+
+    private void OnValidate()
+    {
+        EnsureTargetRenderers();
     }
 
     public void DisableOutline() {
-        if (_renderer != null && _originalMaterials != null && _isOutlined) {
-            _renderer.materials = _originalMaterials;
-            _isOutlined = false;
+        if (!_isOutlined || _originalMaterialsByRenderer == null || targetRenderers == null) {
+            return;
         }
+
+        int count = Mathf.Min(targetRenderers.Length, _originalMaterialsByRenderer.Length);
+        for (int i = 0; i < count; i++) {
+            if (targetRenderers[i] == null || _originalMaterialsByRenderer[i] == null) {
+                continue;
+            }
+
+            targetRenderers[i].materials = _originalMaterialsByRenderer[i];
+        }
+
+        _isOutlined = false;
+        _originalMaterialsByRenderer = null;
     }
 
     public void EnableOutline() {
-        if (_renderer == null || outlineMaterial == null) {
+        if (_isOutlined || outlineMaterial == null) {
             return;
         }
 
-        CacheCurrentMaterials();
-        if (_originalMaterials == null) {
+        EnsureTargetRenderers();
+        if (targetRenderers == null || targetRenderers.Length == 0) {
             return;
         }
 
-        var outlinedMaterials = new Material[_originalMaterials.Length + 1];
-        _originalMaterials.CopyTo(outlinedMaterials, 0);
-        outlinedMaterials[outlinedMaterials.Length - 1] = outlineMaterial;
-        _renderer.materials = outlinedMaterials;
+        _originalMaterialsByRenderer = new Material[targetRenderers.Length][];
+
+        for (int i = 0; i < targetRenderers.Length; i++) {
+            var renderer = targetRenderers[i];
+            if (renderer == null) {
+                continue;
+            }
+
+            var currentMaterials = renderer.materials;
+            _originalMaterialsByRenderer[i] = currentMaterials;
+
+            if (currentMaterials == null || currentMaterials.Length == 0) {
+                renderer.materials = new[] { outlineMaterial };
+                continue;
+            }
+
+            var outlinedMaterials = new Material[currentMaterials.Length + 1];
+            currentMaterials.CopyTo(outlinedMaterials, 0);
+            outlinedMaterials[outlinedMaterials.Length - 1] = outlineMaterial;
+            renderer.materials = outlinedMaterials;
+        }
+
         _isOutlined = true;
     }
 
     public void RefreshMaterials() {
-        if (!_isOutlined) {
-            CacheCurrentMaterials();
-        }
-    }
-
-    private void CacheCurrentMaterials() {
-        if (_renderer == null) {
+        if (_isOutlined) {
             return;
         }
 
-        _originalMaterials = _renderer.materials;
+        _originalMaterialsByRenderer = null;
+        EnsureTargetRenderers();
+    }
+
+    private void EnsureTargetRenderers() {
+        if (targetRenderers != null && targetRenderers.Length > 0) {
+            return;
+        }
+
+        targetRenderers = GetComponentsInChildren<Renderer>(includeInactiveChildren);
     }
 }
