@@ -69,10 +69,15 @@ public class LevelManager : MonoBehaviour {
         // Configurar Timer
         // RemainingTime = currentLevelData.durationInSeconds;
 
+        levelAudioSource.Stop();
+        levelAudioSource.time = 0f;
+
         if (currentLevelData.levelMusic != null) {
             levelAudioSource.clip = currentLevelData.levelMusic;
             RemainingTime = currentLevelData.levelMusic.length; // Pega o tempo exato do clipe
+
             levelAudioSource.Play();
+
         } else {
             RemainingTime = 180f; // Fallback de segurança
             Debug.LogWarning("Nenhuma música configurada no LevelSetupSO!");
@@ -168,7 +173,7 @@ public class LevelManager : MonoBehaviour {
             Debug.LogError("Não há LevelSetupSO carregado para reiniciar o nível!");
         }
     }
-    int thigsBlockingMovemet =0;
+    int thigsBlockingMovemet = 0;
     public void HandleOpenedPannel() {
         thigsBlockingMovemet++;
         playerTransform.GetComponent<PlayerMovement>().EnableMovement(false); // Desabilitar movimento do player
@@ -177,7 +182,7 @@ public class LevelManager : MonoBehaviour {
 
     public void HandleClosedPannel() {
         thigsBlockingMovemet--;//Feito pra n liberar o movimento ao fechar 1 das coisas que bloqueia quando tem 2 abertas
-        if(thigsBlockingMovemet<=0){
+        if (thigsBlockingMovemet <= 0) {
             playerTransform.GetComponent<PlayerMovement>().EnableMovement(true); // Habilitar movimento do player
             playerTransform.GetComponent<PlayerInteract>().EnableInteraction(true); // Habilitar interação do player
         }
@@ -188,4 +193,6 @@ public class LevelManager : MonoBehaviour {
             NowPlayingUI.Instance.ToggleNowPlaying(levelAudioSource, currentLevelData.levelMusic.name, currentLevelData.rpm);
         }
     }
+
+    public AudioSource CurrentAudioSource => levelAudioSource;
 }
