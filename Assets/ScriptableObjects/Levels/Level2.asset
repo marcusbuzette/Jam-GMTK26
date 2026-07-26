@@ -15,8 +15,8 @@ MonoBehaviour:
   levelName: Level 2
   rpm: 63
   levelImage: {fileID: 21300000, guid: 680d3113caea6b046ab874bec2ec2cb3, type: 3}
-  levelMusic: {fileID: 0}
+  levelMusic: {fileID: 8300000, guid: 9db44e47e31234a6d9d2ddc88a1b0ec9, type: 3}
   playerSpawnPosition: {x: -0.24, y: 0, z: -9.51}
   playerSpawnRotation: {x: 0, y: 0, z: 0}
   startingFloorIndex: 0
-  itemsToSpawn: {fileID: 1145893291012582295, guid: 43b568336ef054d3fba30092412ca397, type: 3}
+  itemsToSpawn: {fileID: 3835645446310234065, guid: 43b568336ef054d3fba30092412ca397, type: 3}
