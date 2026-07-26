@@ -225,9 +225,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Inter_Closed
     m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: IsTalking
-    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -598509299548700509}
   m_Solo: 0
@@ -280,9 +277,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Inter_Exclamation
     m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: IsTalking
-    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2341694294873991437}
   m_Solo: 0
@@ -307,9 +301,6 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Inter_Question
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: IsTalking
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3216943943188760407}
@@ -573,9 +564,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Inter_Talking
     m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: IsTalking
-    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8216851135159546985}
   m_Solo: 0
@@ -625,9 +613,6 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Inter_Happy
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: IsTalking
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 3294919269848636980}
@@ -808,9 +793,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: Inter_Sad
     m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: IsTalking
-    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 5874691789251095318}
   m_Solo: 0
@@ -990,9 +972,6 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: Inter_Angry
-    m_EventTreshold: 0
-  - m_ConditionMode: 1
-    m_ConditionEvent: IsTalking
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 1721903395906657240}

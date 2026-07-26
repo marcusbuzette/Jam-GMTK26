@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e2fc63825895e8429f9d28a3a6515a6, type: 3}
+  m_Name: UselessDialogue01
+  m_EditorClassIdentifier: Assembly-CSharp::Dialogue
+  conversationId: useless_dialogue_01
+  displayName: Useless Dialogue 01
+  lines:
+  - character: {fileID: 11400000, guid: c052724c165f89a43a01ab84f981b02c, type: 2}
+    portraitExpression: 22
+    localizedTexts:
+    - languageCode: en
+      text: I spent all morning deciding whether this pebble looks more round or more tired.
+  - character: {fileID: 11400000, guid: c052724c165f89a43a01ab84f981b02c, type: 2}
+    portraitExpression: 16
+    localizedTexts:
+    - languageCode: en
+      text: It has not helped that it refuses to answer simple questions.
+  - character: {fileID: 11400000, guid: c052724c165f89a43a01ab84f981b02c, type: 2}
+    portraitExpression: 17
+    localizedTexts:
+    - languageCode: en
+      text: Still, I admire its commitment to mystery.
+  dialogueChoice: {fileID: 0}
