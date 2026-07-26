@@ -15,13 +15,15 @@ public class VinylTimeUI : MonoBehaviour {
     [Tooltip("Posição da agulha quando o tempo acaba (centro do disco)")]
     [SerializeField] private float needleEndAngle = -45f;
 
+    private AudioSource currentAudioSource;
+
     private float maxTime;
     private bool isPlaying = false;
 
     private void OnEnable() {
         // Se inscreve nos eventos do LevelManager para manter o código limpo e reativo
         LevelManager.OnLevelStarted += HandleLevelStarted;
-        LevelManager.OnTimerUpdated += HandleTimerUpdated;
+        // LevelManager.OnTimerUpdated += HandleTimerUpdated;
         LevelManager.OnLevelDefeat += HandleLevelEnded;
         LevelManager.OnLevelVictory += HandleLevelEnded;
     }
@@ -29,7 +31,7 @@ public class VinylTimeUI : MonoBehaviour {
     private void OnDisable() {
         // Sempre desinscrever eventos no OnDisable para evitar memory leaks
         LevelManager.OnLevelStarted -= HandleLevelStarted;
-        LevelManager.OnTimerUpdated -= HandleTimerUpdated;
+        // LevelManager.OnTimerUpdated -= HandleTimerUpdated;
         LevelManager.OnLevelDefeat -= HandleLevelEnded;
         LevelManager.OnLevelVictory -= HandleLevelEnded;
     }
@@ -39,6 +41,7 @@ public class VinylTimeUI : MonoBehaviour {
         if (LevelManager.Instance != null) {
             maxTime = LevelManager.Instance.RemainingTime;
             isPlaying = true;
+            currentAudioSource = LevelManager.Instance.CurrentAudioSource;
         }
     }
 
@@ -52,6 +55,11 @@ public class VinylTimeUI : MonoBehaviour {
 
         // Gira o disco de vinil continuamente no eixo Z
         vinylTransform.Rotate(0f, 0f, vinylSpinSpeed * Time.deltaTime);
+        
+        if (currentAudioSource != null && currentAudioSource.isPlaying) {
+            // Atualiza a posição do slider
+            HandleTimerUpdated(maxTime - currentAudioSource.time);
+        }
     }
 
     private void HandleTimerUpdated(float remainingTime) {

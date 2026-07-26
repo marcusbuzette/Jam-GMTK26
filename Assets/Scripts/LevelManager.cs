@@ -186,4 +186,6 @@ public class LevelManager : MonoBehaviour {
             NowPlayingUI.Instance.ToggleNowPlaying(levelAudioSource, currentLevelData.levelMusic.name, currentLevelData.rpm);
         }
     }
+
+    public AudioSource CurrentAudioSource => levelAudioSource;
 }
