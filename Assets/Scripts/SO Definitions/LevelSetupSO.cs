@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "LevelSetupSO", menuName = "Scriptable Objects/LevelSetupSO")]
@@ -7,6 +8,7 @@ public class LevelSetupSO : ScriptableObject {
     [Header("Identificação do Nível")]
     public string levelName = "Level 1";
     public int rpm = 63;
+    public Sprite levelImage;
     public AudioClip levelMusic;
 
     [Header("Player Spawn Configuration")]
