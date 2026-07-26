@@ -266,12 +266,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2641594791896409068, guid: 2561ce177dd0e4767bfb4aea94ee2d85, type: 3}
       propertyPath: m_Name
-      value: NPCBase Variant
+      value: FillerNPC
       objectReference: {fileID: 0}
     - target: {fileID: 5341541534172024640, guid: 2561ce177dd0e4767bfb4aea94ee2d85, type: 3}
       propertyPath: speakerCharacter
       value: 
       objectReference: {fileID: 11400000, guid: c052724c165f89a43a01ab84f981b02c, type: 2}
+    - target: {fileID: 6728713344550381537, guid: 2561ce177dd0e4767bfb4aea94ee2d85, type: 3}
+      propertyPath: maleOutline
+      value: 
+      objectReference: {fileID: 435087730020830130}
+    - target: {fileID: 6728713344550381537, guid: 2561ce177dd0e4767bfb4aea94ee2d85, type: 3}
+      propertyPath: femaleOutline
+      value: 
+      objectReference: {fileID: 4002809656097456169}
     - target: {fileID: 6728713344550381537, guid: 2561ce177dd0e4767bfb4aea94ee2d85, type: 3}
       propertyPath: outlineComponents.Array.size
       value: 2
@@ -319,6 +327,10 @@ MonoBehaviour:
   targetRenderers:
   - {fileID: 530757301453916143}
   includeInactiveChildren: 1
+  outlineThickness: 0.2
+  outlineMinThickness: 0.1
+  outlineSpeed: 1
+  colorPropertyName: _OutlineColor
 --- !u!137 &530757301453916143 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 830574609792638472, guid: 2561ce177dd0e4767bfb4aea94ee2d85, type: 3}
@@ -355,3 +367,7 @@ MonoBehaviour:
   targetRenderers:
   - {fileID: 3952418707853763469}
   includeInactiveChildren: 1
+  outlineThickness: 0.2
+  outlineMinThickness: 0.1
+  outlineSpeed: 1
+  colorPropertyName: _OutlineColor

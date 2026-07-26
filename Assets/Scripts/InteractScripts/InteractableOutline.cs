@@ -8,8 +8,17 @@ public class InteractableOutline : MonoBehaviour {
     [Tooltip("Inclui renderers inativos ao buscar automaticamente.")]
     [SerializeField] private bool includeInactiveChildren = true;
 
+    [Header("Outline Settings")]
+    [SerializeField, Min(0f)] private float outlineThickness = 0.2f;
+    [SerializeField, Min(0f)] private float outlineMinThickness = 0.1f;
+    [SerializeField, Min(0f)] private float outlineSpeed = 1f;
+
     [Tooltip("O nome exato da propriedade de cor no Shader de Outline (Ex: _OutlineColor, _Color, _BorderColor)")]
     [SerializeField] private string colorPropertyName = "_OutlineColor";
+
+    private static readonly int OutlineThicknessId = Shader.PropertyToID("_OutlineThickness");
+    private static readonly int OutlineMinThicknessId = Shader.PropertyToID("_OutlineMinThickness");
+    private static readonly int OutlineSpeedId = Shader.PropertyToID("_OutlineSpeed");
 
     private Renderer _renderer;
     private Material[] _originalMaterials;
@@ -30,11 +39,36 @@ public class InteractableOutline : MonoBehaviour {
         // Cria uma CÓPIA do material de outline específica para este objeto
         _instancedOutlineMaterial = new Material(outlineMaterial);
         _outlinedMaterials[_outlinedMaterials.Length - 1] = _instancedOutlineMaterial;
+        ApplyOutlineSettingsToInstance();
         EnsureTargetRenderers();
     }
 
     private void OnValidate() {
+        ApplyOutlineSettingsToInstance();
         EnsureTargetRenderers();
+    }
+
+    private void ApplyOutlineSettingsToInstance()
+    {
+        if (_instancedOutlineMaterial == null)
+        {
+            return;
+        }
+
+        if (_instancedOutlineMaterial.HasProperty(OutlineThicknessId))
+        {
+            _instancedOutlineMaterial.SetFloat(OutlineThicknessId, outlineThickness);
+        }
+
+        if (_instancedOutlineMaterial.HasProperty(OutlineMinThicknessId))
+        {
+            _instancedOutlineMaterial.SetFloat(OutlineMinThicknessId, outlineMinThickness);
+        }
+
+        if (_instancedOutlineMaterial.HasProperty(OutlineSpeedId))
+        {
+            _instancedOutlineMaterial.SetFloat(OutlineSpeedId, outlineSpeed);
+        }
     }
 
     public void DisableOutline() {
@@ -56,10 +90,11 @@ public class InteractableOutline : MonoBehaviour {
     }
 
     public void EnableOutline() {
-        if (_isOutlined || outlineMaterial == null) {
+        if (_isOutlined || _instancedOutlineMaterial == null) {
             return;
         }
 
+        ApplyOutlineSettingsToInstance();
         EnsureTargetRenderers();
         if (targetRenderers == null || targetRenderers.Length == 0) {
             return;
@@ -77,13 +112,13 @@ public class InteractableOutline : MonoBehaviour {
             _originalMaterialsByRenderer[i] = currentMaterials;
 
             if (currentMaterials == null || currentMaterials.Length == 0) {
-                renderer.materials = new[] { outlineMaterial };
+                renderer.materials = new[] { _instancedOutlineMaterial };
                 continue;
             }
 
             var outlinedMaterials = new Material[currentMaterials.Length + 1];
             currentMaterials.CopyTo(outlinedMaterials, 0);
-            outlinedMaterials[outlinedMaterials.Length - 1] = outlineMaterial;
+            outlinedMaterials[outlinedMaterials.Length - 1] = _instancedOutlineMaterial;
             renderer.materials = outlinedMaterials;
         }
 
@@ -117,8 +152,17 @@ public class InteractableOutline : MonoBehaviour {
                 _instancedOutlineMaterial.color = color;
             }
 
-            // Reatribui a array ao renderer para garantir que a Unity desenhe a atualização
-            _renderer.materials = _outlinedMaterials;
+            if (_isOutlined && targetRenderers != null) {
+                for (int i = 0; i < targetRenderers.Length; i++) {
+                    var renderer = targetRenderers[i];
+                    if (renderer == null) {
+                        continue;
+                    }
+
+                    var currentMaterials = renderer.materials;
+                    renderer.materials = currentMaterials;
+                }
+            }
         }
     }
 
