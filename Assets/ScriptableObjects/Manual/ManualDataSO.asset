@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ManualDataSO
   pagePrefabs:
   - {fileID: 6824551207095047793, guid: 4cc942a9710ef49d1b7d4f7f715f6975, type: 3}
+  - {fileID: 6824551207095047793, guid: b6a8e294a0860450b935c59beb37238a, type: 3}
   - {fileID: 6824551207095047793, guid: 630113ce5ea2146b4a13d3decfee14a4, type: 3}
   - {fileID: 6824551207095047793, guid: b27377229479c5b42ab6a5c3577d395d, type: 3}
