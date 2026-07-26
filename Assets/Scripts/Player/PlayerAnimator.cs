@@ -16,6 +16,7 @@ public class PlayerAnimator : MonoBehaviour {
 
     // Hashes para acesso performático dos parâmetros do Animator
     private readonly int speedHash = Animator.StringToHash("Speed");
+    private readonly int isWalkingHash = Animator.StringToHash("isWalking");
     private readonly int isTalkingHash = Animator.StringToHash("IsTalking");
 
     private void Awake() {
@@ -47,9 +48,9 @@ public class PlayerAnimator : MonoBehaviour {
         float maxSpeed = playerMovement != null ? playerMovement.MoveSpeed : 5f;
         float normalizedSpeed = Mathf.Clamp01(currentSpeed / maxSpeed);
 
-        // Atualiza a velocidade no Animator com suavização (damping)
         if (animator != null) {
             animator.SetFloat(speedHash, normalizedSpeed, 0.1f, Time.deltaTime);
+            animator.SetBool(isWalkingHash, normalizedSpeed > 0.1f);
         }
     }
 

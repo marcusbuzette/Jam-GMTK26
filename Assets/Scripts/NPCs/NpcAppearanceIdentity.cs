@@ -183,6 +183,12 @@ public class NpcAppearanceIdentity : MonoBehaviour
         {
             characterControllers[i].enabled = false;
         }
+
+        var movementScripts = instance.GetComponentsInChildren<PlayerMovement>(true);
+        for (int i = 0; i < movementScripts.Length; i++)
+        {
+            movementScripts[i].enabled = false;
+        }
     }
 
     private void ApplyAppearance()

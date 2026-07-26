@@ -7,16 +7,22 @@ public class InteractableNPC : InteractableBase {
     [Header("Facing")]
     [SerializeField, Min(0f)] private float turnSpeed = 360f;
 
+    [Header("Outline References")]
+    [SerializeField] private InteractableOutline maleOutline;
+    [SerializeField] private InteractableOutline femaleOutline;
+
     private Quaternion originalRotation;
     private Quaternion targetRotation;
     private string activeConversationId;
     private bool shouldReturnToOriginalRotation;
     private bool isTurning;
+    private NpcAppearanceIdentity appearanceIdentity;
 
     private void Awake()
     {
         originalRotation = transform.rotation;
         targetRotation = originalRotation;
+        appearanceIdentity = GetComponent<NpcAppearanceIdentity>();
 
         var manager = DialogueManager.Instance;
         if (manager != null)
@@ -57,13 +63,48 @@ public class InteractableNPC : InteractableBase {
         {
             FaceInteractor(interactor);
             activeConversationId = dialogue.ConversationId;
-            var appearanceIdentity = GetComponent<NpcAppearanceIdentity>();
             DialogueManager.Instance.StartDialogue(dialogue, appearanceIdentity);
         }
         else
         {
             Debug.LogWarning("NPC de nome " + gameObject.name + " não tem diálogo configurado.");
         }
+    }
+
+    public override void OnHoverEnter()
+    {
+        var outline = GetActiveOutline();
+        if (outline != null)
+        {
+            outline.EnableOutline();
+            return;
+        }
+
+        base.OnHoverEnter();
+    }
+
+    public override void OnHoverExit()
+    {
+        var outline = GetActiveOutline();
+        if (outline != null)
+        {
+            outline.DisableOutline();
+            return;
+        }
+
+        base.OnHoverExit();
+    }
+
+    private InteractableOutline GetActiveOutline()
+    {
+        if (appearanceIdentity != null && appearanceIdentity.HasAppearance)
+        {
+            return appearanceIdentity.CurrentAppearance.bodyType == NpcBodyType.Female
+                ? femaleOutline ?? maleOutline
+                : maleOutline ?? femaleOutline;
+        }
+
+        return maleOutline ?? femaleOutline;
     }
 
     private void FaceInteractor(GameObject interactor)

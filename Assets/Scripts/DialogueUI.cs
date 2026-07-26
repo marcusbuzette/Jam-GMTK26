@@ -269,12 +269,29 @@ public class DialogueUI : MonoBehaviour {
             currentPortraitInstance = Instantiate(line.Character.PortraitPrefab, characterAnchor);
             currentPortraitInstance.transform.localPosition = Vector3.zero;
             currentPortraitInstance.transform.localRotation = Quaternion.identity;
+            DisablePortraitScriptComponents(currentPortraitInstance);
             currentPortraitSource = line.Character.PortraitPrefab;
             currentPortraitUsesNpcAppearance = false;
             currentPortraitExpression = DialoguePortraitExpression.Neutral;
         }
 
         ApplyPortraitExpressionIfNeeded(currentPortraitInstance, line.PortraitExpression);
+    }
+
+    private void DisablePortraitScriptComponents(GameObject portraitInstance) {
+        if (portraitInstance == null) {
+            return;
+        }
+
+        var monoBehaviours = portraitInstance.GetComponentsInChildren<MonoBehaviour>(true);
+        for (int i = 0; i < monoBehaviours.Length; i++) {
+            var behaviour = monoBehaviours[i];
+            if (behaviour == null) {
+                continue;
+            }
+
+            behaviour.enabled = false;
+        }
     }
 
     private void ApplyPortraitExpressionIfNeeded(GameObject portraitInstance, DialoguePortraitExpression expression) {

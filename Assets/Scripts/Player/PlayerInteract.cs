@@ -138,27 +138,21 @@ public class PlayerInteract : MonoBehaviour {
     }
 
     private void MoveToTarget(Vector3 destination, float stopDistance, AutoActionState newState) {
-        playerMovementScript.enabled = false;
-        characterController.enabled = false;
-
-        agent.enabled = true;
+        EnterNavMeshMode();
         agent.stoppingDistance = stopDistance;
         agent.SetDestination(destination);
 
         currentState = newState;
-
         isNavigatingToInteract = true;
         isAligningToInteract = false;
     }
 
     private void MoveToInteractionPoint() {
-        playerMovementScript.enabled = false;
-        characterController.enabled = false;
-
-        agent.enabled = true;
+        EnterNavMeshMode();
         agent.stoppingDistance = targetInteractable.InteractionDistance;
         agent.SetDestination(targetInteractable.InteractionPoint.position);
 
+        currentState = AutoActionState.NavigatingToInteract;
         isNavigatingToInteract = true;
         isAligningToInteract = false;
     }
@@ -258,16 +252,61 @@ public class PlayerInteract : MonoBehaviour {
 
     private void RestoreManualMovement() {
         if (LevelManager.Instance != null && LevelManager.Instance.CurrentState == LevelState.Playing) {
-            agent.enabled = false;
-            characterController.enabled = true;
-            playerMovementScript.enabled = true;
+            ExitNavMeshMode();
         }
     }
 
     private void DisableManualMovement() {
-        agent.enabled = false;
+        if (agent != null) {
+            agent.ResetPath();
+            agent.isStopped = true;
+        }
+
         characterController.enabled = false;
         playerMovementScript.enabled = false;
+    }
+
+    private void EnterNavMeshMode() {
+        if (playerMovementScript != null) playerMovementScript.enabled = false;
+        if (characterController != null) characterController.enabled = false;
+
+        if (agent != null) {
+            if (!agent.enabled) agent.enabled = true;
+            agent.isStopped = false;
+            TryWarpAgentToCurrentPosition();
+        }
+    }
+
+    private void ExitNavMeshMode() {
+        if (agent != null && agent.enabled && agent.isOnNavMesh) {
+            agent.ResetPath();
+            agent.isStopped = true;
+        }
+
+        if (agent != null) {
+            agent.enabled = false;
+        }
+
+        if (characterController != null) {
+            characterController.enabled = true;
+        }
+
+        if (playerMovementScript != null) {
+            playerMovementScript.enabled = true;
+        }
+    }
+
+    private void TryWarpAgentToCurrentPosition() {
+        if (agent == null) return;
+
+        if (agent.isOnNavMesh) {
+            agent.Warp(transform.position);
+            return;
+        }
+
+        if (NavMesh.SamplePosition(transform.position, out NavMeshHit navHit, 1.5f, NavMesh.AllAreas)) {
+            agent.Warp(navHit.position);
+        }
     }
 
     private void OnUIClicked(InputAction.CallbackContext context) {

@@ -17,7 +17,7 @@ Shader "Custom/URPVisibilityClip"
     {
         Tags
         {
-            "RenderPipeline" = "UniversalRenderPipeline"
+            "RenderPipeline" = "UniversalPipeline"
             "Queue" = "Geometry"
             "RenderType" = "Opaque"
         }
