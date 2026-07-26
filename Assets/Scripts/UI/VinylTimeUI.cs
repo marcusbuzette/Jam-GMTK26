@@ -1,8 +1,7 @@
 using UnityEngine;
 
-public class VinylTimeUI : MonoBehaviour
-{
-[Header("Referências Visuais")]
+public class VinylTimeUI : MonoBehaviour {
+    [Header("Referências Visuais")]
     [SerializeField] private RectTransform vinylTransform;
     [SerializeField] private RectTransform needleTransform;
 
@@ -16,53 +15,54 @@ public class VinylTimeUI : MonoBehaviour
     [Tooltip("Posição da agulha quando o tempo acaba (centro do disco)")]
     [SerializeField] private float needleEndAngle = -45f;
 
+    private AudioSource currentAudioSource;
+
     private float maxTime;
     private bool isPlaying = false;
 
-    private void OnEnable()
-    {
+    private void OnEnable() {
         // Se inscreve nos eventos do LevelManager para manter o código limpo e reativo
         LevelManager.OnLevelStarted += HandleLevelStarted;
-        LevelManager.OnTimerUpdated += HandleTimerUpdated;
+        // LevelManager.OnTimerUpdated += HandleTimerUpdated;
         LevelManager.OnLevelDefeat += HandleLevelEnded;
         LevelManager.OnLevelVictory += HandleLevelEnded;
     }
 
-    private void OnDisable()
-    {
+    private void OnDisable() {
         // Sempre desinscrever eventos no OnDisable para evitar memory leaks
         LevelManager.OnLevelStarted -= HandleLevelStarted;
-        LevelManager.OnTimerUpdated -= HandleTimerUpdated;
+        // LevelManager.OnTimerUpdated -= HandleTimerUpdated;
         LevelManager.OnLevelDefeat -= HandleLevelEnded;
         LevelManager.OnLevelVictory -= HandleLevelEnded;
     }
 
-    private void HandleLevelStarted()
-    {
+    private void HandleLevelStarted() {
         // Pega o tempo inicial da fase para calcular a porcentagem depois
-        if (LevelManager.Instance != null)
-        {
+        if (LevelManager.Instance != null) {
             maxTime = LevelManager.Instance.RemainingTime;
             isPlaying = true;
+            currentAudioSource = LevelManager.Instance.CurrentAudioSource;
         }
     }
 
-    private void HandleLevelEnded()
-    {
+    private void HandleLevelEnded() {
         // Para a rotação do disco quando o jogo acaba
         isPlaying = false;
     }
 
-    private void Update()
-    {
+    private void Update() {
         if (!isPlaying) return;
 
         // Gira o disco de vinil continuamente no eixo Z
         vinylTransform.Rotate(0f, 0f, vinylSpinSpeed * Time.deltaTime);
+        
+        if (currentAudioSource != null && currentAudioSource.isPlaying) {
+            // Atualiza a posição do slider
+            HandleTimerUpdated(maxTime - currentAudioSource.time);
+        }
     }
 
-    private void HandleTimerUpdated(float remainingTime)
-    {
+    private void HandleTimerUpdated(float remainingTime) {
         if (maxTime <= 0) return;
 
         // Calcula a porcentagem do tempo restante (vai de 1.0 a 0.0)
