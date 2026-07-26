@@ -1054,6 +1054,7 @@ MonoBehaviour:
   zoomButton: {fileID: 3469649713857301882}
   bombController: {fileID: 0}
   cover: {fileID: 7200061760258870596}
+  minigameType: 3
   codeWordButtonPrefab: {fileID: 8018084333113565423, guid: a755aa9def9ee974984bd54dbd3247cd, type: 3}
   gridLayoutGroup: {fileID: 253627726076153312}
   numberOfOptions: 0

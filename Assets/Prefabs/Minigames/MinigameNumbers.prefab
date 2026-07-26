@@ -937,6 +937,7 @@ MonoBehaviour:
   zoomButton: {fileID: 8246498352622325350}
   bombController: {fileID: 0}
   cover: {fileID: 968376222796586364}
+  minigameType: 5
   numbers: 00000000000000000000000000000000
   numbersText:
   - {fileID: 2809540865227490340}

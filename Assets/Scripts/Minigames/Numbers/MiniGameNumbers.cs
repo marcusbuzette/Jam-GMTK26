@@ -10,6 +10,7 @@ public class MiniGameNumbers : MinigameBase {
     }
 
     public override void Settup() {
+        base.Settup();
         for(int i = 0; i < numbers.Length; i++) {
             numbers[i]=Random.Range(0,10);
             numbersText[i].text=numbers[i].ToString();

@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 1158518016980168555}
   - component: {fileID: 8462319160737730897}
   - component: {fileID: 356213956043634583}
+  - component: {fileID: 2761191922068430524}
   m_Layer: 5
   m_Name: Bomb
   m_TagString: Untagged
@@ -336,6 +337,18 @@ MonoBehaviour:
   audioSource: {fileID: 8462319160737730897}
   audioClips: []
   pitchVariance: 0.05
+--- !u!114 &2761191922068430524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5490393025151504971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 427b6ac08222cc14884ddcd45ed50589, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinigameAnswerController
 --- !u!1 &6778818032256936479
 GameObject:
   m_ObjectHideFlags: 0

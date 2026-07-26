@@ -517,6 +517,7 @@ MonoBehaviour:
   zoomButton: {fileID: 4506595022821725383}
   bombController: {fileID: 0}
   cover: {fileID: 1250982661526689787}
+  minigameType: 4
   answerDebug: 
   attemptDebug: 
   numberOfSteps: 0

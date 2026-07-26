@@ -26,7 +26,7 @@ public class InteractableItem : InteractableBase {
 
     [Header("Configurações do PopUp (PopUp)")]
     [SerializeField] private GameObject contentPrefab; // Prefab do conteúdo a ser exibido no painel de interação
-
+    public GameObject GetContentPrefab() => contentPrefab;
     // Referências internas
     private Coroutine simpleInteractionCoroutine;
 
@@ -104,5 +104,8 @@ public class InteractableItem : InteractableBase {
         } else {
             Debug.LogWarning("InteractPannelController não encontrado na cena.");
         }
+    }
+    public void SetTextToShow(string s) {
+        textToShow=s;
     }
 }

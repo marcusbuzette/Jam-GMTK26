@@ -27,11 +27,11 @@ public class MiniGameCodeWords : MinigameBase {
     public override void MiniGameSolved() {
         base.MiniGameSolved();
     }
-    void Update() {
+    /* void Update() {
         if (Keyboard.current.enterKey.wasPressedThisFrame) {
             Restart();
         }
-    }
+    } */
     public override void Restart() {
         codeWordButtonsList.Clear();
         codeWorldOptionsList.Clear();
@@ -45,6 +45,7 @@ public class MiniGameCodeWords : MinigameBase {
     }
 
     public override void Settup() {
+        base.Settup();
         //Get language, assume english for now
         string[] options;
         if(isEnglish){

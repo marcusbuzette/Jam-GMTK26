@@ -400,7 +400,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 343998861a95e4f43ab7ae6a84589e3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
-  currentLevelData: {fileID: 11400000, guid: c036e3134c8044d23b567e8eee354afa, type: 2}
+  currentLevelData: {fileID: 11400000, guid: 63fa91bb891b7452a9053d044ea81880, type: 2}
   itemsContainer: {fileID: 1846273250}
   playerTransform: {fileID: 0}
   playerPrefab: {fileID: 896664772234552446, guid: 0b4fb1cb3ee394af8bb6eebee6959ce2, type: 3}
