@@ -2,10 +2,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class DiegeticMenuManager : MonoBehaviour
-{
+public class DiegeticMenuManager : MonoBehaviour {
     [Header("Configurações de Câmera")]
-    [Tooltip("A Virtual Camera do Cinemachine com a visão geral do menu.")]
     [SerializeField] private GameObject defaultMainCamera;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private float transitionTime = 2f;
@@ -17,83 +15,130 @@ public class DiegeticMenuManager : MonoBehaviour
     private GameObject currentActiveCamera;
     private bool isTransitioning = false;
 
-    private void Awake() 
-    {
-        // Instancia a mesma classe gerada do Input System que você já usa
+    private IInteractable currentHovered;
+
+    private MenuInteractable currentActiveInteractable;
+
+    private void Awake() {
         inputActions = new InputSystem_Actions();
-        
         if (mainCamera == null) mainCamera = Camera.main;
     }
 
-    private void OnEnable() 
-    {
+    private void OnEnable() {
         inputActions.UI.Enable();
-        
         inputActions.UI.Click.performed += OnUIClicked;
-
         inputActions.UI.Cancel.performed += OnCancelClicked;
     }
 
-    private void OnDisable() 
-    {
+    private void OnDisable() {
         inputActions.UI.Click.performed -= OnUIClicked;
+        inputActions.UI.Cancel.performed -= OnCancelClicked;
         inputActions.UI.Disable();
     }
 
-    private void Start() 
-    {
+    private void Start() {
         currentActiveCamera = defaultMainCamera;
         currentActiveCamera.SetActive(true);
     }
 
-    private void OnUIClicked(InputAction.CallbackContext context) 
-    {
-        if (isTransitioning) return;
+    private void Update() {
+        if (!isTransitioning) {
+            HandleHover();
+        }
+    }
 
-        // Lê a posição do mouse da mesma forma que no seu PlayerInteract
+    private void HandleHover() {
         Vector2 mousePos = inputActions.UI.Point.ReadValue<Vector2>();
         Ray ray = mainCamera.ScreenPointToRay(mousePos);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 1000f, interactableLayer)) 
-        {
-            MenuInteractable interactable = hit.collider.GetComponent<MenuInteractable>();
-            
-            if (interactable != null)
-            {
-                interactable.Interact();
+        if (Physics.Raycast(ray, out RaycastHit hit, 1000f, interactableLayer)) {
+            IInteractable interactable = hit.collider.GetComponentInParent<IInteractable>();
 
-                if (interactable.virtualCamera != null && interactable.virtualCamera != currentActiveCamera) 
-                {
-                    SwitchCamera(interactable.virtualCamera);
+            if (interactable is MenuInteractable menuInteractable) {
+                if (menuInteractable.GetCanInteract() == false) {
+                    if (currentHovered != null) {
+                        currentHovered.OnHoverExit();
+                        currentHovered = null;
+                    }
+                    return;
                 }
+            }
+
+            if (interactable != null) {
+                if (currentHovered != interactable) {
+                    currentHovered?.OnHoverExit();
+                    currentHovered = interactable;
+                    currentHovered.OnHoverEnter();
+                }
+                return;
+            }
+        }
+
+        if (currentHovered != null) {
+            currentHovered.OnHoverExit();
+            currentHovered = null;
+        }
+    }
+
+    private void OnUIClicked(InputAction.CallbackContext context) {
+        if (isTransitioning) return;
+
+        if (currentHovered != null && currentHovered is MenuInteractable clickedInteractable) {
+
+            if (clickedInteractable.virtualCamera != null && clickedInteractable.virtualCamera != currentActiveCamera) {
+
+                // Chama o Exit de onde estávamos ANTES de ir para o novo
+                if (currentActiveInteractable != null) {
+                    currentActiveInteractable.Exit();
+                }
+
+                // Chama o Interact do local novo
+                clickedInteractable.Interact(gameObject);
+
+                // O novo local passa a ser o ativo
+                currentActiveInteractable = clickedInteractable;
+
+                // Inicia a transição da câmera
+                SwitchCamera(clickedInteractable.virtualCamera);
+            } else {
+                // Se não tem câmera nova, só interage normalmente
+                clickedInteractable.Interact(gameObject);
             }
         }
     }
 
-    // Opcional: Método para ser chamado se você mapear um botão de voltar no Input System
-    private void OnCancelClicked(InputAction.CallbackContext context)
-    {
-        if (currentActiveCamera != defaultMainCamera && !isTransitioning) 
-        {
+    private void OnCancelClicked(InputAction.CallbackContext context) {
+        if (currentActiveCamera != defaultMainCamera && !isTransitioning) {
+
+            // Chama o Exit de onde estávamos ao voltar para a visão principal
+            if (currentActiveInteractable != null) {
+                currentActiveInteractable.Exit();
+                currentActiveInteractable = null; // Limpa porque voltamos pra visão geral
+            }
+
             SwitchCamera(defaultMainCamera);
         }
     }
 
-    public void SwitchCamera(GameObject newCamera) 
-    {
+    public void SwitchCamera(GameObject newCamera) {
         StartCoroutine(TransitionRoutine(newCamera));
     }
 
-    private IEnumerator TransitionRoutine(GameObject newCamera) 
-    {
+    private IEnumerator TransitionRoutine(GameObject newCamera) {
         isTransitioning = true;
-        
+
+        // Limpa visualmente o hover de onde o mouse estava clicado
+        if (currentHovered != null) {
+            currentHovered.OnHoverExit();
+            currentHovered = null;
+        }
+
         currentActiveCamera.SetActive(false);
         newCamera.SetActive(true);
         currentActiveCamera = newCamera;
 
         yield return new WaitForSeconds(transitionTime);
-        
+
         isTransitioning = false;
     }
 }

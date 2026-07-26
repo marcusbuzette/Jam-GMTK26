@@ -1,19 +1,54 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class MenuInteractable : MonoBehaviour
-{
-    [Header("Configuracao de Camera")]
-    [Tooltip("A Virtual Camera do Cinemachine que focara neste objeto.")]
+public class MenuInteractable : InteractableBase {
+    [Header("Configuração de Câmera do Menu")]
+    [Tooltip("A Virtual Camera do Cinemachine que focará neste objeto.")]
     public GameObject virtualCamera;
 
-    [Header("Eventos Adicionais (Opcional)")]
-    [Tooltip("Use para ativar botoes UI, tocar sons, etc., quando o objeto for clicado.")]
+    [Header("Eventos Adicionais do Menu")]
+    [Tooltip("Ative botões de um Canvas, inicie animações ou sons ao clicar.")]
     public UnityEvent onInteract;
 
-    public void Interact()
-    {
-        // Dispara qualquer evento configurado no Inspector
+    [Tooltip("Chamado quando o jogador clica em outro objeto ou aperta ESC.")]
+    public UnityEvent onExit;
+
+    bool canInteract = true;
+
+    [SerializeField] private InteractableOutline outlineComponentSelected;
+
+    [SerializeField] private Color onSelectedColor;
+
+    void Awake() {
+        SetCanInteract(true);
+    }
+
+    public override void Interact(GameObject interactor) {
         onInteract?.Invoke();
     }
+
+    public void Exit() {
+        onExit?.Invoke();
+    }
+
+    public override void OnHoverEnter() {
+        if (outlineComponentSelected != null) outlineComponentSelected.ChangeColor(onSelectedColor);
+    }
+
+    public override void OnHoverExit() {
+        if (outlineComponentSelected != null) outlineComponentSelected.ChangeColor(Color.white);
+    }
+
+    public void SetCanInteract(bool value) {
+        canInteract = value;
+
+        if (canInteract) {
+            if (outlineComponentSelected != null) outlineComponentSelected.EnableOutline();
+            Debug.Log("Entrou");
+        } else {
+            if (outlineComponentSelected != null) outlineComponentSelected.DisableOutline();
+        }
+    }
+
+    public bool GetCanInteract() => canInteract;
 }
