@@ -15,6 +15,7 @@ public class PlayerInteract : MonoBehaviour {
     private NavMeshAgent agent;
     private CharacterController characterController;
     private PlayerMovement playerMovementScript;
+    private PlayerAnimator playerAnimator;
 
     private IInteractable currentHovered;
     private IInteractable targetInteractable;
@@ -31,8 +32,9 @@ public class PlayerInteract : MonoBehaviour {
         agent = GetComponent<NavMeshAgent>();
         characterController = GetComponent<CharacterController>();
         playerMovementScript = GetComponent<PlayerMovement>();
+        playerAnimator = GetComponent<PlayerAnimator>();
 
-        // Desliga a rotação automática para aplicarmos a nossa lógica
+        // Desliga a rotação automática do NavMeshAgent para aplicarmos a nossa lógica
         agent.updateRotation = false;
 
         if (mainCamera == null) mainCamera = Camera.main;
@@ -129,7 +131,6 @@ public class PlayerInteract : MonoBehaviour {
 
         // Prioridade 2: Clicou no chão (Point and click livre)
         if (Physics.Raycast(ray, out RaycastHit groundHit, 10000f, groundLayer)) {
-            // Valida se o ponto atingido realmente está dentro da área navegável do NavMesh
             if (NavMesh.SamplePosition(groundHit.point, out NavMeshHit navHit, 1.0f, NavMesh.AllAreas)) {
                 MoveToTarget(navHit.position, 0.1f, AutoActionState.NavigatingToPoint);
             }
@@ -173,7 +174,7 @@ public class PlayerInteract : MonoBehaviour {
     }
 
     private void HandleNavMeshMovement() {
-        if (agent == null || !agent.enabled || !agent.isOnNavMesh)return;
+        if (agent == null || !agent.enabled || !agent.isOnNavMesh) return;
         if (agent.pathPending) return;
 
         if (agent.remainingDistance <= agent.stoppingDistance) {
@@ -260,7 +261,6 @@ public class PlayerInteract : MonoBehaviour {
             agent.enabled = false;
             characterController.enabled = true;
             playerMovementScript.enabled = true;
-
         }
     }
 
@@ -310,6 +310,10 @@ public class PlayerInteract : MonoBehaviour {
         DisableManualMovement();
         inputActions.Player.Disable();
         inputActions.UI.Enable();
+
+        if (playerAnimator != null) {
+            playerAnimator.SetTalking(true);
+        }
     }
 
     private void OnDialogueFinished(Dialogue dialogue) {
@@ -317,22 +321,25 @@ public class PlayerInteract : MonoBehaviour {
         inputActions.Player.Enable();
         inputActions.UI.Enable();
         RestoreManualMovement();
+
+        if (playerAnimator != null) {
+            playerAnimator.SetTalking(false);
+        }
     }
 
     public void EnableInteraction(bool enable) {
-        // enabled = enable;
         if (enable) {
-            inputActions.Player.Enable(); // Habilita o input de interação
+            inputActions.Player.Enable();
             inputActions.UI.Enable();
             RestoreManualMovement();
         } else {
-            inputActions.Player.Disable(); // Desabilita o input de interação
+            inputActions.Player.Disable();
             DisableManualMovement();
         }
     }
 
     private void OnToggleManualClicked(InputAction.CallbackContext context) {
-        if(!CanOpenManual()) return;
+        if (!CanOpenManual()) return;
         ManualManager.Instance.ToggleManual();
     }
 
