@@ -2,16 +2,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
-public class TopDownVisibilitySystem : MonoBehaviour
-{
-    private enum ClipMode
-    {
+public class TopDownVisibilitySystem : MonoBehaviour {
+    private enum ClipMode {
         None,
         Hole
     }
 
-    private sealed class RendererState
-    {
+    private sealed class RendererState {
         public Material[] OriginalSharedMaterials;
         public Material[] HoleSharedMaterials;
         public ClipMode CurrentMode;
@@ -46,72 +43,58 @@ public class TopDownVisibilitySystem : MonoBehaviour
     private static readonly int HoleEnabledId = Shader.PropertyToID("_HoleEnabled");
     private static readonly int PlaneEnabledId = Shader.PropertyToID("_PlaneEnabled");
 
-    private void Awake()
-    {
+    private void Awake() {
         cachedCamera = GetComponent<Camera>();
 
-        if (visibilityShader == null)
-        {
+        if (visibilityShader == null) {
             visibilityShader = Shader.Find("Custom/URPVisibilityClip");
         }
     }
 
-    private void Start()
-    {
+    private void Start() {
         AssignDefaultReferences();
     }
 
-    private void OnEnable()
-    {
+    private void OnEnable() {
         AssignDefaultReferences();
     }
 
-    private void AssignDefaultReferences()
-    {
-        if (target != null)
-        {
+    private void AssignDefaultReferences() {
+        if (target != null) {
             return;
         }
 
-        if (LevelManager.Instance != null && LevelManager.Instance.PlayerTransform != null)
-        {
+        if (LevelManager.Instance != null && LevelManager.Instance.PlayerTransform != null) {
             target = LevelManager.Instance.PlayerTransform;
             missingTargetWarningLogged = false;
             return;
         }
 
         PlayerMovement playerMovement = FindAnyObjectByType<PlayerMovement>();
-        if (playerMovement != null)
-        {
+        if (playerMovement != null) {
             target = playerMovement.transform;
             missingTargetWarningLogged = false;
             return;
         }
 
-        if (!missingTargetWarningLogged)
-        {
+        if (!missingTargetWarningLogged) {
             Debug.LogWarning("TopDownVisibilitySystem: target is not assigned yet. Waiting for LevelManager.PlayerTransform or a PlayerMovement instance.");
             missingTargetWarningLogged = true;
         }
     }
 
-    private void OnDisable()
-    {
+    private void OnDisable() {
         RestoreAllRenderers();
     }
 
-    private void LateUpdate()
-    {
-        if (visibilityShader == null)
-        {
+    private void LateUpdate() {
+        if (visibilityShader == null) {
             return;
         }
 
-        if (target == null)
-        {
+        if (target == null) {
             AssignDefaultReferences();
-            if (target == null)
-            {
+            if (target == null) {
                 ClearActiveOccluders();
                 return;
             }
@@ -124,8 +107,7 @@ public class TopDownVisibilitySystem : MonoBehaviour
         Vector3 cameraToTarget = targetPosition - cameraPosition;
         float distanceToTarget = cameraToTarget.magnitude;
 
-        if (distanceToTarget <= Mathf.Epsilon)
-        {
+        if (distanceToTarget <= Mathf.Epsilon) {
             return;
         }
 
@@ -134,8 +116,7 @@ public class TopDownVisibilitySystem : MonoBehaviour
         UpdateOccluders(cameraPosition, directionToTarget, distanceToTarget, targetPosition);
     }
 
-    private void UpdateOccluders(Vector3 cameraPosition, Vector3 directionToTarget, float distanceToTarget, Vector3 targetPosition)
-    {
+    private void UpdateOccluders(Vector3 cameraPosition, Vector3 directionToTarget, float distanceToTarget, Vector3 targetPosition) {
         nextOccluders.Clear();
 
         RaycastHit[] hits = Physics.SphereCastAll(
@@ -146,62 +127,50 @@ public class TopDownVisibilitySystem : MonoBehaviour
             obstructionMask,
             QueryTriggerInteraction.Ignore);
 
-        for (int i = 0; i < hits.Length; i++)
-        {
+        for (int i = 0; i < hits.Length; i++) {
             Collider hitCollider = hits[i].collider;
-            if (hitCollider == null)
-            {
+            if (hitCollider == null) {
                 continue;
             }
 
-            if (target != null && hitCollider.transform.IsChildOf(target))
-            {
+            if (target != null && hitCollider.transform.IsChildOf(target)) {
                 continue;
             }
 
             Renderer hitRenderer = hitCollider.GetComponentInParent<Renderer>();
-            if (hitRenderer == null)
-            {
+            if (hitRenderer == null) {
                 continue;
             }
 
             nextOccluders.Add(hitRenderer);
         }
 
-        foreach (Renderer occluder in nextOccluders)
-        {
-            if (!activeOccluders.Contains(occluder))
-            {
+        foreach (Renderer occluder in nextOccluders) {
+            if (!activeOccluders.Contains(occluder)) {
                 SetRendererMode(occluder, ClipMode.Hole);
             }
 
             SetRendererHoleData(occluder, targetPosition);
         }
 
-        foreach (Renderer previousOccluder in activeOccluders)
-        {
-            if (!nextOccluders.Contains(previousOccluder))
-            {
+        foreach (Renderer previousOccluder in activeOccluders) {
+            if (!nextOccluders.Contains(previousOccluder)) {
                 SetRendererMode(previousOccluder, ClipMode.None);
             }
         }
 
         activeOccluders.Clear();
-        foreach (Renderer occluder in nextOccluders)
-        {
+        foreach (Renderer occluder in nextOccluders) {
             activeOccluders.Add(occluder);
         }
     }
 
-    private void SetRendererHoleData(Renderer targetRenderer, Vector3 holeCenter)
-    {
-        if (targetRenderer == null || cachedCamera == null)
-        {
+    private void SetRendererHoleData(Renderer targetRenderer, Vector3 holeCenter) {
+        if (targetRenderer == null || cachedCamera == null) {
             return;
         }
 
-        if (!rendererStates.TryGetValue(targetRenderer, out RendererState state) || state?.HoleSharedMaterials == null)
-        {
+        if (!rendererStates.TryGetValue(targetRenderer, out RendererState state) || state?.HoleSharedMaterials == null) {
             return;
         }
 
@@ -214,11 +183,9 @@ public class TopDownVisibilitySystem : MonoBehaviour
         float holeSoftnessPixels = Mathf.Max(minimumHoleSoftnessPixels, Vector2.Distance(edgeScreen, softnessEdgeScreen));
 
         Material[] materials = state.HoleSharedMaterials;
-        for (int i = 0; i < materials.Length; i++)
-        {
+        for (int i = 0; i < materials.Length; i++) {
             Material material = materials[i];
-            if (material != null)
-            {
+            if (material != null) {
                 material.SetVector(HoleCenterViewportId, centerViewport);
                 material.SetFloat(HoleRadiusPixelsId, holeRadiusPixels);
                 material.SetFloat(HoleSoftnessPixelsId, holeSoftnessPixels);
@@ -226,10 +193,8 @@ public class TopDownVisibilitySystem : MonoBehaviour
         }
     }
 
-    private void ClearActiveOccluders()
-    {
-        foreach (Renderer previousOccluder in activeOccluders)
-        {
+    private void ClearActiveOccluders() {
+        foreach (Renderer previousOccluder in activeOccluders) {
             SetRendererMode(previousOccluder, ClipMode.None);
         }
 
@@ -237,17 +202,13 @@ public class TopDownVisibilitySystem : MonoBehaviour
         nextOccluders.Clear();
     }
 
-    private void SetRendererMode(Renderer targetRenderer, ClipMode mode)
-    {
-        if (targetRenderer == null || visibilityShader == null)
-        {
+    private void SetRendererMode(Renderer targetRenderer, ClipMode mode) {
+        if (targetRenderer == null || visibilityShader == null) {
             return;
         }
 
-        if (!rendererStates.TryGetValue(targetRenderer, out RendererState state))
-        {
-            state = new RendererState
-            {
+        if (!rendererStates.TryGetValue(targetRenderer, out RendererState state)) {
+            state = new RendererState {
                 OriginalSharedMaterials = targetRenderer.sharedMaterials,
                 CurrentMode = ClipMode.None
             };
@@ -255,19 +216,16 @@ public class TopDownVisibilitySystem : MonoBehaviour
             rendererStates[targetRenderer] = state;
         }
 
-        if (state.CurrentMode == mode)
-        {
+        if (state.CurrentMode == mode) {
             return;
         }
 
-        switch (mode)
-        {
+        switch (mode) {
             case ClipMode.None:
                 targetRenderer.sharedMaterials = state.OriginalSharedMaterials;
                 break;
             case ClipMode.Hole:
-                if (state.HoleSharedMaterials == null)
-                {
+                if (state.HoleSharedMaterials == null) {
                     state.HoleSharedMaterials = BuildReplacementMaterials(state.OriginalSharedMaterials);
                 }
 
@@ -278,40 +236,29 @@ public class TopDownVisibilitySystem : MonoBehaviour
         state.CurrentMode = mode;
     }
 
-    private Material[] BuildReplacementMaterials(Material[] sourceMaterials)
-    {
-        if (sourceMaterials == null)
-        {
+    private Material[] BuildReplacementMaterials(Material[] sourceMaterials) {
+        if (sourceMaterials == null) {
             return null;
         }
 
         Material[] generated = new Material[sourceMaterials.Length];
 
-        for (int i = 0; i < sourceMaterials.Length; i++)
-        {
+        for (int i = 0; i < sourceMaterials.Length; i++) {
             Material source = sourceMaterials[i];
-            Material generatedMaterial = new Material(visibilityShader)
-            {
+            Material generatedMaterial = new Material(visibilityShader) {
                 name = source != null ? source.name + "_VisibilityClip" : "VisibilityClip"
             };
 
-            if (source != null)
-            {
-                if (source.HasProperty(BaseMapId))
-                {
+            if (source != null) {
+                if (source.HasProperty(BaseMapId)) {
                     generatedMaterial.SetTexture(BaseMapId, source.GetTexture(BaseMapId));
-                }
-                else if (source.HasProperty("_MainTex"))
-                {
+                } else if (source.HasProperty("_MainTex")) {
                     generatedMaterial.SetTexture(BaseMapId, source.GetTexture("_MainTex"));
                 }
 
-                if (source.HasProperty(BaseColorId))
-                {
+                if (source.HasProperty(BaseColorId)) {
                     generatedMaterial.SetColor(BaseColorId, source.GetColor(BaseColorId));
-                }
-                else if (source.HasProperty("_Color"))
-                {
+                } else if (source.HasProperty("_Color")) {
                     generatedMaterial.SetColor(BaseColorId, source.GetColor("_Color"));
                 }
             }
@@ -328,20 +275,16 @@ public class TopDownVisibilitySystem : MonoBehaviour
         return generated;
     }
 
-    private void RestoreAllRenderers()
-    {
-        foreach (KeyValuePair<Renderer, RendererState> pair in rendererStates)
-        {
+    private void RestoreAllRenderers() {
+        foreach (KeyValuePair<Renderer, RendererState> pair in rendererStates) {
             Renderer renderer = pair.Key;
             RendererState state = pair.Value;
 
-            if (renderer != null && state != null && state.OriginalSharedMaterials != null)
-            {
+            if (renderer != null && state != null && state.OriginalSharedMaterials != null) {
                 renderer.sharedMaterials = state.OriginalSharedMaterials;
             }
 
-            if (state != null)
-            {
+            if (state != null) {
                 DestroyGeneratedMaterials(state.HoleSharedMaterials);
             }
         }
@@ -351,13 +294,10 @@ public class TopDownVisibilitySystem : MonoBehaviour
         nextOccluders.Clear();
     }
 
-    private void RefreshGeneratedMaterialSettings()
-    {
-        foreach (KeyValuePair<Renderer, RendererState> pair in rendererStates)
-        {
+    private void RefreshGeneratedMaterialSettings() {
+        foreach (KeyValuePair<Renderer, RendererState> pair in rendererStates) {
             RendererState state = pair.Value;
-            if (state == null)
-            {
+            if (state == null) {
                 continue;
             }
 
@@ -365,18 +305,14 @@ public class TopDownVisibilitySystem : MonoBehaviour
         }
     }
 
-    private void ApplyHoleSettings(Material[] materials)
-    {
-        if (materials == null)
-        {
+    private void ApplyHoleSettings(Material[] materials) {
+        if (materials == null) {
             return;
         }
 
-        for (int i = 0; i < materials.Length; i++)
-        {
+        for (int i = 0; i < materials.Length; i++) {
             Material material = materials[i];
-            if (material == null)
-            {
+            if (material == null) {
                 continue;
             }
 
@@ -384,18 +320,14 @@ public class TopDownVisibilitySystem : MonoBehaviour
         }
     }
 
-    private void DestroyGeneratedMaterials(Material[] materials)
-    {
-        if (materials == null)
-        {
+    private void DestroyGeneratedMaterials(Material[] materials) {
+        if (materials == null) {
             return;
         }
 
-        for (int i = 0; i < materials.Length; i++)
-        {
+        for (int i = 0; i < materials.Length; i++) {
             Material material = materials[i];
-            if (material != null)
-            {
+            if (material != null) {
                 Destroy(material);
             }
         }

@@ -99,10 +99,16 @@ public class LevelManager : MonoBehaviour {
             playerTransform = playerInstance.transform;
         }
 
+
+
         playerTransform.GetComponent<PlayerMovement>().EnableMovement(true); // Desabilitar movimento do player
         playerTransform.GetComponent<PlayerInteract>().EnableInteraction(true); // Desabilitar interação do player
 
         cmCam.Follow = playerTransform;
+        Camera mainCam = Camera.main;
+        if (mainCam != null) {
+            mainCam.GetComponent<CameraObstruction>()?.AddTarget(playerTransform); // Adiciona o player como alvo para a câmera
+        }
 
 
         //Spawnar Prefab dos itens de Cenário em suas posicoes configuradas

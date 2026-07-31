@@ -567,7 +567,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fa5a10ea4c35d4ac5acd4827b8862701, type: 2}
+  - {fileID: 2100000, guid: 1bb3c3739edc7485781600095a65f6ab, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -648,6 +648,9 @@ MonoBehaviour:
   targetRenderers:
   - {fileID: 6191974036989387186}
   includeInactiveChildren: 1
+  outlineThickness: 0.2
+  outlineMinThickness: 0.1
+  outlineSpeed: 1
   colorPropertyName: _OutlineColor
 --- !u!114 &1992328784776500406
 MonoBehaviour:
@@ -995,7 +998,7 @@ GameObject:
   - component: {fileID: 1773782678105834481}
   m_Layer: 1
   m_Name: Hall1stFloor
-  m_TagString: Untagged
+  m_TagString: Obstruction
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1048,9 +1051,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8b022d09cd2f9457892c8bbac7850173, type: 2}
-  - {fileID: 2100000, guid: fd158ef114e77415fb657400a985b2c9, type: 2}
-  - {fileID: 2100000, guid: fa5a10ea4c35d4ac5acd4827b8862701, type: 2}
+  - {fileID: 2100000, guid: 1bb3c3739edc7485781600095a65f6ab, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -12705,7 +12706,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fa5a10ea4c35d4ac5acd4827b8862701, type: 2}
+  - {fileID: 2100000, guid: 1bb3c3739edc7485781600095a65f6ab, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -12767,6 +12768,9 @@ MonoBehaviour:
   targetRenderers:
   - {fileID: 2684300843177949726}
   includeInactiveChildren: 1
+  outlineThickness: 0.2
+  outlineMinThickness: 0.1
+  outlineSpeed: 1
   colorPropertyName: _OutlineColor
 --- !u!114 &2693090144080178701
 MonoBehaviour:
